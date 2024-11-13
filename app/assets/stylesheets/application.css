@@ -1,0 +1,314 @@
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+/* Genel Sayfa Düzeni */
+.container {
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+  }
+
+  .full-width-container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9; /* Arka plan renginizi buraya yazın */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Tam ekran yüksekliği sağlar */
+  }
+
+  .navbar .nav-link {
+    color: #ffffff;
+  }
+  
+  .navbar .nav-link:hover {
+    color: #bbbbbb;
+  }
+  
+  .navbar .dropdown-menu {
+    background-color: #343a40;
+  }
+  
+  .navbar .dropdown-menu .dropdown-item {
+    color: #ffffff;
+  }
+  
+  .navbar .dropdown-menu .dropdown-item:hover {
+    background-color: #495057;
+  }
+  
+  
+  
+  /* Kenar Menü */
+  .sidebar {
+    width: 150px; /* Sidebar genişliğini sabitleyin */
+    min-width: 150px; /* Tarayıcıda yeniden boyutlandırıldığında sabit genişlik korunsun */
+    background-color: #1e1e2f;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .sidebar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 30px;
+  }
+  
+  .menu {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .menu li {
+    margin-bottom: 15px;
+  }
+  
+  .menu li a {
+    color: #b0b3c1;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .menu li a:hover {
+    color: #ffffff;
+  }
+  
+  .menu li a.active {
+    color: #4b7bec;
+  }
+  
+  /* İçerik Alanı */
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .user-info a {
+    color: #4b7bec;
+    text-decoration: none;
+  }
+  
+  .page-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  /* Tablo ve Diğer İçerikler */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f9fafc;
+  }
+  
+  button, .btn {
+    background-color: #007bff; /* Butonun varsayılan rengi */
+    color: white;
+    padding: 12px 24px; /* Daha geniş bir buton tasarımı */
+    border: none;
+    border-radius: 5px; /* Hafif yuvarlatılmış köşeler */
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase; /* Büyük harfler */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+    transition: all 0.3s ease; /* Hover geçişi */
+  }
+  
+  button:hover, .btn:hover {
+    background-color: #0056b3; /* Hover durumunda daha koyu mavi */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Daha belirgin gölge */
+  }
+  
+  .btn-cancel {
+    background-color: #f8f9fa; /* Açık gri */
+    color: #333; /* Siyah yazı */
+    border: 1px solid #ddd; /* İnce gri çerçeve */
+  }
+  
+  .btn-cancel:hover {
+    background-color: #e2e6ea; /* Hover durumunda daha koyu gri */
+    color: #000; /* Siyah yazı */
+  }
+  
+  .btn-save {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .btn-save:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Yuvarlak Köşeli Butonlar */
+  button.rounded, .btn.rounded {
+    border-radius: 50px;
+  }
+  
+  /* Buton Grubu */
+  .btn-group {
+    display: flex;
+    gap: 10px; /* Butonlar arasına boşluk */
+  }
+  
+  /* Mobil Uyum */
+  @media (max-width: 768px) {
+    button, .btn {
+      width: 100%; /* Küçük ekranlarda tam genişlik */
+      font-size: 14px; /* Daha küçük yazı */
+    }
+  }
+  
+
+  #settings-menu {
+    transition: all 0.3s ease;
+  }
+
+  .dashboard-logo {
+    text-align: center; /* Center the logo */
+    margin-bottom: 20px; /* Add space below the logo */
+  }
+  
+  .dashboard-logo .logo {
+    max-width: 200px; /* Adjust the size */
+    height: auto;
+  }
+
+  .form-container {
+    background: #f9fbff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-container h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-container .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .form-container .form-group {
+    flex: 1;
+    min-width: calc(50% - 15px);
+  }
+  
+  .form-container .form-group label {
+    font-size: 0.875rem;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .form-container .form-group input,
+  .form-container .form-group textarea,
+  .form-container .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.875rem;
+  }
+  
+  .form-container .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .form-container .btn {
+    padding: 10px 20px;
+    font-size: 0.875rem;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .form-container .btn-save {
+    background: #007bff;
+    color: #fff;
+  }
+  
+  .form-container .btn-cancel {
+    background: #f8f9fa;
+    color: #333;
+  }
+
+  /* Checkbox container styling */
+.custom-checkbox {
+  display: none; /* Varsayılan görünümü gizler */
+}
+
+.custom-checkbox + .custom-label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.custom-checkbox + .custom-label:before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 2px solid #007bff; /* Ana kutu rengi */
+  border-radius: 4px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.custom-checkbox:checked + .custom-label:before {
+  background-color: #007bff; /* Seçili durumda kutunun dolgu rengi */
+  border-color: #007bff;
+  content: '✔'; /* Seçili durumda gösterilecek simge */
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  line-height: 18px;
+}
+
+.custom-checkbox + .custom-label:hover:before {
+  border-color: #0056b3; /* Hover durumunda renk değişimi */
+}
+
+  
+  
+  

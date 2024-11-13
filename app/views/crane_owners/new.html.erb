@@ -1,0 +1,52 @@
+<div class="form-container">
+  <h1>Yeni Firma Ekle</h1>
+  <%= form_with model: @crane_owner, local: true do |f| %>
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_owner_name, "Firma İsmi" %>
+        <%= f.text_field :crane_owner_name %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_owner_phone, "Telefon" %>
+        <%= f.text_field :crane_owner_phone %>
+      </div>
+      <div class="form-group">
+        <%= f.label :crane_owner_vat_office, "Vergi Dairesi" %>
+        <%= f.text_field :crane_owner_vat_office %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_owner_address, "Adres" %>
+        <%= f.text_area :crane_owner_address %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_owner_contact, "Yetkili Kişi" %>
+        <%= f.text_field :crane_owner_contact %>
+      </div>
+      <div class="form-group">
+        <%= f.label :crane_owner_contact_email, "Yetkili Email" %>
+        <%= f.email_field :crane_owner_contact_email %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_owner_contact_phone, "Yetkili Telefon" %>
+        <%= f.text_field :crane_owner_contact_phone %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= link_to 'İptal', crane_owners_path, class: 'btn btn-cancel' %>
+      <%= f.submit "Kaydet", class: 'btn btn-save' %>
+    </div>
+  <% end %>
+</div>

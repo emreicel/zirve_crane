@@ -1,0 +1,13 @@
+tr:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+
+  number:
+    currency:
+      format:
+        unit: "₺"                 # Para birimi simgesi
+        format: "%n %u"           # "%n" sayıyı, "%u" para birimini belirtir
+        separator: ","            # Ondalık ayracı
+        delimiter: "."            # Binlik ayracı
+        precision: 2              # Ondalık basamak sayısı

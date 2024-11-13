@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= content_for?(:title) ? yield(:title) : "Zirve Crane" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  
+</head>
+<body>
+  <div class="full-width-container">
+    <% if user_signed_in? %>
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <!-- Left Menu -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><%= link_to 'Anasayfa', root_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to 'Vinçler', cranes_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to 'Müşteriler', customers_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to 'Kontratlar', contracts_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to 'Vinç Firmaları', crane_owners_path, class: "nav-link" %></li>
+
+            <% if current_user&.super_admin? %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Users
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+                  <li><%= link_to 'Kullanıcı Listesi', users_path, class: "dropdown-item" %></li>
+                  <li><%= link_to 'Yeni Kullanıcı Oluştur', new_user_path, class: "dropdown-item" %></li>
+                </ul>
+              </li>
+            <% end %>
+          </ul>
+
+          <!-- Right User Info -->
+          <div class="d-flex align-items-center">
+            <% if user_signed_in? %>
+              <span class="text-white me-3"><%= current_user.name %></span>
+              <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
+                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+              <% end %>
+              
+            <% end %>
+          </div>
+        </div>
+      </nav>
+
+    <% end %>
+
+    <!-- İçerik Alanı -->
+    <main class="content mt-4">
+      <div class="page-content">
+        <%= yield %>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function toggleSettingsMenu() {
+      const menu = document.getElementById('settings-menu');
+      menu.classList.toggle('d-none');
+    }
+  </script>
+</body>
+</html>

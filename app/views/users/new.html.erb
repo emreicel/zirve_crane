@@ -1,0 +1,38 @@
+<h1 class="mb-4">Yeni Kullanıcı Oluştur</h1>
+
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <%= form_with model: @user, url: user_registration_path, local: true do |f| %>
+        <div class="mb-3">
+          <%= f.label :name, "Ad", class: "form-label" %>
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :email, "E-posta", class: "form-label" %>
+          <%= f.email_field :email, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, "Şifre", class: "form-label" %>
+          <%= f.password_field :password, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password_confirmation, "Şifre Doğrulama", class: "form-label" %>
+          <%= f.password_field :password_confirmation, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :role, "Rol", class: "form-label" %>
+          <%= f.select :role, User.roles.keys.map { |role| [role.titleize, role] }, {}, class: "form-select" %>
+        </div>
+
+        <div class="text-end">
+          <%= f.submit "Kaydet", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

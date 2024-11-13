@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kule Vinç Kiralama Sözleşmesi</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; }
+        th { background-color: #f4f4f4; }
+        .contract-section {
+            margin-bottom: 20px;
+        }
+        .technical-specs {
+            margin-top: 10px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .technical-specs th, .technical-specs td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .technical-specs th {
+            background-color: #f2f2f2;
+        }
+        .signature {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature div {
+            text-align: center;
+            width: 30%;
+        }
+        .page-break {
+            page-break-before: always; /* Yeni bir sayfaya başlar */
+        }
+    </style>
+    <% contract = @contract %>
+</head>
+<body>
+    <div class="container">
+        <h1>Kule Vinç Kiralama Sözleşmesi</h1>
+
+        <div class="contract-section">
+            <h2>Madde 1 - Taraflar</h2>
+            <p>
+              1.1.Bir tarafta merkezi DEMİRCİ MAH. ESENGÜL SK. HACIM APT NO: 8A/ 2 Nilüfer/BURSA adresinde
+              bulunan ZİRVE VİNÇ TİCARET VE SANAYİ A.Ş. (Bundan böyle Kiraya Veren olarak anılacaktır) ile <%= contract.customer.customer_address %> adresinde bulunan
+              <%= contract.customer.customer_name %> (Bundan böyle kiracı olarak anılacaktır) arasında
+              aşağıdaki hükümlerle Kule Vinç Kiralama Sözleşmesi kurulmuştur.
+            </p>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 2 - Sözleşme Konusu</h2>
+            <p>
+              <h3>A)</h3>ZİRVE VİNÇ TİCARET VE SANAYİ A.Ş şirketine ait <%= contract.crane.crane_brand_name %> <%= contract.crane.crane_model_name %> Tipi KULE VINÇ in Kiracısı <%= contract.customer.customer_name %> kiralama sözleşmesidir.
+            </p>
+            <h3>B) Kiralanan Vinç'in Teknik Özellikleri</h3>
+            <table class="technical-specs">
+                <tr>
+                    <th>Marka</th>
+                    <td><%= contract.crane.crane_brand_name %></td>
+                </tr>
+                <tr>
+                    <th>Model</th>
+                    <td><%= contract.crane.crane_model_name %></td>
+                </tr>
+                <tr>
+                    <th>Seri No</th>
+                    <td><%= contract.crane.crane_chassis_no %></td>
+                </tr>
+                <tr>
+                    <th>İmal Yılı</th>
+                    <td><%= contract.crane.crane_year %></td>
+                </tr>
+                <tr>
+                    <th>Maksimum Kapasite</th>
+                    <td><%= contract.crane.crane_tonnage %> KG</td>
+                </tr>
+                <tr>
+                    <th>Yükseklik</th>
+                    <td><%= contract.crane.crane_height %> MT</td>
+                </tr>
+                <tr>
+                    <th>Bom Uzunluğu</th>
+                    <td><%= contract.crane.crane_boom_length %> MT</td>
+                </tr>
+                <tr>
+                    <th>Bom Ucu Tonajı</th>
+                    <td><%= contract.crane.crane_boom_tonnage %> KG</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 3 - Sözleşmenin Başlangıç ve Bitiş Tarihleri ile Kullanım Adresi</h2>
+            <p>
+              3.1.Kira süresi 1 adet makine için <%= contract.rent_term %> ay olup, sözleşmede yazılı tarihte başlar, sözleşmedeki sürenin sona
+              ermesi ve vincin eksiksiz teslim edildiği tarihte biter. Sözleşme bitiminde Kule Vincin teslim yeri Bursa
+              veya muadil kilometrede Kiraya Veren' in göstereceği adrestir. Kule vinç, teslim belgesi ile Kiracı’ya teslim
+              edilecek olup kiracı vinci muayene ederek tam ve sağlam olarak teslim aldığını kabul ve beyan
+              etmektedir.
+            </p>
+            <p>
+              3.1.a Kiralama Başlama Tarihi: <%= l(contract.rent_start_date) %> (madde:3.1) Kiralama Bitiş Tarihi : <%= l(contract.rent_finish_date) %>
+            </p>
+            <p>
+              3.1.b Kule vinç ?? GÜRSU TOKİ KONUTLARI Gürsu/BURSA ?? adresinde sözleşme hükümlerine göre kullanılmak
+              üzere kiralanmıştır.
+            </p>
+            <p>
+              3.2.Mevcut kiralama sözleşmesinin bitim tarihine bir ay kala kiralayanın yazılı talebi ve kiralayanın iş bu
+              yazılı talep gereğince fiyat ve süre yönünden tarafların anlaşarak onay vermesi halinde sözleşme
+              taraflarca belirlenen süre için uzamış olur.
+            </p>
+            <p>
+              3.3.Kiraya Veren, Sözleşmenin bitmesi ile vincin teslim edilmediği her gün için kira bedeli isteme hakkı
+              saklıdır. Bu süre 1 hafta uzar ise yarım ay, 2 hafta uzar ise tam ay kira bedeli kiracı tarafından cezai şart olarak ödenecektir. Cezai şart, kiraya verenin uğradığı zararlardan mahsup edilmeyecek, kiralayan ayrıca
+              zararları tazminat ve talep hakkına sahip olacaktır.
+            </p>
+              3.4.Sözleşmenin geçerliliği Kule Vinç teslim edilmediği müddetçe devam eder. Sözleşme süresinin bitmesi
+              veya sözleşmedeki şartların yerine gelmemesi durumunda şirketin yazılı olarak ihtar göndermesi
+              durumunda kiracı 15 gün içerisinde Kule Vinci şirketin göstereceği adrese teslim edecektir. Teslim
+              etmemesi durumunda sözlü veya yazılı ihtar tarihinden 15 gün sonra çalıştırılması, bekletilmesi veya
+              teslim edilmemesi durumunda her ay için aylık kira bedelinin %50 si oranında cezai şart fatura
+              edilecektir.
+            <p>
+              3.5.Ödenmeyen tüm faturalara fesih sebebi sayılmasının yanında yasaya uygun en yüksek faiz bedeli
+              talep edilecektir.
+            </p>
+        </div>
+        <div class="contract-section">
+            <h2>Madde 4 - Kule Vinç Muayene ve Teslim</h2>
+            <p>
+              4.1.Kiraya Veren, kiracıya teslim ettiği Kule Vincin kendi teknik ve idari usullerine göre bakımını yapmış
+              olup tam ve eksiksiz olarak teslim etmiş sayılacaktır.
+            </p>
+            <p>
+              4.2.Kiraya Veren elinde birden fazla Kule Vinç varsa, elinde bulunan aynı tip ve kapasite Kule Vinçlerden
+              istediğini usulüne uygun olarak verebilir. Kiracı buna engel olamaz.
+            </p>
+            <p>
+              4.3.Kiraya Veren Kule Vinci kiracıya teslim ettikten sonra Kiraya Veren'in sorumluluğu biter. Kule Vinç
+              kiracının sorumluluğuna geçer. Kiracı Kule Vinci Kiraya Veren'e teslim ederken; teslim aldığı şekilde
+              hasarsız ve noksansız, hukuki, maddi vs Ayıptan ari olarak teslim etmekle yükümlüdür.
+            </p>
+            <p>
+              4.4.Kule Vinç teslim edildikten sonra teslim tutanağı düzenlenmemiş ise kiracı Kule Vinci kullanıma
+              alamaz. Kiracı Kule Vinci kullanmaya başlamış ise kiracı Kule Vinci tam ve eksiksiz olarak teslim almış
+              sayılır. Kiraya Veren'in sorumluluğu biter.
+            </p>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 5 - Kule Vincin Taşınması ve Kullanılması</h2>
+            <p>
+              5.1.Kiracı, Kule Vincin sağlam ve çalışır vaziyette teslim almış olup, kira bitiminde Kiraya Verenin istemiş
+              olduğu yere nakliye sigortası ve tahliyesi için gerekli her türlü masrafları kiracıya ait olarak teslim
+              edecektir. Vincin gidiş dönüş nakliye bedelleri ve tüm riskleri kiracıya aittir.
+            </p>
+            <p>
+              5.2.Kiracı kule vinci kısmen veya tamamen devir ve ciro edemez, kiraya veremez kiracının ortaklarına
+              veya ortağı olduğu herhangi bir şirkete dahi devir ve cirosu edemez. Kiraya verenin yazılı muvaffaktı
+              alınmaksızın sözleşme anında ki ortakların dışında ortak alınması ve-veya haricen pay devri yapamaz.
+            </p>
+            <p>
+              5.3.Vincin teslim alınacağı ve teslim edileceği yer ?? Bursa ??'dır.
+            </p>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 6 - Kule Vincin Sigortalanması</h2>
+            <p>
+              Kule vinç kiralama süresi boyunca, oluşabilecek her türlü kaza ve üçüncü kişilere (Kiracının çalışanları da
+              dahil) verebileceği zararlara karşı all risk (montaj, demontaj, kırılma ve onarım dahil ) sigorta edilecektir.
+              İş bu hususta kiracı mutlak surette sorumludur. Ayrıca kiracı 3. şahıslar yönünden oluşabilecek zarar ve
+              kusurlardan da sorumludur. Aksi husustaki hiç bir sözleşme ve anlaşma geçerli değildir. Herhangi bir
+              hasar durumunda sigorta acentesi ve Kiraya Veren tarafından ödenecek olan hasar tazminat (sigorta
+              bedeli) Kiraya Verene ait olacaktır şayet alınan sigorta bedeli hasar tamamen giderecek seviyede olmaz
+              ise farkı kiracı, Kiraya Verene ödeyecektir. Kiracı tarafından kule vinci sigorta ettirilmemesi durumunda
+              meydana sigortasızlık nedeniyle alınan teminat senedinin tahsili ile karşılanacaktır.
+            </p>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="contract-section">
+          
+            <h2>Madde 7 - Kira Bedellerinin Ödeme Şekli</h2>
+            <p>
+            7.1.A Tipi Kule Vinç kira bedeli her makine için aylık <%= @payment_tables.first.amount_excluding_vat %>-TL (İkiYüzBinLira) artı KDV karşılığıdır.(Tablo.1)
+            </p>
+            <p>
+            7.1.1 Nakliye ücretleri ve Nakliye sigortası, Kurum, Arıza ve Servis ücretleri Teklif + Madde 7.2.
+            </p>
+            <h2>Ödeme Tablosu</h2>
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Adet</th>
+                    <th scope="col">Başlangıç Tarihi</th>
+                    <th scope="col">Bitiş Tarihi</th>
+                    <th scope="col">KDV Hariç Tutar</th>
+                    <th scope="col">KDV Oranı</th>
+                    <th scope="col">KDV Dahil Tutar</th>
+                    <th scope="col">Ödeme Tarihi</th>
+                    <th scope="col">Ödeme Yöntemi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @payment_tables.each_with_index do |payment, index| %>
+                    <tr>
+                      <td class="text-center"><%= index + 1 %></td>
+                      <td class="text-center"><%= payment.rent_table_quantity %></td>
+                      <td class="text-center"><%= l(payment.start_date) %></td>
+                      <td class="text-center"><%= l(payment.end_date) %></td>
+                      <td class="text-end"><%= number_to_currency(payment.amount_excluding_vat) %></td>
+                      <td class="text-center"><%= payment.vat_percentage %>%</td>
+                      <td class="text-end"><%= number_to_currency(payment.amount_including_vat) %></td>
+                      <td class="text-center"><%= payment.payment_date %></td>
+                      <td class="text-center"><%= payment.payment_method %></td>
+                    </tr>
+                  <% end %>
+                  
+                </tbody>
+              </table>
+            </div>
+
+            <div class="page-break"></div>
+
+              <h3>Tablo 2</h3>
+              <table class="technical-specs">
+                  <thead>
+                      <tr>
+                          <th>S.NO</th>
+                          <th>ADET</th>
+                          <th>BİRİM FİYAT</th>
+                          <th>TUTAR</th>
+                          <th>KDV HARİÇ</th>
+                          <th>KDV DAHİL</th>
+                          <th>ÖDEME TARİHİ</th>
+                          <th>ÖDEME YÖNTEMİ</th>
+                          <th>İZAHAT</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>1</td>
+                          <td>3</td>
+                          <td>₺120.000,00</td>
+                          <td>₺360.000,00</td>
+                          <td>₺432.000,00</td>
+                          <td>İşlem Tarihinde</td>
+                          <td></td>
+                          <td></td>
+                          <td>Madde 7.7</td>
+                      </tr>
+                      <tr>
+                          <td>2</td>
+                          <td>1</td>
+                          <td>₺60.000,00</td>
+                          <td>₺60.000,00</td>
+                          <td>₺72.000,00</td>
+                          <td>1.10.2024</td>
+                          <td>Nakit</td>
+                          <td></td>
+                          <td>Madde 7.7</td>
+                      </tr>
+                      <!-- Daha fazla satır eklenebilir -->
+                  </tbody>
+              </table>
+              <p>
+                7.2.Montaj ve De Montaj Arıza ve Bakımların bedelleri Kiracı'ya ait olacak olup, ilgili işlemlerin Kiraya Veren tarafından yaptırılması halinde Kiracı tarafından fatura karşılığında ödenecektir.
+              </p>
+              <p>
+                7.3.Kiraya Verenin onayı olmadan montaj, de montaj ve arızalar hiçbir şekilde bir başka firmaya ve
+                kişilere yaptırılmayacaktır. Çok acil durumlarda arıza ve bakımlar Kiraya Verenin onayını almak suretiyle
+                bakım, onarım ve yedek parça bedelleri kiracıya ait olmak üzere kiracı ehil ve yetkili servislere yaptırabilir.
+                Kullanılacak olan yedek parçalar orijinal olacaktır.
+              </p>
+              <p>
+                7.4. Bu sözleşmenin akdinden doğacak her türlü vergi resim ve harçlar kiracıya aittir.
+              </p>
+              <p>
+                7.5.Sözleşmedeki şartlar ve ödeme şartları yerine getirilmezse hizmet durdurulur, Kule Vinç iade alınır-, kiracının buna engel olmaya hakkı yoktur.
+              </p>
+              <p>
+                7.6.Kiracı hiçbir sebepten dolayı yani Kule Vinçin durdurulması, arızalanması, hizmet aksaması gibi
+                durumlarda Kiraya Verenden tazminat talebinde bulunamaz, gider faturası düzenleyemez. Kiraya Verenin
+                hizmetleri aksatması durumunda kiracı Kule Vinci sağlam ve eksiksiz olarak Kiraya Verenin belirttiği yere
+                teslim eder. Teslim ettiği gün itibarı ile kira ödemesi durdurulur.
+              </p>
+              <p>
+                7.7. ödemelerin 3 iş gününden fazla gecikmesi halinde Kiraya veren vinci geri alma hakkına sahiptir.
+                Herhangi bir ücret iadesi yapılmaz. Kiralayan bu durumda sözleşmeden doğan kira bedellerini d-montaj,
+                Mobil vinç, servis ücretlerini ve nakliye bedellerini 15 gün içerisinde ödemek ve vinci belirtilen adresi 7 iş
+                günü içerisinde iade etmek zorundadır.
+              </p>
+              <p>
+                7.8. İşin erken bitmesi ve makinanın iade edilmesi durumunda hiçbir ücret iadesi yapılmaz.
+              </p>
+              <p>
+                7.9. ücretlendirme periyodu aylık olarak yapılacaktır. Uzatmalarda aylık olarak süre uzatımı yapılır.
+              </p>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 8 - Kiracının Sorumlulukları</h2>
+            <p>
+              8.1.Kiracı kendisine kiralanan Kule Vinci usulü dairesinde kullanmayı bakım ve muhafazasına itina
+              göstermeyi, tüm özen ve sadakati ile makinayı kullanmayı ve muhafaza etmeyi, gerekli bilcümle tedbirleri
+              almayı kabul eder.
+            </p>
+            <p>
+              8.1.1 Kiracı vincin sevkiyat, montaj, arıza, bakım ve d-montaj işlerini kiraya verenin yetkilendirdiği servis
+              şirketleri ve personellerine yaptırmak zorundadır.
+            </p>
+            <p>
+              8.1.2. Kiracı sözleşmeye konu kule vincin periyodik bakımlarını 3 ayda bir kiraya verenin yetkilendirdiği
+              servis ve personellere yaptırmak zorundadır.
+            </p>
+            <p>
+              8.1.3 Makine kullanılacak ola bez sapan, zincir, projektörler gibi ekstra donanımlar kiracının
+              sorumluluğundadır.
+            </p>
+            <p>
+              8.1.4 Makinanın yıkılması veya kullanılmayacak şekilde zarar görmesi halinde, kiracı makinanın bedeli
+              olan <strong>262.000,00 $</strong> (İkiYüzatmışikiBinDolar) ödemekle yükümlüdür. Ve bu bedel sözleşme esnasında
+              teminat senedi olarak düzenlenerek teslim süreci başlayabilecektir.
+            </p>
+            <p>
+              8.2.Kule Vincin montaj edileceği zemin ve yürütüleceği yerlerdeki zemin etütleri ve alt yapı kiracı
+              tarafından yapılacaktır. Kule vincin montaj edileceği yer ve yürütme yolları kiraya verenin yetkilendirdiği
+              uzman personel tarafından kontrolleri sağlanıp onay alındıktan sonra yetkili personelin kontrolünde imal
+              edilecektir. Yetkilendirilmiş personeli servis ücretleri ve servis yol, yemek ve konaklama giderleri kiracıya
+              aittir.
+            </p>
+            <p>
+              8.3.Kule Vincin tüm arıza, servis ve bakımları kiracıya aittir. Çok acil durumlarda arıza ve bakımlar Kiraya Verenin onayım alınarak suretiyle bakım, onarım ve yedek parça bedelleri kiracıya ait olmak üzere kiracı ehil ve yetkili servislere yaptırabilir. Kullanılacak olan yedek parçalar orijinal olacaktır.
+            </p>
+            <p>
+              8.4.kiracı Kiraya Verene yapılan işlemler ile ilgili bilgi vermekle yükümlüdür.
+            </p>
+            <p>
+              8.5.Kiracı Kule Vinci ücretli veya ücretsiz başka bir şahsa kiraya veremez üçüncü şahıslar tarafından
+              kısmen veya tamamen kullanılmasına müsaade edemez. Kendi borcundan dolayı ya da İş sahibi, şantiye
+              sahibi veya bir üçüncü kişinin borcundan dolayı Kule Vinç üzerine ihtiyati tedbir veya ihtiyati hacze
+              tevessül edildiği takdirde bunların kendisine ait olmadığını Kiraya Verene ait olduğunu söylemeye ve
+              gerekli mercilere ve Kiraya Verene keyfiyeti zamanında haber rehin mevzuu yapılmasına mani tedbirleri
+              almaya mecburdur.
+            </p>
+            <p>
+              8.6.Kule Vincin hasara, kazaya ve arızaya uğraması halinde Kule Vincin tekrar onarılıp çalışır duruma
+              getirilmesine kadar geçecek sürelere ait kira bedelleri kiracı tarafından ödenecektir. Kule Vincin
+              arızalanmasından ve arıza süresince geçecek zamandan, sebep ne olursa olsun şantiyenin işinin
+              aksamasından Kiraya Veren sorumlu değildir.
+            </p>
+            <p>
+              8.7.Kule vinç sözleşmenin imzalanmasıyla birlikte herhangi bir teslim tutanağına gerek kalmaksızın
+              kiracının sorumluluğuna girmiş sayılır ve girer. Kiracı; kule vinci tam ve eksiksiz olarak teslim almış ise
+              sözleşmede yazılan Kule Vincin markası, modeli, seri numarası gibi yanlış veya hatalı sözleşme
+              düzenlenmiş ise bu yanlışlıklardan dolayı, kiracı kule vince vermiş olduğu hasarı veya ziyanı ödemek ile
+              yükümlüdür. Kule vince verilen hasar ve ziyanda; sözleşmedeki yazım hatasından dolayı kiracı hiçbir
+              yükümlülük ve sorumluluğundan kaçınamaz. Kule Vinci teslim aldığı gibi teslim etmekle sorumludur.
+            </p>
+            <p>
+              8.8.Kiraya verilen vincin veya vinçlerin seri numaraları, vinç teslim edilirken belirlenir. Vinç teslim
+              edildikten sonra taraflar sözleşmenin üzerine vincin seri numarasını yazabilir veya montaj tutanağında
+              belirtmek yeterlidir.
+            </p>
+            <p>
+              8.9.Kule vincin iş bitiminden sonra Kiraya Verenin istediği adrese şantiye veya depoya indikten sonra ve
+              eksiksiz ve sağlamdır tutanağı ile teslim edilir.
+            </p>
+            <p>
+              8.10.Kiracı Kule Vincin üzerinde bulunan vince ait parçaların arıza ve hasar durumlarında parçaların
+              orijinal ile değişimini sağlamakla yükümlüdür.
+            </p>
+            <p>
+              8.11. Kiracı Kule Vincin üzerinde bulunan vince ait ve Kiraya Verene ait reklam yazılarını silemez,
+              köreltemez, kurmasını engelleyecek herhangi bir engel koyamaz.
+            </p>
+            <p>
+              8.12. Kule vincin kiracıyla ilgili herhangi bir sebepten dolayı yani, Kule Vince el konulması, Kiraya Verene
+              ait olmayan borçlardan dolayı haczedilmesi, hasar görmesi veya kazaya uğraması nedeniyle Kiraya
+              Verene herhangi bir sebepten dolayı Kule Vincin teslim edilmemesi durumunda Kule Vincin teslim
+              edilemediği günkü rayiç bedeli kiracı ödemekle yükümlüdür. Kiracı ya da İş sahibi, şantiye sahibi veya bir
+              üçüncü kişinin borcundan dolayı Kule Vinç ilgili bir zarar meydana geldiği takdirde bu zararın Kiracı
+              tarafından ödeneceğini Kiracı geriye dönülemez bir şekilde kabul, beyan ve taahhüt eder.
+            </p>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="contract-section">
+            <h2>Madde 9 - İş Kazaları ve Mesuliyeti</h2>
+            <p>
+              9.1.Vinç kiracı adına sevk edildikten sonra veya sevk esnasında veya kiracı iş yerinde iş emniyeti
+              nizamnamesi hükümlerine muhalif hareket de vukua gelebilecek iş kazasından meydana gelebilecek tüm
+              hukuki, idari, mali, cezai vs Risklerden münhasıran kiracı mesuldür. Kule Vincin montaj ve de montaj
+              esnasında meydana gelebilecek tüm hasar ve ziyandan kiracı sorumludur. Her türlü güvenlik önlemleri
+              almak kiracıya aittir. Ayrıca İş veren mali mesuliyet sigortası yaptırmak zorundadır.
+            </p>
+            <p>
+              9.2.kiracı ancak kazaya uğrayan işçiler veya üçüncü şahıslar için mevzuat gereği Kiraya Verene rücu
+              edilirse işçi sigortalar' kurumuna ve istihkak sahiplerine Kiraya Verence ödenecek her türlü masraf ve
+              tazminatları ve avukatlık ücretleri ayrıca bir dava ikamesine ve mahkeme kararı ihtilaline hacet kalmadan
+              Kiraya Verene ödemeyi mecburdur. Kiracının bu yükümlülüğüne aykırı hareket etmesi halinde kiracı,
+              kiraya verene 250.000 usd (ikiyüzelbinamerikandoları) cezai şart ödemekle yükümlüdür. İş bu cezai şart
+              kiraya verenin uğradığı zarardan mahsup edilmeyecektir.
+            </p>
+            <p>
+              9.3.Kiraya Veren tarafından tavsiye edilen operatörler yardımcıları ve sair personelin Kule Vincin
+              kullanılması esnasında ve sair istihdam yerlerindeki kusurları doğrudan doğruya kiracıya ait olup bundan
+              dolayı Kiraya Verene rücu edilemez. Operatör ve masrafları kiracıya aittir.
+            </p>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 10 - Kiraya Verenin Kontrol Hakkı</h2>
+            <p>
+              10.1.Kiraya Veren kiracı tarafından talep edilsin veya edilmesin kendi elemanları vasıtasıyla Kule Vinci iş
+              yerinde kontrol ederek tekniğe uygun olarak çalıştırılıp çalıştırılmadığını tespit etmeye ve bu hususta
+              gerekli talimatı vermeye ve icabında gerekli tamiratı kiracının nam ve hesabına yaptırmaya yetkilidir.
+            </p>
+            <p>
+              10.2.Kiracı kontroller ve tespitler neticesinde Kiraya Veren veya Kiraya Veren personelinin verdiği fenni
+              talimatları yerine getirmekle yükümlüdür.
+            </p>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 11 - Sözleşmenin Feshi</h2>
+            <p>
+              11.1.Kiraya Veren, Kiracının iş bu sözleşme kapsamında yüklendiği edimlerini ifa etmemesinden, eksik ifa
+              etmesinden ya da haksız fiillerinden dolayı herhangi bir tazminat ödemeksizin bu sözleşmeyi derhal
+              feshedebilir. Kiracı, Kiraya Verenin bu hakkını geriye dönülemez bir şekilde kabul, beyan ve taahhüt eder.
+            </p>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 12 - Tebligat</h2>
+            <p>
+              12.1.Tarafların tebligat adresi Kiracı ve Kiraya Veren için Sözleşmenin başında belirtilen adres olup,
+              adresini değiştiren taraf yeni adresini değişiklikten itibaren 7 (yedi) gün içinde diğer tarafa yazılı olarak
+              bildirmediği sürece bu adreslerde yapılan tebligatlar geçerli olarak hukuki sonuçlar doğurur.
+            </p>
+            <p>
+              12.2.Taraflar, kendilerinin bulunmadığı zamanlarda yanında çalışanlardan herhangi birine yapılacak
+              tebligatın bizzat kendisine yapılmış bir tebligat gibi hüküm ve sonuç doğuracağını kabul etmişlerdir. İşbu
+              Sözleşmede kararlaştırılan adrese yapılmak kaydı ile söz konusu tebligatın "bila-tebliğ" geri dönmesi
+              halinde dahi tebligat muhatabına ulaşmış kabul edilir. İşbu Sözleşme tahtında yapılacak olan tebligatlar
+              noter kanalı veya iadeli taahhütlü mektup ile yapılacaktır.
+            </p>
+        </div>
+
+        <div class="contract-section">
+            <h2>Madde 13 - Garanti Verilmesi</h2>
+            <p>
+              13.1.Kiraya Veren ‘in, Kiracı'nın bu sözleşme kapsamında edimlerini yerine getirmesinden doğan zarar
+              ve/veya zarar tehlikesini tamamen bağımsız olarak garantör sıfatıyla garanti eder.
+            </p>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="contract-section">
+            <h2>Madde 14 - İtilafların Halı</h2>
+            <p>
+              14.1.Bu sözleşmeden doğabilecek her türlü itilafın hal merci münhasıran BURSA mahkemeleri ve icra daireleridir.
+            </p>
+            <p>
+              14.2.Bu KULE VİNÇ kira sözleşmesi <%= l(contract.contract_date) %> tarihinde 2 nüsha olarak akdedilmiştir.
+            </p>
+        </div>
+
+        <div class="container">
+          <div class="signature">
+            <div>
+                <p>KİRAYA VEREN</p>
+                <p>ZİRVE VİNÇ TİCARET VE SANAYİ A.Ş.</p>
+            </div>
+            <div>
+                <p>KİRACI</p>
+                <p><%= contract.customer.customer_name %></p>
+            </div>
+            <div>
+                <p>GARANTÖR</p>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+        
+</body>
+</html>

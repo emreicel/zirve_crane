@@ -1,0 +1,46 @@
+<h1>Kontratı Düzenle</h1>
+
+<%= form_with model: @contract, local: true do |f| %>
+  <div>
+    <%= f.label :customer_id, "Müşteri Adı" %>
+    <%= f.collection_select :customer_id, @customers, :id, :customer_name, prompt: "Müşteri Seçin" %>
+  </div>
+
+  <div>
+    <%= f.label :crane_id, "Vinç Markası ve Şase No" %>
+    <%= f.collection_select :crane_id, @cranes, :id, ->(crane) { "#{crane.crane_brand_name} - #{crane.crane_chassis_no}" }, prompt: "Vinç Markası Seçin" %>
+  </div>
+
+  <div>
+    <%= f.label :rent_term, "Kiralama Süresi (Ay)" %>
+    <%= f.number_field :rent_term, data: { contracts_target: "rentTerm" } %>
+  </div>
+
+  <div>
+    <%= f.label :rent_amount, "Fiyat" %>
+    <%= f.number_field :rent_amount %>
+  </div>
+
+  <div>
+    <%= f.label :contract_date, "Kontrakt Tarihi" %>
+    <%= f.date_field :contract_date %>
+  </div>
+
+  <div>
+    <%= f.label :rent_start_date, "Kira Başlangıç Tarihi" %>
+    <%= f.date_field :rent_start_date, data: { contracts_target: "startDate" } %>
+  </div>
+
+  <div>
+    <%= f.label :rent_finish_date, "Kira Bitiş Tarihi" %>
+    <%= f.date_field :rent_finish_date, data: { contracts_target: "finishDate" } %>
+  </div>
+
+  <%= f.label :vat_percentage, "KDV Oranı (%)" %>
+    <%= f.number_field :vat_percentage, min: 0, max: 100 %>
+  </div>
+
+  <div>
+    <%= f.submit "Güncelle" %>
+  </div>
+<% end %>

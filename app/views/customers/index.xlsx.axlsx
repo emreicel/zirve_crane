@@ -1,0 +1,14 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Müşteri Listesi") do |sheet|
+  sheet.add_row ["Müşteri Adı", "Vergi Dairesi", "Müşteri Adresi", "Müşteri Numarası"]
+
+  @customers.each do |customer|
+    sheet.add_row [
+      customer.customer_name,
+      customer.vat_office_name,
+      customer.customer_address,
+      customer.customer_phone_number
+    ]
+  end
+end

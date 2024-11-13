@@ -1,0 +1,63 @@
+<div class="form-container">
+  <h1>Yeni Vinç Ekle</h1>
+  <%= form_with model: @crane, local: true do |f| %>
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_brand_name, "Marka" %>
+        <%= f.text_field :crane_brand_name, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :crane_model_name, "Model" %>
+        <%= f.text_field :crane_model_name, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_chassis_no, "Şase No" %>
+        <%= f.text_field :crane_chassis_no, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :crane_boom_length, "Bom Uzunluğu" %>
+        <%= f.number_field :crane_boom_length, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_height, "Vinç Yüksekliği" %>
+        <%= f.number_field :crane_height, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :crane_tonnage, "Maksimum Tonaj" %>
+        <%= f.number_field :crane_tonnage, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_boom_tonnage, "Bom Ucu Tonaj" %>
+        <%= f.number_field :crane_boom_tonnage, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :crane_year, "İmal Yılı" %>
+        <%= f.number_field :crane_year, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :crane_company_name, "Kayıtlı Firma" %>
+        <%= f.collection_select :crane_owner_id, @crane_owners, :id, :crane_owner_name, prompt: "Firma Seçin", class: "form-control" %>
+      </div>
+      <div class="form-check mb-3">
+        <%= f.check_box :available, class: "form-check-input custom-checkbox", id: "available-checkbox" %>
+        <%= f.label :available, "Uygun mu?", class: "form-check-label custom-label", for: "available-checkbox" %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "Kaydet", class: "btn btn-save" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer_id: 1
+  crane_id: 1
+  rent_term: 1
+  rent_amount: 1
+  contract_date: 2024-11-05
+  rent_start_date: 2024-11-05
+  rent_finish_date: 2024-11-05
+
+two:
+  customer_id: 1
+  crane_id: 1
+  rent_term: 1
+  rent_amount: 1
+  contract_date: 2024-11-05
+  rent_start_date: 2024-11-05
+  rent_finish_date: 2024-11-05

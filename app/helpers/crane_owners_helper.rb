@@ -1,0 +1,2 @@
+module CraneOwnersHelper
+end

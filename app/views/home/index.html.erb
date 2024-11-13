@@ -1,0 +1,71 @@
+<div class="dashboard-logo">
+  <%= image_tag 'logo.png', alt: 'Company Logo', class: 'logo' %>
+</div>
+
+<% if user_signed_in? %>
+<h1 class="mb-4">Genel Bakış</h1>
+
+<div class="container-fluid">
+  <!-- Crane Durum Tablosu -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Vinç Durumları</h5>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped table-hover mb-0 text-center">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Uygun Vinç Sayısı</th>
+                <th scope="col">Uygun Olmayan Vinç Sayısı</th>
+                <th scope="col">Toplam Vinç Sayısı</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center">
+                <td><%= Crane.where(available: true).count %></td>
+                <td><%= Crane.where(available: false).count %></td>
+                <td><%= Crane.count %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contract Bilgileri Tablosu -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Kontrat Bilgileri</h5>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped table-hover mb-0 text-center">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Toplam Kontrat Sayısı</th>
+                <th scope="col">Toplam Kontrat Tutarı</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center">
+                <td><%= Contract.count %></td>
+                <td><%= number_to_currency(Contract.sum(:rent_amount)) %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% else %>
+  <%= link_to 'Sign up', new_user_registration_path %> |
+  <%= link_to 'Log in', new_user_session_path %>
+
+  
+<% end %>

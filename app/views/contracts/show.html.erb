@@ -1,0 +1,50 @@
+<div class="card-header d-flex justify-content-between align-items-center">
+  <h1 class="card-title mb-4">Kontrat Detayları</h1>
+  <div class="d-flex gap-2">
+    <%= link_to 'PDF OLUŞTUR', show_pdf_contract_path(@contract), target: "_blank", class: "btn btn-sm btn-outline-info mx-1" %>
+  </div>
+</div>
+<p><strong>Kiralayan :</strong> <%= @contract.customer.customer_name %></p>
+<p><strong>Marka :</strong> <%= @contract.crane.crane_brand_name %></p>
+<p><strong>Seri No :</strong> <%= @contract.crane.crane_chassis_no %></p>
+<p><strong>İmal Yılı :</strong> <%= @contract.crane.crane_year%></p>
+<p><strong>Maksimum Kapasite :</strong> <%= @contract.crane.crane_tonnage %> KG</p>
+<p><strong>Yükseklik :</strong> <%= @contract.crane.crane_height %> MT</p>
+<p><strong>Bom Uzunluğu :</strong> <%= @contract.crane.crane_boom_length %> MT</p>
+<p><strong>Bom Ucu Tonajı :</strong> <%= @contract.crane.crane_boom_tonnage%> KG</p>
+<p><strong>Kiralama Süresi:</strong> <%= @contract.rent_term %> ay</p>
+<p><strong>Toplam Tutar:</strong> <%= number_to_currency(@contract.rent_amount) %></p>
+
+<h2>Ödeme Tablosu</h2>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">S.No</th>
+        <th scope="col">Adet</th>
+        <th scope="col">Başlangıç Tarihi</th>
+        <th scope="col">Bitiş Tarihi</th>
+        <th scope="col">KDV Hariç Tutar</th>
+        <th scope="col">KDV Oranı</th>
+        <th scope="col">KDV Dahil Tutar</th>
+        <th scope="col">Ödeme Tarihi</th>
+        <th scope="col">Ödeme Yöntemi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @payment_tables.each_with_index do |payment, index| %>
+        <tr>
+          <td class="text-center"><%= index + 1 %></td>
+          <td class="text-center"><%= payment.rent_table_quantity %></td>
+          <td class="text-center"><%= l(payment.start_date) %></td>
+          <td class="text-center"><%= l(payment.end_date) %></td>
+          <td class="text-end"><%= number_to_currency(payment.amount_excluding_vat) %></td>
+          <td class="text-center"><%= payment.vat_percentage %>%</td>
+          <td class="text-end"><%= number_to_currency(payment.amount_including_vat) %></td>
+          <td class="text-center"><%= payment.payment_date %></td>
+          <td class="text-center"><%= payment.payment_method %></td>
+        </tr>
+      <% end %>
+      
+    </tbody>
+  </table>
+</div>

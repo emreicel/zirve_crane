@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  contract: one
+  rent_table_quantity: 1
+  start_date: 2024-11-06
+  end_date: 2024-11-06
+  amount_excluding_vat: 9.99
+  vat_percentage: 9.99
+  amount_including_vat: 9.99
+  payment_date: 2024-11-06
+  payment_method: MyString
+
+two:
+  contract: two
+  rent_table_quantity: 1
+  start_date: 2024-11-06
+  end_date: 2024-11-06
+  amount_excluding_vat: 9.99
+  vat_percentage: 9.99
+  amount_including_vat: 9.99
+  payment_date: 2024-11-06
+  payment_method: MyString

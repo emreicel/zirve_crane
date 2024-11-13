@@ -1,0 +1,17 @@
+<h1>Kullanıcı Düzenle</h1>
+
+<%= form_with model: @user, local: true do |f| %>
+    <div>
+        <%= f.label :name, 'Ad' %>
+        <%= f.text_field :name %>
+    </div>
+
+    <div>
+        <%= f.label :role, 'Rol' %>
+        <%= f.select :role, User.roles.keys.map { |role| [role.titleize, role] } %>
+    </div>
+
+    <div>
+        <%= f.submit 'Güncelle' %>
+    </div>
+<% end %>

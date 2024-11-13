@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  crane_brand_name: MyString
+  crane_model_name: MyString
+  crane_chassis_no: MyString
+  crane_boom_length: 1
+  crane_height: 1
+  crane_tonnage: 1
+  crane_boom_tonnage: 1
+  crane_year: 1
+  crane_company_name: MyString
+
+two:
+  crane_brand_name: MyString
+  crane_model_name: MyString
+  crane_chassis_no: MyString
+  crane_boom_length: 1
+  crane_height: 1
+  crane_tonnage: 1
+  crane_boom_tonnage: 1
+  crane_year: 1
+  crane_company_name: MyString

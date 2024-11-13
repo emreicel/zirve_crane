@@ -1,0 +1,22 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Cranes") do |sheet|
+  # Başlıklar
+  sheet.add_row ["Marka", "Model", "Şase No", "Bom Uzunluğu", "Vinç Yüksekliği", "Maksimum Tonaj", "Bom Ucu Tonaj", "İmal Yılı", "Kayıtlı Firma", "Uygunluk"]
+
+  # Veriler
+  @cranes.each do |crane|
+    sheet.add_row [
+      crane.crane_brand_name,
+      crane.crane_model_name,
+      crane.crane_chassis_no,
+      crane.crane_boom_length,
+      crane.crane_height,
+      crane.crane_tonnage,
+      crane.crane_boom_tonnage,
+      crane.crane_year,
+      crane.crane_company_name,
+      crane.available ? "Uygun" : "Uygun Değil"
+    ]
+  end
+end

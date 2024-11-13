@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  crane_owner_name: MyString
+  crane_owner_address: MyText
+  crane_owner_phone: MyString
+  crane_owner_vat_office: MyString
+  crane_owner_contact: MyString
+  crane_owner_contact_email: MyString
+  crane_owner_contact_phone: MyString
+
+two:
+  crane_owner_name: MyString
+  crane_owner_address: MyText
+  crane_owner_phone: MyString
+  crane_owner_vat_office: MyString
+  crane_owner_contact: MyString
+  crane_owner_contact_email: MyString
+  crane_owner_contact_phone: MyString
