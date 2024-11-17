@@ -7,7 +7,7 @@
 # On Windows:
 #   gem install pg
 #       Choose the win32 build.
-#       Install PostgreSQL and put its /bin directory on your path.
+#       Install  and put its /bin directory on your path.
 #
 # Configure Using Gemfile
 # gem "pg"
@@ -22,7 +22,13 @@ default: &default
 
 development:
   <<: *default
+  adapter: postgresql
+  encoding: unicode
   database: zirve_crane_development
+  username: zirve_crane
+  password: white.shark667  # PostgreSQL kullanıcısının parolası
+  host: localhost
+  port: 5432
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.

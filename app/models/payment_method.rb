@@ -1,3 +1,5 @@
 class PaymentMethod < ApplicationRecord
-    belongs_to :contract
-end
+    has_many :payment_tables
+    
+    validates :payment_method, presence: true
+  end

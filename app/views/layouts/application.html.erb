@@ -66,6 +66,41 @@
     </main>
   </div>
 
+
+
+  <% if flash[:success] %>
+    <div class="modal fade" id="successModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title">
+              <span class="material-icons align-middle me-2">check_circle</span>
+              <%= flash[:success][:title] %>
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p><%= flash[:success][:message] %></p>
+            <p class="mb-0">
+              <strong>Dosya Adı:</strong> 
+              <span class="text-muted"><%= flash[:success][:filename] %></span>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%= javascript_tag do %>
+      document.addEventListener('DOMContentLoaded', function() {
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+      });
+    <% end %>
+  <% end %>
+
   <script>
     function toggleSettingsMenu() {
       const menu = document.getElementById('settings-menu');

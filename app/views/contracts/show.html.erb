@@ -16,35 +16,98 @@
 <p><strong>Toplam Tutar:</strong> <%= number_to_currency(@contract.rent_amount) %></p>
 
 <h2>Ödeme Tablosu</h2>
-  <table>
-    <thead>
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">S.No</th>
+      <th scope="col">Adet</th>
+      <th scope="col">Başlangıç Tarihi</th>
+      <th scope="col">Bitiş Tarihi</th>
+      <th scope="col">KDV Hariç Tutar</th>
+      <th scope="col">KDV Oranı</th>
+      <th scope="col">KDV Dahil Tutar</th>
+      <th scope="col">Ödeme Tarihi</th>
+      <th scope="col">Ödeme Yöntemi</th>
+      <th scope="col">Dosya</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payment_tables.each_with_index do |payment, index| %>
       <tr>
-        <th scope="col">S.No</th>
-        <th scope="col">Adet</th>
-        <th scope="col">Başlangıç Tarihi</th>
-        <th scope="col">Bitiş Tarihi</th>
-        <th scope="col">KDV Hariç Tutar</th>
-        <th scope="col">KDV Oranı</th>
-        <th scope="col">KDV Dahil Tutar</th>
-        <th scope="col">Ödeme Tarihi</th>
-        <th scope="col">Ödeme Yöntemi</th>
+        <td class="text-center"><%= index + 1 %></td>
+        <td class="text-center"><%= payment.rent_table_quantity %></td>
+        <td class="text-center"><%= l(payment.start_date) %></td>
+        <td class="text-center"><%= l(payment.end_date) %></td>
+        <td class="text-end"><%= number_to_currency(payment.amount_excluding_vat) %></td>
+        <td class="text-center"><%= payment.vat_percentage %>%</td>
+        <td class="text-end"><%= number_to_currency(payment.amount_including_vat) %></td>
+        <td class="text-center"><%= payment.payment_date %></td>
+        
+        <td class="text-center" style="width: 200px;">
+          <div class="btn-group">
+            <% if payment.file.attached? %>
+              <%= link_to rails_blob_path(payment.file, disposition: "attachment"), 
+                  class: "btn btn-sm btn-info", 
+                  title: payment.file.filename.to_s,
+                  data: { bs_toggle: "tooltip" } do %>
+                <span class="material-icons">download</span>
+              <% end %>
+              
+              <%= button_to delete_file_payment_table_path(payment), 
+                  method: :delete,
+                  form: { 
+                    style: 'display: inline-block;',
+                    data: { confirm: "Dosyayı silmek istediğinize emin misiniz?" }
+                  },
+                  class: "btn btn-sm btn-danger",
+                  title: "Dosyayı Sil" do %>
+                <span class="material-icons">delete</span>
+              <% end %>
+            <% end %>
+            
+            <%= button_tag type: "button", 
+                class: "btn btn-sm btn-primary", 
+                data: { bs_toggle: "modal", bs_target: "#uploadModal#{payment.id}" } do %>
+              <span class="material-icons">upload</span>
+              <%= payment.file.attached? ? "Değiştir" : "Yükle" %>
+            <% end %>
+          </div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="uploadModal<%= payment.id %>" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Dosya Yükle</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <%= form_with(model: payment, local: true, multipart: true) do |form| %>
+                    <div class="mb-3">
+                      <% if payment.file.attached? %>
+                        <p class="text-muted">Mevcut dosya: <%= payment.file.filename %></p>
+                      <% end %>
+                      <%= form.file_field :file, 
+                          class: "form-control form-control-sm",
+                          accept: ".pdf,.doc,.docx,.xls,.xlsx" %>
+                    </div>
+                    <div class="text-end">
+                      <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">İptal</button>
+                      <%= form.submit "Yükle", class: "btn btn-primary btn-sm" %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+
+          
+
+       
       </tr>
-    </thead>
-    <tbody>
-      <% @payment_tables.each_with_index do |payment, index| %>
-        <tr>
-          <td class="text-center"><%= index + 1 %></td>
-          <td class="text-center"><%= payment.rent_table_quantity %></td>
-          <td class="text-center"><%= l(payment.start_date) %></td>
-          <td class="text-center"><%= l(payment.end_date) %></td>
-          <td class="text-end"><%= number_to_currency(payment.amount_excluding_vat) %></td>
-          <td class="text-center"><%= payment.vat_percentage %>%</td>
-          <td class="text-end"><%= number_to_currency(payment.amount_including_vat) %></td>
-          <td class="text-center"><%= payment.payment_date %></td>
-          <td class="text-center"><%= payment.payment_method %></td>
-        </tr>
-      <% end %>
-      
-    </tbody>
-  </table>
+    <% end %>
+  </tbody>
+</table>
+
 </div>

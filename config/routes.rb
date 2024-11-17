@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "payment_tables/update"
   # Devise user authentication
   devise_for :users
 
@@ -17,36 +18,18 @@ Rails.application.routes.draw do
   resources :contracts do
     member do
       get :show_pdf
+      post :send_email
+      post :upload_invoice
     end
   end
-  resources :users, only: [:index, :new, :edit, :update]
+  resources :users, only: [:index, :new, :edit, :create, :update]
   resources :payment_methods
-
-  # Remove the following redundant GET routes as they are already covered by the resources
-  # get "payment_methods/index"
-  # get "payment_methods/new"
-  # get "payment_methods/create"
-  # get "payment_methods/edit"
-  # get "payment_methods/update"
-  # get "payment_methods/destroy"
-  # get "users/index"
-  # get "users/edit"
-  # get "users/update"
-  # get "contracts/new"
-  # get "contracts/create"
-  # get "contracts/index"
-  # get "contracts/edit"
-  # get "contracts/update"
-  # get "contracts/destroy"
-  # get "customers/new"
-  # get "customers/create"
-  # get "customers/index"
-  # get "customers/edit"
-  # get "customers/update"
-  # get "customers/destroy"
-  # get "cranes/new"
-  # get "cranes/create"
-  # get "cranes/index"
+  resources :payment_tables do
+    member do
+      post :upload_invoice
+      delete 'delete_file', to: 'payment_tables#delete_file'
+    end
+  end
 
   # Manually added home route
   get "home/index"

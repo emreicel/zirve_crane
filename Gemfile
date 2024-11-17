@@ -24,6 +24,8 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 gem 'font-awesome-sass'
 gem 'axlsx_rails'
+gem 'letter_opener', group: :development
+
 
 
 

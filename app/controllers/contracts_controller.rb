@@ -15,8 +15,8 @@ class ContractsController < ApplicationController
   end
 
   def show
-    @payment_tables = @contract.payment_tables
     @contract = Contract.find(params[:id])
+    @payment_tables = @contract.payment_tables
   end
 
   def new
@@ -60,6 +60,19 @@ class ContractsController < ApplicationController
            template: "contracts/pdf_template" # Kullanılacak şablon dosyası
   end
 
+  # app/controllers/contracts_controller.rb
+  def send_email
+    @contract = Contract.find(params[:id])
+    begin
+      ContractMailer.payment_notification(@contract).deliver_now
+      flash[:notice] = "E-posta başarıyla gönderildi."
+    rescue => e
+      Rails.logger.error "E-posta gönderim hatası: #{e.message}"
+      flash[:alert] = "E-posta gönderilirken bir hata oluştu: #{e.message}"
+    end
+    redirect_to contracts_path
+  end
+
   
   
 
@@ -69,6 +82,8 @@ class ContractsController < ApplicationController
   def set_contract
     @contract = Contract.find(params[:id])
   end
+
+  
 
   def set_customers_and_cranes
     @customers = Customer.all
@@ -113,4 +128,6 @@ class ContractsController < ApplicationController
       )
     end
   end
+
+  
 end

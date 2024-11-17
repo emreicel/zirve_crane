@@ -1,0 +1,11 @@
+<p>Merhaba,</p>
+
+<p>Aşağıdaki ödeme bilgilerini sizlere iletiyoruz:</p>
+
+<ul>
+  <li>Ödeme Tarihi: <%= @customer_invoice_request.payment_date %></li>
+  <li>Tutar: <%= number_to_currency(@customer_invoice_request.amount_including_vat) %></li>
+  <li>Ödeme Yöntemi: <%= @customer_invoice_request.payment_method %></li>
+</ul>
+
+<p>Teşekkürler!</p>

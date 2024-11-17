@@ -34,9 +34,14 @@
               <td><%= contract.crane&.crane_chassis_no || "Seri numarası eksik" %></td>
               <td><%= contract.rent_term %> ay</td>
               <td><%= number_to_currency(contract.rent_amount) %></td>
-              <td><%= contract.contract_date %></td>
-              <td><%= contract.rent_start_date %></td>
-              <td><%= contract.rent_finish_date %></td>
+              <td><%= l(contract.contract_date) %></td>
+              <td><%= l(contract.rent_start_date) %></td>
+              <td><%= l(contract.rent_finish_date) %></td>
+              <td>
+                <%= button_to 'E-posta Gönder', send_email_contract_path(contract), method: :post, class: "btn btn-sm btn-outline-primary" %>
+              </td>
+
+
               <td class="text-center">
                 
                 <%= link_to 'Görüntüle', contract_path(contract), class: "btn btn-sm btn-outline-info mx-1" %>

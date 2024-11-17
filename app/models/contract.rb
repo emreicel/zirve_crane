@@ -2,6 +2,7 @@ class Contract < ApplicationRecord
     belongs_to :customer
     belongs_to :crane
     has_many :payment_tables, dependent: :destroy
+    accepts_nested_attributes_for :payment_tables
 
     after_destroy :make_crane_available
 
