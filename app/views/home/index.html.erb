@@ -6,57 +6,49 @@
 <h1 class="mb-4">Genel Bakış</h1>
 
 <div class="container-fluid">
-  <!-- Crane Durum Tablosu -->
-  <div class="row mb-4">
-    <div class="col-md-12">
-      <div class="card shadow-sm">
-        <div class="card-header">
+  <div class="row">
+    <!-- Vinç Durumları Kartı -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white">
           <h5 class="card-title mb-0">Vinç Durumları</h5>
         </div>
-        <div class="card-body p-0">
-          <table class="table table-striped table-hover mb-0 text-center">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">Uygun Vinç Sayısı</th>
-                <th scope="col">Uygun Olmayan Vinç Sayısı</th>
-                <th scope="col">Toplam Vinç Sayısı</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td><%= Crane.where(available: true).count %></td>
-                <td><%= Crane.where(available: false).count %></td>
-                <td><%= Crane.count %></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-4">
+              <h3 class="text-success"><%= Crane.where(available: true).count %></h3>
+              <small class="text-muted">Uygun Vinç</small>
+            </div>
+            <div class="col-4">
+              <h3 class="text-danger"><%= Crane.where(available: false).count %></h3>
+              <small class="text-muted">Uygun Olmayan</small>
+            </div>
+            <div class="col-4">
+              <h3 class="text-primary"><%= Crane.count %></h3>
+              <small class="text-muted">Toplam</small>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Contract Bilgileri Tablosu -->
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card shadow-sm">
-        <div class="card-header">
+    <!-- Kontrat Bilgileri Kartı -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white">
           <h5 class="card-title mb-0">Kontrat Bilgileri</h5>
         </div>
-        <div class="card-body p-0">
-          <table class="table table-striped table-hover mb-0 text-center">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">Toplam Kontrat Sayısı</th>
-                <th scope="col">Toplam Kontrat Tutarı</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td><%= Contract.count %></td>
-                <td><%= number_to_currency(Contract.sum(:rent_amount)) %></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-6">
+              <h3><%= Contract.count %></h3>
+              <small class="text-muted">Toplam Kontrat</small>
+            </div>
+            <div class="col-6">
+              <h3><%= number_to_currency(Contract.sum(:rent_amount)) %></h3>
+              <small class="text-muted">Toplam Tutar</small>
+            </div>
+          </div>
         </div>
       </div>
     </div>

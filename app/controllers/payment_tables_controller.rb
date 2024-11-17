@@ -35,6 +35,24 @@ class PaymentTablesController < ApplicationController
         flash[:alert] = "Ödeme yöntemi güncellenemedi."
       end
       redirect_to contract_path(@payment_table.contract)
+    elsif params[:payment_table][:note].present? || params[:payment_table][:note] == ""
+      if @payment_table.update(note_params)
+        respond_to do |format|
+          format.html { 
+            flash[:notice] = "Not güncellendi"
+            redirect_to contract_path(@payment_table.contract)
+          }
+          format.json { render json: { status: 'success', message: 'Not güncellendi' } }
+        end
+      else
+        respond_to do |format|
+          format.html {
+            flash[:alert] = "Not güncellenemedi"
+            redirect_to contract_path(@payment_table.contract)
+          }
+          format.json { render json: { status: 'error', message: 'Not güncellenemedi' } }
+        end
+      end
     end
   end
 
@@ -55,5 +73,34 @@ class PaymentTablesController < ApplicationController
 
   def payment_table_params
     params.require(:payment_table).permit(:payment_method_id, :file)
+  end
+
+
+  def note_params 
+    params.require(:payment_table).permit(:note)
+  end
+
+  def handle_note_update
+    if @payment_table.update(note_params)
+      respond_to do |format|
+        format.html { 
+          flash[:notice] = "Not güncellendi"
+          redirect_to contract_path(@payment_table.contract)
+        }
+        format.json { 
+          render json: { status: 'success', message: 'Not güncellendi' }
+        }
+      end
+    else
+      respond_to do |format|
+        format.html {
+          flash[:alert] = "Not güncellenemedi"
+          redirect_to contract_path(@payment_table.contract)
+        }
+        format.json { 
+          render json: { status: 'error', message: 'Not güncellenemedi' }
+        }
+      end
+    end
   end
 end

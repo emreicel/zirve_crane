@@ -111,7 +111,7 @@ class ContractsController < ApplicationController
   end
 
   def create_payment_tables(contract)
-    rent_amount_per_month = contract.rent_amount / contract.rent_term
+    rent_amount_per_month = (contract.rent_amount.to_f / contract.rent_term).round(2)
     start_date = contract.rent_start_date
   
     contract.rent_term.times do |i|
