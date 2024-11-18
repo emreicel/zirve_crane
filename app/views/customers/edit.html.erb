@@ -13,6 +13,10 @@
             <%= f.text_field :customer_name, class: "form-control", required: true %>
           </div>
           <div class="col-md-6">
+            <%= f.label :email, "E-posta" %>
+            <%= f.email_field :email, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
             <%= f.label :vat_office_name, "Vergi Dairesi", class: "form-label" %>
             <%= f.text_field :vat_office_name, class: "form-control" %>
           </div>

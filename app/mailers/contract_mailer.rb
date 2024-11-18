@@ -1,14 +1,14 @@
 class ContractMailer < ApplicationMailer
-    default from: 'emreicel@gmail.com'
-  
-    def payment_notification(contract)
-      @contract = contract
-      mail(to: 'emre@iclexport.com', subject: 'Fatura Talebi')do |format|
-        format.html { render 'payment_notification' }
-      end
+  def contract_details(contract)
+    @contract = contract
+    @customer = contract.customer
+    @crane = contract.crane
 
-    # Sunucu yanıtını günlüğe yazdırma
-      Rails.logger.info "E-posta gönderimi için hazırlanan: #{message}"
-    end
+    attachments["kontrat_#{contract.id}.pdf"] = contract.generate_pdf if contract.respond_to?(:generate_pdf)
+    
+    mail(
+      to: @customer.email,
+      subject: "Vinç Kiralama Kontrat Detayları - ##{contract.id}"
+    )
   end
-  
+end

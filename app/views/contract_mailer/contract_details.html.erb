@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Sayın <%= @customer.customer_name %>,</h1>
+    
+    <p>Vinç kiralama kontrat detaylarınız aşağıdadır:</p>
+    
+    <div style="margin: 20px 0;">
+      <p><strong>Kontrat No:</strong> #<%= @contract.id %></p>
+      <p><strong>Başlangıç Tarihi:</strong> <%= l(@contract.start_date, format: :long) %></p>
+      <p><strong>Bitiş Tarihi:</strong> <%= l(@contract.end_date, format: :long) %></p>
+      <p><strong>Vinç Modeli:</strong> <%= @crane.crane_model %></p>
+      <p><strong>Kiralama Tutarı:</strong> <%= number_to_currency(@contract.rent_amount) %></p>
+    </div>
+
+    <p>Detaylı bilgiler ekteki PDF dosyasında yer almaktadır.</p>
+    
+    <p>Saygılarımızla,<br>
+    Vinç Kiralama Sistemi</p>
+  </body>
+</html>

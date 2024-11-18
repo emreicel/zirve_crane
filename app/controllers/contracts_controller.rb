@@ -63,14 +63,15 @@ class ContractsController < ApplicationController
   # app/controllers/contracts_controller.rb
   def send_email
     @contract = Contract.find(params[:id])
-    begin
-      ContractMailer.payment_notification(@contract).deliver_now
-      flash[:notice] = "E-posta başarıyla gönderildi."
-    rescue => e
-      Rails.logger.error "E-posta gönderim hatası: #{e.message}"
-      flash[:alert] = "E-posta gönderilirken bir hata oluştu: #{e.message}"
+    
+    if @contract.customer&.email.present?
+      ContractMailer.contract_details(@contract).deliver_later
+      redirect_to contracts_path, notice: 'Kontrat detayları email olarak gönderildi.'
+    else
+      redirect_to contracts_path, alert: 'Müşteri email adresi bulunamadı!'
     end
-    redirect_to contracts_path
+  rescue StandardError => e
+    redirect_to contracts_path, alert: "Email gönderilemedi: #{e.message}"
   end
 
   
