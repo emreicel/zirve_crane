@@ -86,6 +86,7 @@
       <th scope="col" class="text-center align-middle">Ödeme Tarihi</th>
       <th scope="col" class="text-center align-middle">Ödeme Yöntemi</th>
       <th scope="col" class="text-center align-middle">Not</th>  <!-- Yeni sütun -->
+      <th scope="col" class="text-center align-middle">Email Gönder</th>
       <th scope="col" class="text-center align-middle">Dosya</th>
     </tr>
   </thead>
@@ -123,15 +124,6 @@
           <% end %>
         </td>
 
-        <td class="text-center align-middle">
-          <%= button_to send_payment_email_payment_table_path(payment),
-              method: :post,
-              class: "btn btn-sm btn-info",
-              data: { confirm: "Bu ödeme için email göndermek istediğinize emin misiniz?" } do %>
-            <i class="material-icons">email</i>
-          <% end %>
-        </td>
-
         <td class="text-center align-middle" style="min-width: 200px;">
           <%= form_with(model: payment, local: true) do |form| %>
             <div class="input-group input-group-sm">
@@ -145,6 +137,24 @@
             </div>
           <% end %>
         </td>
+
+        <td class="text-center align-middle">
+          <% if payment.email_sent_at.present? %>
+            <span class="badge bg-success">
+              <i class="material-icons">check</i>
+              Email Gönderildi
+              <small>(<%= payment.email_sent_at.strftime("%d.%m.%Y %H:%M") %>)</small>
+            </span>
+          <% else %>
+            <%= button_to send_payment_email_payment_table_path(payment),
+                method: :post,
+                class: "btn btn-sm btn-info",
+                data: { confirm: "Bu ödeme için email göndermek istediğinize emin misiniz?" } do %>
+              <i class="material-icons">email</i>
+              Email Gönder
+            <% end %>
+          <% end %>
+        </td> 
                 
         <td class="text-center align-middle" style="width: 200px;">
           <div class="btn-group">

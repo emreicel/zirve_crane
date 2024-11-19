@@ -35,25 +35,10 @@
               <td><%= l(contract.contract_date) %></td>
               <td><%= l(contract.rent_start_date) %></td>
               <td><%= l(contract.rent_finish_date) %></td>
-              <!-- Mevcut tablo içinde email butonu -->
-              <td>
-                <%= button_to send_email_contract_path(contract), 
-                              class: "btn btn-sm #{contract.customer&.email.present? ? 'btn-primary' : 'btn-secondary'}", 
-                              method: :post,
-                              data: { confirm: "Email göndermek istediğinizden emin misiniz?" },
-                              disabled: contract.customer&.email.blank?,
-                              title: contract.customer&.email.blank? ? "Müşteri email adresi eksik" : "Email gönder" do %>
-                  <i class="fas fa-envelope"></i> Email Gönder
-                <% end %>
-              </td>
-
-
               <td class="text-center">
-                
                 <%= link_to 'Görüntüle', contract_path(contract), class: "btn btn-sm btn-outline-info mx-1" %>
                 <%= link_to 'Düzenle', edit_contract_path(contract), class: "btn btn-sm btn-outline-warning mx-1" %>
                 <%= button_to 'Sil', contract, method: :delete, data: { confirm: 'Bu kontratı silmek istediğinize emin misiniz?' }, class: "btn btn-sm btn-outline-danger" %>
-                                
               </td>
             </tr>
           <% end %>

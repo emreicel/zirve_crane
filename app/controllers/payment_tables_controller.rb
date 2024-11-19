@@ -74,7 +74,8 @@ class PaymentTablesController < ApplicationController
     
     begin
       if @payment.contract.customer.email.present?
-        PaymentMailer.payment_notification(@payment).deliver_now # deliver_later yerine deliver_now kullanalım test için
+        PaymentMailer.payment_notification(@payment).deliver_now
+        @payment.update(email_sent_at: Time.current)
         flash[:notice] = 'Email başarıyla gönderildi.'
       else
         flash[:alert] = 'Müşterinin email adresi bulunamadı!'

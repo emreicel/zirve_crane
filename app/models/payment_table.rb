@@ -6,6 +6,10 @@ class PaymentTable < ApplicationRecord
   
   # Dosya türü validasyonu
   validate :acceptable_file
+
+  def email_sent?
+    email_sent_at.present?
+  end
   
   private
   
