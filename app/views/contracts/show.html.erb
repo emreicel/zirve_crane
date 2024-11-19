@@ -4,16 +4,73 @@
     <%= link_to 'PDF OLUŞTUR', show_pdf_contract_path(@contract), target: "_blank", class: "btn btn-sm btn-outline-info mx-1" %>
   </div>
 </div>
-<p><strong>Kiralayan :</strong> <%= @contract.customer.customer_name %></p>
-<p><strong>Marka :</strong> <%= @contract.crane.crane_brand_name %></p>
-<p><strong>Seri No :</strong> <%= @contract.crane.crane_chassis_no %></p>
-<p><strong>İmal Yılı :</strong> <%= @contract.crane.crane_year%></p>
-<p><strong>Maksimum Kapasite :</strong> <%= @contract.crane.crane_tonnage %> KG</p>
-<p><strong>Yükseklik :</strong> <%= @contract.crane.crane_height %> MT</p>
-<p><strong>Bom Uzunluğu :</strong> <%= @contract.crane.crane_boom_length %> MT</p>
-<p><strong>Bom Ucu Tonajı :</strong> <%= @contract.crane.crane_boom_tonnage%> KG</p>
-<p><strong>Kiralama Süresi:</strong> <%= @contract.rent_term %> ay</p>
-<p><strong>Toplam Tutar:</strong> <%= number_to_currency(@contract.rent_amount) %></p>
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="card h-100 border-0 bg-light">
+          <div class="card-body">
+            <h5 class="card-title mb-3">Müşteri ve Sözleşme Bilgileri</h5>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Kiralayan:</span>
+              <strong><%= @contract.customer.customer_name %></strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Kiralama Süresi:</span>
+              <strong><%= @contract.rent_term %> ay</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Toplam Tutar:</span>
+              <strong class="text-primary"><%= number_to_currency(@contract.rent_amount) %></strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card h-100 border-0 bg-light">
+          <div class="card-body">
+            <h5 class="card-title mb-3">Vinç Teknik Özellikleri</h5>
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-2">
+                  <small class="text-muted d-block">Marka</small>
+                  <strong><%= @contract.crane.crane_brand_name %></strong>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted d-block">Seri No</small>
+                  <strong><%= @contract.crane.crane_chassis_no %></strong>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted d-block">İmal Yılı</small>
+                  <strong><%= @contract.crane.crane_year %></strong>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted d-block">Maks. Kapasite</small>
+                  <strong><%= @contract.crane.crane_tonnage %> KG</strong>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="mb-2">
+                  <small class="text-muted d-block">Yükseklik</small>
+                  <strong><%= @contract.crane.crane_height %> MT</strong>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted d-block">Bom Uzunluğu</small>
+                  <strong><%= @contract.crane.crane_boom_length %> MT</strong>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted d-block">Bom Ucu Tonajı</small>
+                  <strong><%= @contract.crane.crane_boom_tonnage %> KG</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <h2>Ödeme Tablosu</h2>
 <table class="table table-striped table-bordered">
@@ -37,7 +94,14 @@
       <tr id="payment_row_<%= payment.id %>">
         <td class="text-center align-middle"><%= index + 1 %></td>
         <td class="text-center align-middle"><%= payment.rent_table_quantity %></td>
-        <td class="text-center align-middle"><%= l(payment.start_date) %></td>
+        <td class="text-center align-middle">
+          <%= l(payment.start_date) %>
+          <% unless payment.file.attached? %>
+            <% if payment.start_date < Date.current %>
+              <span class="badge bg-danger ms-2">GECİKTİ</span>
+            <% end %>
+          <% end %>
+        </td>
         <td class="text-center align-middle"><%= l(payment.end_date) %></td>
         <td class="text-center align-middle"><%= number_to_currency(payment.amount_excluding_vat, precision: 2) %></td>
         <td class="text-center align-middle"><%= payment.vat_percentage %>%</td>
@@ -56,6 +120,15 @@
                   onchange: 'this.form.requestSubmit()'
                 } 
             %>
+          <% end %>
+        </td>
+
+        <td class="text-center align-middle">
+          <%= button_to send_payment_email_payment_table_path(payment),
+              method: :post,
+              class: "btn btn-sm btn-info",
+              data: { confirm: "Bu ödeme için email göndermek istediğinize emin misiniz?" } do %>
+            <i class="material-icons">email</i>
           <% end %>
         </td>
 

@@ -69,6 +69,24 @@ class PaymentTablesController < ApplicationController
     redirect_to contract_path(@payment_table.contract), alert: 'Dosya silinirken bir hata oluştu.'
   end
 
+  def send_payment_email
+    @payment = PaymentTable.find(params[:id])
+    
+    begin
+      if @payment.contract.customer.email.present?
+        PaymentMailer.payment_notification(@payment).deliver_now # deliver_later yerine deliver_now kullanalım test için
+        flash[:notice] = 'Email başarıyla gönderildi.'
+      else
+        flash[:alert] = 'Müşterinin email adresi bulunamadı!'
+      end
+    rescue => e
+      flash[:error] = "Email gönderilirken hata oluştu: #{e.message}"
+      Rails.logger.error("Email gönderme hatası: #{e.message}")
+    end
+  
+    redirect_to contract_path(@payment.contract)
+  end
+
   private
 
   def payment_table_params

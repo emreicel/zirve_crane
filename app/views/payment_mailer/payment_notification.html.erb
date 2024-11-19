@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #f8f9fa; padding: 20px; margin-bottom: 20px; border-radius: 5px; }
+    .section { margin-bottom: 20px; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; }
+    .amount { font-weight: bold; color: #28a745; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2 style="margin: 0;">Ödeme Bildirimi</h2>
+    </div>
+
+    <div class="section">
+      <h3>Sözleşme Bilgileri</h3>
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 150px;"><strong>Müşteri:</strong></td>
+          <td><%= @contract.customer.customer_name %></td>
+        </tr>
+        <tr>
+          <td><strong>Vinç:</strong></td>
+          <td><%= @contract.crane.crane_brand_name %> - <%= @contract.crane.crane_chassis_no %></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>Fatura Detayları</h3>
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 150px;"><strong>Başlangıç:</strong></td>
+          <td><%= l(@payment.start_date) %></td>
+        </tr>
+        <tr>
+          <td><strong>Bitiş:</strong></td>
+          <td><%= l(@payment.end_date) %></td>
+        </tr>
+        <tr>
+          <td><strong>Tutar (KDV Hariç):</strong></td>
+          <td class="amount"><%= number_to_currency(@payment.amount_excluding_vat) %></td>
+        </tr>
+        <tr>
+          <td><strong>KDV Oranı:</strong></td>
+          <td>%<%= @payment.vat_percentage %></td>
+        </tr>
+        <tr>
+          <td><strong>Toplam Tutar:</strong></td>
+          <td class="amount"><%= number_to_currency(@payment.amount_including_vat) %></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="footer">
+      <p>Bu email otomatik olarak gönderilmiştir. Lütfen cevaplamayınız.</p>
+      <p>Saygılarımızla,<br>Zirve Vinç</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     member do
       post :upload_invoice
       delete 'delete_file', to: 'payment_tables#delete_file'
+      post :send_payment_email
     end
   end
 
