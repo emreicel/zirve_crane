@@ -3,7 +3,7 @@
 </div>
 
 <% if user_signed_in? %>
-<h1 class="mb-4">Genel Bakış</h1>
+<h1 class="mb-4">Genel Bakış - <%= Time.current.strftime("%d.%m.%Y") %></h1>
 
 <div class="container-fluid">
   <div class="row">
@@ -53,6 +53,47 @@
       </div>
     </div>
   </div>
+
+  <div class="card mt-4">
+    <div class="card-header">
+      <h4>Faturası Kesilecek Ödemeler</h4>
+    </div>
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Kira Tarihi</th>
+            <th>Müşteri</th>
+            <th>Vinç Markası</th>
+            <th>Şasi No</th>
+            <th>Tutar</th>
+            <th>İşlemler</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @missing_documents.each do |payment| %>
+            <tr>
+              <td><%= payment.start_date&.strftime("%d.%m.%Y") %>
+                <% if payment.start_date && payment.start_date < Date.current %>
+                  <span class="badge bg-danger ms-2">GECİKTİ</span>
+                <% elsif payment.start_date && payment.start_date > Date.current %>
+                  <span class="badge bg-success ms-2">YAKLAŞIYOR</span>
+                <% end %>
+              </td>
+              <td><%= payment.contract.customer.customer_name rescue "-" %></td>
+              <td><%= payment.contract.crane.crane_brand_name rescue "-" %></td>
+              <td><%= payment.contract.crane.crane_chassis_no rescue "-" %></td>
+              <td><%= number_to_currency(payment.amount_excluding_vat) %></td>
+              <td>
+                <%= link_to "Detay", contract_path(payment.contract), class: "btn btn-sm btn-primary" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <% else %>

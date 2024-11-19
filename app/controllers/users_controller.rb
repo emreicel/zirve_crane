@@ -35,7 +35,7 @@ class UsersController < ApplicationController
   private
 
   def authorize_super_admin
-    redirect_to root_path, alert: 'Bu işlemi yapmaya yetkiniz yok.' unless current_user.super_admin?
+    redirect_to root_path, alert: 'Bu işlemi yapmaya yetkiniz yok.' unless current_user&.super_admin?
   end
 
   def user_params

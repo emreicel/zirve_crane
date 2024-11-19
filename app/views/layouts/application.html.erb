@@ -47,6 +47,7 @@
           <div class="d-flex align-items-center">
           
             <span class="text-white me-3"><%= current_user.name %></span>
+            <span class="text-white me-3"><%= current_user.role ? "(Super Admin)" : "" %></span>
             <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
               <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
             <% end %>

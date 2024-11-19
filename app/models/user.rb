@@ -10,9 +10,14 @@ class User < ApplicationRecord
   # Varsayılan olarak her yeni kullanıcı "user" rolüne sahip olur
   after_initialize :set_default_role, if: :new_record?
 
+  def super_admin?
+    role == 'super_admin'  # veya sizin kullandığınız role değeri
+  end
+
   private
 
   def set_default_role
     self.role ||= :user
   end
+  
 end
