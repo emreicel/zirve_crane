@@ -19,9 +19,21 @@
               <span class="text-muted">Kiralama Süresi:</span>
               <strong><%= @contract.rent_term %> ay</strong>
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between mb-2">
               <span class="text-muted">Toplam Tutar:</span>
               <strong class="text-primary"><%= number_to_currency(@contract.rent_amount) %></strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Kontrat Tarihi:</span>
+              <strong><%= l(@contract.contract_date) %></strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Kira Başlangıç Tarihi:</span>
+              <strong><%= l(@contract.rent_start_date) %></strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Kira Bitiş Tarihi:</span>
+              <strong><%= l(@contract.rent_finish_date) %></strong>
             </div>
           </div>
         </div>

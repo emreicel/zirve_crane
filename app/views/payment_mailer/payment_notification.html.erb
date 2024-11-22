@@ -9,6 +9,20 @@
     .section { margin-bottom: 20px; }
     .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; }
     .amount { font-weight: bold; color: #28a745; }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white !important;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .text-center { text-align: center; }
   </style>
 </head>
 <body>
@@ -18,7 +32,7 @@
     </div>
 
     <div class="section">
-      <h3>Sözleşme Bilgileri</h3>
+      <h3><%= @contract.contract_number %> - Sözleşme Bilgileri</h3>
       <table style="width: 100%;">
         <tr>
           <td style="width: 150px;"><strong>Müşteri:</strong></td>
@@ -44,7 +58,7 @@
         </tr>
         <tr>
           <td><strong>Ödeme Şekli:</strong></td>
-          <td><%= @payment.payment_method.payment_method %></td>
+          <td><%= @payment&.payment_method&.payment_method %></td>
         </tr>
         <tr>
           <td><strong>Tutar (KDV Hariç):</strong></td>

@@ -22,3 +22,10 @@ class Contract < ApplicationRecord
       crane.update(available: true)
     end
   end
+
+  def set_finish_date
+    return unless rent_start_date.present? && rent_term.present?
+    
+    # Bitiş tarihini ayın son günü olarak ayarla
+    self.rent_finish_date = rent_start_date.advance(months: rent_term)
+  end

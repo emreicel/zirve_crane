@@ -58,3 +58,17 @@ cranes.each do |crane_data|
 end
 
 puts "#{Crane.count} adet vinç oluşturuldu"
+
+# Varsayılan rolleri oluştur
+default_roles = [
+  { name: 'super_admin', description: 'Sistem yöneticisi' },
+  { name: 'admin', description: 'Yönetici' },
+  { name: 'user', description: 'Normal kullanıcı' },
+  { name: 'accountant', description: 'Muhasebeci' }
+]
+
+default_roles.each do |role|
+  Role.find_or_create_by!(name: role[:name]) do |r|
+    r.description = role[:description]
+  end
+end

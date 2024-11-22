@@ -40,6 +40,15 @@
                   <li><%= link_to 'Yeni Kullanıcı Oluştur', new_user_path, class: "dropdown-item" %></li>
                 </ul>
               </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Ayarlar
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="settingsDropdown">
+                  <li><%= link_to 'Ödeme Yöntemleri', payment_methods_path, class: "dropdown-item" %></li>
+                </ul>
+              </li>
             <% end %>
           </ul>
 
@@ -47,7 +56,7 @@
           <div class="d-flex align-items-center">
           
             <span class="text-white me-3"><%= current_user.name %></span>
-            <span class="text-white me-3"><%= current_user.role ? "(Super Admin)" : "" %></span>
+            <span class="text-white me-3"><%= current_user.role ? current_user.role.description : "" %></span>
             <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
               <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
             <% end %>

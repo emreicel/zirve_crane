@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get "roles/index"
+  get "roles/new"
+  get "roles/create"
+  get "roles/edit"
+  get "roles/update"
+  get "roles/destroy"
   get "payment_tables/update"
   # Devise user authentication
   devise_for :users
@@ -23,6 +29,7 @@ Rails.application.routes.draw do
     end
   end
   resources :users, only: [:index, :new, :edit, :create, :update]
+  resources :roles
   resources :payment_methods
   resources :payment_tables do
     member do

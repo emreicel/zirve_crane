@@ -14,7 +14,7 @@
     <div class="form-row">
       <div class="form-group">
         <%= f.label :rent_term, "Kiralama Süresi (Ay)" %>
-        <%= f.number_field :rent_term %>
+        <%= f.number_field :rent_term, id: 'rent_term', class: 'form-control' %>
       </div>
       <div class="form-group">
         <%= f.label :rent_amount, "Fiyat (₺)" %>
@@ -28,11 +28,11 @@
       </div>
       <div class="form-group">
         <%= f.label :rent_start_date, "Kira Başlangıç Tarihi" %>
-        <%= f.date_field :rent_start_date %>
+        <%= f.date_field :rent_start_date, id: 'rent_start_date', class: 'form-control' %>
       </div>
       <div class="form-group">
         <%= f.label :rent_finish_date, "Kira Bitiş Tarihi" %>
-        <%= f.date_field :rent_finish_date %>
+        <%= f.date_field :rent_finish_date, id: 'rent_finish_date', class: 'form-control', readonly: true %>
       </div>
       <div class="form-group">
         <%= f.label :vat_percentage, "KDV Oranı (%)" %>
@@ -46,3 +46,32 @@
     </div>
   <% end %>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const rentTermInput = document.getElementById('rent_term');
+  const startDateInput = document.getElementById('rent_start_date');
+  const finishDateInput = document.getElementById('rent_finish_date');
+
+  function updateFinishDate() {
+    const rentTerm = parseInt(rentTermInput.value) || 0;
+    const startDate = new Date(startDateInput.value);
+    
+    if (rentTerm > 0 && startDate instanceof Date && !isNaN(startDate)) {
+      // Başlangıç tarihinden rentTerm ay sonrasını hesapla
+      const finishDate = new Date(startDate);
+      finishDate.setMonth(finishDate.getMonth() + rentTerm);
+      
+      // YYYY-MM-DD formatına çevir
+      const year = finishDate.getFullYear();
+      const month = String(finishDate.getMonth() + 1).padStart(2, '0');
+      const day = String(finishDate.getDate()).padStart(2, '0');
+      
+      finishDateInput.value = `${year}-${month}-${day}`;
+    }
+  }
+
+  rentTermInput.addEventListener('change', updateFinishDate);
+  startDateInput.addEventListener('change', updateFinishDate);
+});
+</script>

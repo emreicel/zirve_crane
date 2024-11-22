@@ -1,0 +1,35 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Roller</h5>
+      <%= link_to 'Yeni Rol Ekle', new_role_path, class: 'btn btn-primary btn-sm' %>
+    </div>
+    
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Rol Adı</th>
+            <th>Açıklama</th>
+            <th>İşlemler</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @roles.each do |role| %>
+            <tr>
+              <td><%= role.name %></td>
+              <td><%= role.description %></td>
+              <td>
+                <%= link_to 'Düzenle', edit_role_path(role), class: 'btn btn-sm btn-info' %>
+                <%= link_to 'Sil', role_path(role), 
+                    method: :delete, 
+                    data: { confirm: 'Emin misiniz?' }, 
+                    class: 'btn btn-sm btn-danger' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

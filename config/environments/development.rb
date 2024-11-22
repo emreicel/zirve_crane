@@ -97,8 +97,5 @@ Rails.application.configure do
     openssl_verify_mode:  'none' # SSL hatası alırsanız bunu ekleyin
   }
 
-  
-
-
-
+  config.action_mailer.default_url_options = { host: ENV['APP_HOST'] || 'localhost:3000' }
 end

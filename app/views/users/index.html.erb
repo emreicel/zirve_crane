@@ -9,11 +9,11 @@
     </tr>
   </thead>
   <tbody>
-    <% @users.each do |user| %>
+    <% @users.order(:id).each do |user| %>
       <tr>
         <td><%= user.name %></td>
         <td><%= user.email %></td>
-        <td><%= user.role %></td>
+        <td><%= user.role.description %></td>
         <td><%= link_to 'Düzenle', edit_user_registration_path(user) %></td>
       </tr>
     <% end %>
