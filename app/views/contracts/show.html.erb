@@ -101,7 +101,15 @@
             <tr>
               <td class="text-center align-middle"><%= index + 1 %></td>
               <td class="text-center align-middle"><%= payment.rent_table_quantity %></td>
-              <td class="text-center align-middle"><%= l(payment.start_date) %></td>
+              <td class="text-center align-middle"><%= l(payment.start_date) %>
+                <% if @missing_documents.include?(payment) %>
+                  <% if payment.start_date < Date.current %>
+                    <span class="badge bg-danger ms-2">GECİKTİ</span>
+                  <% elsif payment.start_date >= Date.current.beginning_of_month && payment.start_date <= Date.current.end_of_month %>
+                    <span class="badge bg-success ms-2">YAKLAŞIYOR</span>
+                  <% end %>
+                <% end %>
+              </td>
               <td class="text-center align-middle"><%= l(payment.end_date) %></td>
               <td class="text-center align-middle">
                 <span class="text-muted"><%= number_to_currency(payment.amount_excluding_vat) %></span>

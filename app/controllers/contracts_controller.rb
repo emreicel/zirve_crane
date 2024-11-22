@@ -17,6 +17,15 @@ class ContractsController < ApplicationController
   def show
     @contract = Contract.find(params[:id])
     @payment_tables = @contract.payment_tables
+
+    @missing_documents = @contract.payment_tables
+    .left_joins(:file_attachment)
+    .where(active_storage_attachments: { id: nil })
+    .where("start_date < ? OR (start_date >= ? AND start_date <= ?)",
+           Date.current,
+           Date.current.beginning_of_month,
+           Date.current.end_of_month)
+    .order(start_date: :asc)
   end
 
   def new
@@ -72,10 +81,7 @@ class ContractsController < ApplicationController
     end
   rescue StandardError => e
     redirect_to contracts_path, alert: "Email gönderilemedi: #{e.message}"
-  end
-
-  
-  
+  end  
 
 
   private
