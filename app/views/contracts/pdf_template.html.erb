@@ -500,21 +500,63 @@
             </p>
         </div>
 
-        <div class="container">
-          <div class="signature">
-            <div>
-                <p>KİRAYA VEREN</p>
-                <p>ZİRVE VİNÇ TİCARET VE SANAYİ A.Ş.</p>
-            </div>
-            <div>
-                <p>KİRACI</p>
-                <p><%= contract.customer.customer_name %></p>
-            </div>
-            <div>
-                <p>GARANTÖR</p>
-            </div>
-          </div>
+        <div class="container mt-5">
+  <table class="signature-table" style="width: 100%; border-collapse: collapse;">
+    <tr>
+      <th style="width: 33.33%; text-align: center; padding: 10px; border: 1px solid #ddd; background-color: #f8f9fa;">
+        KİRAYA VEREN
+      </th>
+      <th style="width: 33.33%; text-align: center; padding: 10px; border: 1px solid #ddd; background-color: #f8f9fa;">
+        KİRACI
+      </th>
+      <th style="width: 33.33%; text-align: center; padding: 10px; border: 1px solid #ddd; background-color: #f8f9fa;">
+        GARANTÖR
+      </th>
+    </tr>
+    <tr>
+      <td style="text-align: center; padding: 20px; border: 1px solid #ddd; height: 100px;">
+        <strong>ZİRVE VİNÇ TİCARET VE SANAYİ A.Ş.</strong>
+        <div style="margin-top: 50px;">
+          İmza / Kaşe
         </div>
+      </td>
+      <td style="text-align: center; padding: 20px; border: 1px solid #ddd; height: 100px;">
+        <strong><%= contract.customer.customer_name %></strong>
+        <div style="margin-top: 50px;">
+          İmza / Kaşe
+        </div>
+      </td>
+      <td style="text-align: center; padding: 20px; border: 1px solid #ddd; height: 100px;">
+        <div style="margin-top: 50px;">
+          İmza / Kaşe
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<style>
+  .signature-table {
+    margin-top: 30px;
+    page-break-inside: avoid; /* PDF'de tabloyu bölmemesi için */
+  }
+  
+  .signature-table th {
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .signature-table td {
+    font-size: 12px;
+    vertical-align: top;
+  }
+  
+  @media print {
+    .signature-table {
+      margin-top: 20px;
+    }
+  }
+</style>
 
     </div>
 
