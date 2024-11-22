@@ -14,7 +14,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <h2 style="margin: 0;">Ödeme Bildirimi</h2>
+      <h2 style="margin: 0;">Fatura Talebi</h2>
     </div>
 
     <div class="section">
@@ -35,12 +35,16 @@
       <h3>Fatura Detayları</h3>
       <table style="width: 100%;">
         <tr>
-          <td style="width: 150px;"><strong>Başlangıç:</strong></td>
+          <td style="width: 150px;"><strong>Kira Başlangıç:</strong></td>
           <td><%= l(@payment.start_date) %></td>
         </tr>
         <tr>
-          <td><strong>Bitiş:</strong></td>
+          <td><strong>Kira Bitiş:</strong></td>
           <td><%= l(@payment.end_date) %></td>
+        </tr>
+        <tr>
+          <td><strong>Ödeme Şekli:</strong></td>
+          <td><%= @payment.payment_method.payment_method %></td>
         </tr>
         <tr>
           <td><strong>Tutar (KDV Hariç):</strong></td>
@@ -53,6 +57,15 @@
         <tr>
           <td><strong>Toplam Tutar:</strong></td>
           <td class="amount"><%= number_to_currency(@payment.amount_including_vat) %></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <table style="width: 100%;">
+        <tr>
+          <td><strong>Not:</strong></td>
+          <td><%= @payment.note %></td>
         </tr>
       </table>
     </div>

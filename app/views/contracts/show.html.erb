@@ -72,161 +72,168 @@
   </div>
 </div>
 
-<h2>Ödeme Tablosu</h2>
-<table class="table table-striped table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">S.No</th>
-      <th scope="col" class="text-center align-middle">Adet</th>
-      <th scope="col" class="text-center align-middle" >Başlangıç Tarihi</th>
-      <th scope="col" class="text-center align-middle">Bitiş Tarihi</th>
-      <th scope="col" class="text-center align-middle">KDV Hariç Tutar</th>
-      <th scope="col" class="text-center align-middle">KDV Oranı</th>
-      <th scope="col" class="text-center align-middle">KDV Dahil Tutar</th>
-      <th scope="col" class="text-center align-middle">Ödeme Tarihi</th>
-      <th scope="col" class="text-center align-middle">Ödeme Yöntemi</th>
-      <th scope="col" class="text-center align-middle">Not</th>  <!-- Yeni sütun -->
-      <th scope="col" class="text-center align-middle">Email Gönder</th>
-      <th scope="col" class="text-center align-middle">Dosya</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @payment_tables.order(:id).each_with_index do |payment, index| %>
-      <tr id="payment_row_<%= payment.id %>">
-        <td class="text-center align-middle"><%= index + 1 %></td>
-        <td class="text-center align-middle"><%= payment.rent_table_quantity %></td>
-        <td class="text-center align-middle">
-          <%= l(payment.start_date) %>
-          <% unless payment.file.attached? %>
-            <% if payment.start_date < Date.current %>
-              <span class="badge bg-danger ms-2">GECİKTİ</span>
-            <% end %>
-          <% end %>
-        </td>
-        <td class="text-center align-middle"><%= l(payment.end_date) %></td>
-        <td class="text-center align-middle"><%= number_to_currency(payment.amount_excluding_vat, precision: 2) %></td>
-        <td class="text-center align-middle"><%= payment.vat_percentage %>%</td>
-        <td class="text-center align-middle"><%= number_to_currency(payment.amount_including_vat) %></td>
-        <td class="text-center align-middle"><%= payment.payment_date %></td>
-        <td class="text-center align-middle">
-          <%= form_with(model: payment, local: true) do |form| %>
-            <%= form.collection_select :payment_method_id,
-                PaymentMethod.order(:payment_method),
-                :id,
-                :payment_method,
-                { include_blank: "-" },
-                { 
-                  class: "form-select form-select-sm",
-                  style: "width: auto; display: inline-block;",
-                  onchange: 'this.form.requestSubmit()'
-                } 
-            %>
-          <% end %>
-        </td>
-
-        <td class="text-center align-middle" style="min-width: 200px;">
-          <%= form_with(model: payment, local: true) do |form| %>
-            <div class="input-group input-group-sm">
-              <%= form.text_area :note, 
-                  class: 'form-control form-control-sm', 
-                  rows: 2,
-                  placeholder: 'Not ekleyin...' %>
-              <%= form.submit 'Kaydet', 
-                  class: 'btn btn-sm btn-success',
-                  tyle: 'height: 25px; font-size: 12px; padding: 0 8px; margin-left: 5px; align-self: flex-end;' %>
-            </div>
-          <% end %>
-        </td>
-
-        <td class="text-center align-middle">
-          <% if payment.email_sent_at.present? %>
-            <span class="badge bg-success">
-              <i class="material-icons">check</i>
-              Email Gönderildi
-              <small>(<%= payment.email_sent_at.strftime("%d.%m.%Y %H:%M") %>)</small>
-            </span>
-          <% else %>
-            <%= button_to send_payment_email_payment_table_path(payment),
-                method: :post,
-                class: "btn btn-sm btn-info",
-                data: { confirm: "Bu ödeme için email göndermek istediğinize emin misiniz?" } do %>
-              <i class="material-icons">email</i>
-              Email Gönder
-            <% end %>
-          <% end %>
-        </td> 
-                
-        <td class="text-center align-middle" style="width: 200px;">
-          <div class="btn-group">
-            <% if payment.file.attached? %>
-              <%= link_to rails_blob_path(payment.file, disposition: "attachment"), 
-                  class: "btn btn-sm btn-info", 
-                  title: payment.file.filename.to_s,
-                  data: { bs_toggle: "tooltip" } do %>
-                <span class="material-icons">download</span>
-              <% end %>
+<div class="card mt-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Ödeme Planı</h5>
+    <span class="badge bg-primary">Toplam Kalan Ödeme Sayısı: <%= @payment_tables.count - @payment_tables.count { |payment| payment.file.attached? } %> </span>
+  </div>
+  
+  <div class="card-body p-0"> <!-- padding'i kaldırarak daha kompakt görünüm -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped mb-0"> <!-- mb-0 ile alt boşluğu kaldır -->
+        <thead class="table-light">
+          <tr>
+            <th class="text-center" style="width: 50px">#</th>
+            <th class="text-center" style="width: 80px">Miktar</th>
+            <th class="text-center" style="width: 120px">Başlangıç</th>
+            <th class="text-center" style="width: 120px">Bitiş</th>
+            <th class="text-center">KDV Hariç</th>
+            <th class="text-center" style="width: 80px">KDV %</th>
+            <th class="text-center">KDV Dahil</th>
+            <th class="text-center" style="width: 120px">Ödeme Tarihi</th>
+            <th class="text-center" style="width: 150px">Ödeme Şekli</th>
+            <th class="text-center">Not</th>
+            <th class="text-center" style="width: 150px">Fatura/Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @payment_tables.order(:id).each_with_index do |payment, index| %>
+            <tr>
+              <td class="text-center align-middle"><%= index + 1 %></td>
+              <td class="text-center align-middle"><%= payment.rent_table_quantity %></td>
+              <td class="text-center align-middle"><%= l(payment.start_date) %></td>
+              <td class="text-center align-middle"><%= l(payment.end_date) %></td>
+              <td class="text-center align-middle">
+                <span class="text-muted"><%= number_to_currency(payment.amount_excluding_vat) %></span>
+              </td>
+              <td class="text-center align-middle">
+                <span class="badge bg-secondary"><%= payment.vat_percentage %>%</span>
+              </td>
+              <td class="text-center align-middle">
+                <strong><%= number_to_currency(payment.amount_including_vat) %></strong>
+              </td>
+              <td class="text-center align-middle">
+                <% if payment.payment_date.present? %>
+                  <span class="<%= payment.payment_date < Date.current ? 'text-danger' : '' %>">
+                    <%= l(payment.payment_date) %>
+                  </span>
+                <% else %>
+                  <span class="text-muted">-</span>
+                <% end %>
+              </td>
               
-              <%= button_to delete_file_payment_table_path(payment), 
-                  method: :delete,
-                  form: { 
-                    style: 'display: inline-block;',
-                    data: { confirm: "Dosyayı silmek istediğinize emin misiniz?" }
-                  },
-                  class: "btn btn-sm btn-danger",
-                  title: "Dosyayı Sil" do %>
-                <span class="material-icons">delete</span>
-              <% end %>
-            <% end %>
-            
-            <%= button_tag type: "button", 
-                class: "btn btn-sm btn-primary", 
-                data: { bs_toggle: "modal", bs_target: "#uploadModal#{payment.id}" } do %>
-              
-              <% if payment.file.attached? %>
-              <span class="material-icons">upload</span>
-                
-              <% else %>
-                <span class="material-icons">upload</span>
-                <span>Yükle</span>
-              <% end %>
-            <% end %>
-          </div>
+              <!-- Ödeme Şekli Select -->
+              <td class="text-center align-middle">
+                <%= form_with(model: payment, local: true) do |form| %>
+                  <%= form.collection_select :payment_method_id,
+                      PaymentMethod.order(:payment_method),
+                      :id,
+                      :payment_method,
+                      { include_blank: "-" },
+                      { 
+                        class: "form-select form-select-sm",
+                        style: "width: 100%; min-width: 120px;",
+                        onchange: 'this.form.requestSubmit()'
+                      } 
+                  %>
+                <% end %>
+              </td>
 
-          <!-- Modal -->
-          <div class="modal fade" id="uploadModal<%= payment.id %>" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Dosya Yükle</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                  <%= form_with(model: payment, local: true, multipart: true) do |form| %>
-                    <div class="mb-3">
-                      <% if payment.file.attached? %>
-                        <p class="text-muted">Mevcut dosya: <%= payment.file.filename %></p>
-                      <% end %>
-                      <%= form.file_field :file, 
-                          class: "form-control form-control-sm",
-                          accept: ".pdf,.doc,.docx,.xls,.xlsx" %>
-                    </div>
-                    <div class="text-end">
-                      <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">İptal</button>
-                      <%= form.submit "Yükle", class: "btn btn-primary btn-sm" %>
-                    </div>
+              <!-- Not Alanı -->
+              <td class="align-middle">
+                <%= form_with(model: payment, local: true) do |form| %>
+                  <div class="input-group input-group-sm">
+                    <%= form.text_area :note, 
+                        class: 'form-control form-control-sm',
+                        rows: 1,
+                        style: 'font-size: 12px;',
+                        placeholder: 'Not...' %>
+                    <%= form.submit 'Kaydet', 
+                        class: 'btn btn-sm btn-outline-success',
+                        style: 'font-size: 12px;' %>
+                  </div>
+                <% end %>
+              </td>
+
+              <!-- Dosya ve Email İşlemleri -->
+              <td class="text-center align-middle">
+                <div class="btn-group btn-group-sm">
+                  <% if payment.file.attached? %>
+                    <%= link_to rails_blob_path(payment.file, disposition: "attachment"), 
+                        class: "btn btn-outline-info", 
+                        title: payment.file.filename.to_s,
+                        data: { bs_toggle: "tooltip" } do %>
+                      <i class="material-icons" style="font-size: 16px;">download</i>
+                    <% end %>
+                    
+                    <%= button_to delete_file_payment_table_path(payment), 
+                        method: :delete,
+                        form: { 
+                          style: 'display: inline-block;',
+                          data: { confirm: "Dosyayı silmek istediğinize emin misiniz?" }
+                        },
+                        class: "btn btn-outline-danger",
+                        title: "Dosyayı Sil" do %>
+                      <i class="material-icons" style="font-size: 16px;">delete</i>
+                    <% end %>
                   <% end %>
+
+                  <!-- Dosya Yükleme Butonu -->
+                  <%= button_tag type: "button", 
+                      class: "btn btn-outline-primary", 
+                      data: { bs_toggle: "modal", bs_target: "#uploadModal#{payment.id}" } do %>
+                    <i class="material-icons" style="font-size: 16px;">upload</i>
+                  <% end %>
+
+                  <!-- Email Durumu/Butonu -->
+                  <% if payment.email_sent_at.present? %>
+                    <button class="btn btn-outline-success" disabled title="<%= payment.email_sent_at.strftime("%d.%m.%Y %H:%M") %>">
+                      <i class="material-icons" style="font-size: 16px;">check</i>
+                    </button>
+                  <% else %>
+                    <%= button_to send_payment_email_payment_table_path(payment),
+                        method: :post,
+                        class: "btn btn-outline-secondary",
+                        data: { confirm: "Email göndermek istediğinize emin misiniz?" } do %>
+                      <i class="material-icons" style="font-size: 16px;">email</i>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Upload Modal -->
+            <div class="modal fade" id="uploadModal<%= payment.id %>" tabindex="-1">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header py-2">
+                    <h5 class="modal-title">Dosya Yükle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    <%= form_with(model: payment, local: true, multipart: true) do |form| %>
+                      <div class="mb-3">
+                        <% if payment.file.attached? %>
+                          <p class="text-muted small">Mevcut dosya: <%= payment.file.filename %></p>
+                        <% end %>
+                        <%= form.file_field :file, 
+                            class: "form-control form-control-sm",
+                            accept: ".pdf,.doc,.docx,.xls,.xlsx" %>
+                      </div>
+                      <div class="text-end">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">İptal</button>
+                        <%= form.submit "Yükle", class: "btn btn-primary btn-sm" %>
+                      </div>
+                    <% end %>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </td>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-          
-
-       
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
 </div>
