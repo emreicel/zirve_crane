@@ -1,46 +1,125 @@
-<h1>Kontratı Düzenle</h1>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-light py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+          <i class="fas fa-edit me-2"></i>Kontrat Düzenle
+        </h5>
+        <%= link_to contracts_path, class: "btn btn-sm btn-outline-secondary" do %>
+          <i class="fas fa-arrow-left me-1"></i>Geri
+        <% end %>
+      </div>
+    </div>
 
-<%= form_with model: @contract, local: true do |f| %>
-  <div>
-    <%= f.label :customer_id, "Müşteri Adı" %>
-    <%= f.collection_select :customer_id, @customers, :id, :customer_name, prompt: "Müşteri Seçin" %>
-  </div>
+    <div class="card-body">
+      <%= form_with model: @contract, local: true, class: "needs-validation" do |f| %>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <%= f.collection_select :customer_id, @customers, :id, :customer_name,
+                  { prompt: "Müşteri Seçin" },
+                  class: "form-select",
+                  required: true %>
+              <%= f.label :customer_id, "Müşteri Adı" %>
+            </div>
+          </div>
 
-  <div>
-    <%= f.label :crane_id, "Vinç Markası ve Şase No" %>
-    <%= f.collection_select :crane_id, @cranes, :id, ->(crane) { "#{crane.crane_brand_name} - #{crane.crane_chassis_no}" }, prompt: "Vinç Markası Seçin" %>
-  </div>
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <%= f.collection_select :crane_id, @cranes, :id,
+                  ->(crane) { "#{crane.crane_brand_name} - #{crane.crane_chassis_no}" },
+                  { prompt: "Vinç Seçin" },
+                  class: "form-select",
+                  required: true %>
+              <%= f.label :crane_id, "Vinç Markası ve Şase No" %>
+            </div>
+          </div>
 
-  <div>
-    <%= f.label :rent_term, "Kiralama Süresi (Ay)" %>
-    <%= f.number_field :rent_term, data: { contracts_target: "rentTerm" } %>
-  </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <%= f.number_field :rent_term,
+                  class: "form-control",
+                  data: { contracts_target: "rentTerm" },
+                  min: 1,
+                  required: true %>
+              <%= f.label :rent_term, "Kiralama Süresi (Ay)" %>
+            </div>
+          </div>
 
-  <div>
-    <%= f.label :rent_amount, "Fiyat" %>
-    <%= f.number_field :rent_amount %>
-  </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <%= f.number_field :rent_amount,
+                  class: "form-control",
+                  min: 0,
+                  step: "0.01",
+                  required: true %>
+              <%= f.label :rent_amount, "Fiyat" %>
+            </div>
+          </div>
 
-  <div>
-    <%= f.label :contract_date, "Kontrakt Tarihi" %>
-    <%= f.date_field :contract_date %>
-  </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <%= f.number_field :vat_percentage,
+                  class: "form-control",
+                  min: 0,
+                  max: 100,
+                  value: 20 %>
+              <%= f.label :vat_percentage, "KDV Oranı (%)" %>
+            </div>
+          </div>
 
-  <div>
-    <%= f.label :rent_start_date, "Kira Başlangıç Tarihi" %>
-    <%= f.date_field :rent_start_date, data: { contracts_target: "startDate" } %>
-  </div>
+          <div class="col-12">
+            <hr class="my-4">
+          </div>
 
-  <div>
-    <%= f.label :rent_finish_date, "Kira Bitiş Tarihi" %>
-    <%= f.date_field :rent_finish_date, data: { contracts_target: "finishDate" } %>
-  </div>
+          <div class="col-md-4">
+            <div class="form-floating mb-3">
+              <%= f.date_field :contract_date,
+                  class: "form-control",
+                  required: true %>
+              <%= f.label :contract_date, "Kontrat Tarihi" %>
+            </div>
+          </div>
 
-  <%= f.label :vat_percentage, "KDV Oranı (%)" %>
-    <%= f.number_field :vat_percentage, min: 0, max: 100 %>
-  </div>
+          <div class="col-md-4">
+            <div class="form-floating mb-3">
+              <%= f.date_field :rent_start_date,
+                  class: "form-control",
+                  data: { contracts_target: "startDate" },
+                  required: true %>
+              <%= f.label :rent_start_date, "Kira Başlangıç" %>
+            </div>
+          </div>
 
-  <div>
-    <%= f.submit "Güncelle" %>
+          <div class="col-md-4">
+            <div class="form-floating mb-3">
+              <%= f.date_field :rent_finish_date,
+                  class: "form-control",
+                  data: { contracts_target: "finishDate" },
+                  readonly: true %>
+              <%= f.label :rent_finish_date, "Kira Bitiş" %>
+            </div>
+          </div>
+
+          <div class="col-12 mt-4">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <%= link_to "İptal", contracts_path, class: "btn btn-outline-secondary me-2" %>
+              <%= f.button type: "submit", class: "btn btn-primary" do %>
+                <i class="fas fa-save me-1"></i>Güncelle
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
+</div>
+
+<% content_for :head do %>
+  <style>
+    .form-floating > .form-select {
+      padding-top: 1.625rem;
+      padding-bottom: 0.625rem;
+    }
+  </style>
 <% end %>

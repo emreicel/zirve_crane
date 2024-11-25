@@ -17,11 +17,11 @@
           <div class="row text-center">
             <div class="col-4">
               <h3 class="text-success"><%= Crane.where(available: true).count %></h3>
-              <small class="text-muted">Uygun Vinç</small>
+              <small class="text-muted">Uygun Olan</small>
             </div>
             <div class="col-4">
               <h3 class="text-danger"><%= Crane.where(available: false).count %></h3>
-              <small class="text-muted">Uygun Olmayan</small>
+              <small class="text-muted">Kirada Olan</small>
             </div>
             <div class="col-4">
               <h3 class="text-primary"><%= Crane.count %></h3>
@@ -62,29 +62,29 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Kira Tarihi</th>
-            <th>Müşteri</th>
-            <th>Vinç Markası</th>
-            <th>Şasi No</th>
-            <th>Tutar</th>
-            <th>İşlemler</th>
+            <th class="text-center" style="width: 50px">Kira Tarihi</th>
+            <th class="text-center" style="width: 50px">Müşteri</th>
+            <th class="text-center" style="width: 50px">Vinç Markası</th>
+            <th class="text-center" style="width: 50px">Şasi No</th>
+            <th class="text-center" style="width: 50px">Tutar</th>
+            <th class="text-center" style="width: 50px">İşlemler</th>
           </tr>
         </thead>
         <tbody>
           <% @missing_documents.each do |payment| %>
             <tr>
-              <td><%= payment.start_date&.strftime("%d.%m.%Y") %>
-                <% if payment.start_date && payment.start_date < Date.current %>
+              <td class="text-center align-middle"><%= l(payment.start_date) %>
+                <% if payment.start_date < Date.current %>
                   <span class="badge bg-danger ms-2">GECİKTİ</span>
-                <% elsif payment.start_date && payment.start_date > Date.current %>
+                <% elsif payment.start_date >= Date.current.beginning_of_month && payment.start_date <= Date.current.end_of_month %>
                   <span class="badge bg-success ms-2">YAKLAŞIYOR</span>
                 <% end %>
               </td>
-              <td><%= payment.contract.customer.customer_name rescue "-" %></td>
-              <td><%= payment.contract.crane.crane_brand_name rescue "-" %></td>
-              <td><%= payment.contract.crane.crane_chassis_no rescue "-" %></td>
-              <td><%= number_to_currency(payment.amount_excluding_vat) %></td>
-              <td>
+              <td class="text-center align-middle"><%= payment.contract.customer.customer_name rescue "-" %></td>
+              <td class="text-center align-middle"><%= payment.contract.crane.crane_brand_name rescue "-" %></td>
+              <td class="text-center align-middle"><%= payment.contract.crane.crane_chassis_no rescue "-" %></td>
+              <td class="text-center align-middle"><%= number_to_currency(payment.amount_excluding_vat) %></td>
+              <td class="text-center align-middle">
                 <%= link_to "Detay", contract_path(payment.contract), class: "btn btn-sm btn-primary" %>
               </td>
             </tr>
