@@ -1,35 +1,133 @@
-<h1>Firma Listesi</h1>
+<div class="container-fluid mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-light py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-0">
+            <i class="fas fa-building me-2"></i>Firma Listesi
+          </h5>
+          <small class="text-muted">Toplam <%= @crane_owners.count %> firma</small>
+        </div>
+        <%= link_to new_crane_owner_path, class: "btn btn-sm btn-success" do %>
+          <i class="fas fa-plus me-1"></i>Yeni Firma Ekle
+        <% end %>
+      </div>
+    </div>
 
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Firma İsmi</th>
-      <th>Adres</th>
-      <th>Telefon</th>
-      <th>Vergi Dairesi</th>
-      <th>Yetkili Kişi</th>
-      <th>Yetkili Email</th>
-      <th>Yetkili Telefon</th>
-      <th>İşlemler</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @crane_owners.each do |crane_owner| %>
-      <tr>
-        <td><%= crane_owner.crane_owner_name %></td>
-        <td><%= crane_owner.crane_owner_address %></td>
-        <td><%= crane_owner.crane_owner_phone %></td>
-        <td><%= crane_owner.crane_owner_vat_office %></td>
-        <td><%= crane_owner.crane_owner_contact %></td>
-        <td><%= crane_owner.crane_owner_contact_email %></td>
-        <td><%= crane_owner.crane_owner_contact_phone %></td>
-        <td>
-          <%= link_to 'Düzenle', edit_crane_owner_path(crane_owner), class: "btn btn-sm btn-warning" %>
-          <%= button_to 'Sil', crane_owner, method: :delete, data: { confirm: 'Bu firmayı silmek istediğinizden emin misiniz?' }, class: "btn btn-sm btn-danger" %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-3">Firma Bilgileri</th>
+              <th>İletişim Bilgileri</th>
+              <th>Yetkili Kişi Bilgileri</th>
+              <th class="text-end pe-3">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @crane_owners.each do |crane_owner| %>
+              <tr>
+                <td class="ps-3">
+                  <div class="d-flex align-items-center">
+                    <div class="company-avatar me-3">
+                      <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <%= crane_owner.crane_owner_name.first.upcase %>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="fw-medium"><%= crane_owner.crane_owner_name %></div>
+                      <small class="text-muted">
+                        <i class="fas fa-building me-1"></i><%= crane_owner.crane_owner_vat_office %>
+                      </small>
+                    </div>
+                  </div>
+                </td>
 
-<%= link_to 'Yeni Firma Ekle', new_crane_owner_path, class: "btn btn-primary mt-3" %>
+                <td>
+                  <div class="d-flex flex-column">
+                    <small>
+                      <i class="fas fa-map-marker-alt me-1 text-muted"></i>
+                      <%= truncate(crane_owner.crane_owner_address, length: 40) %>
+                    </small>
+                    <small>
+                      <i class="fas fa-phone me-1 text-muted"></i>
+                      <%= crane_owner.crane_owner_phone %>
+                    </small>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="d-flex flex-column">
+                    <small class="fw-medium">
+                      <i class="fas fa-user me-1"></i>
+                      <%= crane_owner.crane_owner_contact %>
+                    </small>
+                    <small>
+                      <i class="fas fa-envelope me-1 text-muted"></i>
+                      <%= crane_owner.crane_owner_contact_email %>
+                    </small>
+                    <small>
+                      <i class="fas fa-phone me-1 text-muted"></i>
+                      <%= crane_owner.crane_owner_contact_phone %>
+                    </small>
+                  </div>
+                </td>
+
+                <td class="text-end pe-3">
+                  <%= link_to crane_owner_path(crane_owner), class: "btn btn-outline-info", title: "Görüntüle" do %>
+                    <i class="fas fa-eye"></i>
+                  <% end %>
+                  <div class="btn-group btn-group-sm">
+                    <%= link_to edit_crane_owner_path(crane_owner), 
+                        class: "btn btn-outline-primary",
+                        title: "Düzenle" do %>
+                      <i class="fas fa-edit"></i>
+                    <% end %>
+                    
+                    <%= button_to crane_owner,
+                        method: :delete,
+                        class: "btn btn-outline-danger",
+                        title: "Sil",
+                        data: { 
+                          turbo_confirm: 'Bu firmayı silmek istediğinizden emin misiniz?',
+                          turbo_method: :delete
+                        } do %>
+                      <i class="fas fa-trash"></i>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :head do %>
+  <style>
+    .table > :not(caption) > * > * {
+      padding: 1rem 0.5rem;
+    }
+    .btn-group .btn {
+      border-radius: 0.375rem !important;
+      margin: 0 0.125rem;
+    }
+    .table-hover tbody tr:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+    .company-avatar .rounded-circle {
+      transition: all 0.2s ease-in-out;
+    }
+    .table tbody tr:hover .company-avatar .rounded-circle {
+      transform: scale(1.1);
+    }
+    @media (max-width: 768px) {
+      .table-responsive {
+        border: 0;
+      }
+    }
+  </style>
+<% end %>

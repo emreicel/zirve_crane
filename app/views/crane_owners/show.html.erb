@@ -1,10 +1,118 @@
-<p style="color: green"><%= notice %></p>
+<div class="container mt-4">
+  <% if notice %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fas fa-check-circle me-2"></i><%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
 
-<%= render @crane_owner %>
+  <div class="card shadow-sm">
+    <div class="card-header bg-light py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <div class="company-avatar me-3">
+            <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+              <%= @crane_owner.crane_owner_name.first.upcase %>
+            </div>
+          </div>
+          <div>
+            <h5 class="mb-0"><%= @crane_owner.crane_owner_name %></h5>
+            <small class="text-muted">
+              <i class="fas fa-clock me-1"></i>Kayıt: <%= @crane_owner.created_at.strftime("%d.%m.%Y") %>
+            </small>
+          </div>
+        </div>
+        
+        <div class="btn-group">
+          <%= link_to edit_crane_owner_path(@crane_owner), class: "btn btn-outline-primary" do %>
+            <i class="fas fa-edit me-1"></i>Düzenle
+          <% end %>
+          
+          <%= button_to @crane_owner, 
+              method: :delete,
+              class: "btn btn-outline-danger",
+              form: { data: { turbo_confirm: "Bu firmayı silmek istediğinizden emin misiniz?" } } do %>
+            <i class="fas fa-trash me-1"></i>Sil
+          <% end %>
+          
+          <%= link_to crane_owners_path, class: "btn btn-outline-secondary" do %>
+            <i class="fas fa-arrow-left me-1"></i>Geri
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-<div>
-  <%= link_to "Edit this crane owner", edit_crane_owner_path(@crane_owner) %> |
-  <%= link_to "Back to crane owners", crane_owners_path %>
+    <div class="card-body">
+      <div class="row g-4">
+        <!-- Firma Bilgileri -->
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h6 class="card-subtitle mb-3 text-muted">
+                <i class="fas fa-building me-2"></i>Firma Bilgileri
+              </h6>
+              
+              <dl class="row mb-0">
+                <dt class="col-sm-4">Vergi Dairesi</dt>
+                <dd class="col-sm-8"><%= @crane_owner.crane_owner_vat_office %></dd>
+                
+                <dt class="col-sm-4">Telefon</dt>
+                <dd class="col-sm-8"><%= @crane_owner.crane_owner_phone %></dd>
+                
+                <dt class="col-sm-4">Adres</dt>
+                <dd class="col-sm-8"><%= @crane_owner.crane_owner_address %></dd>
+              </dl>
+            </div>
+          </div>
+        </div>
 
-  <%= button_to "Destroy this crane owner", @crane_owner, method: :delete %>
+        <!-- Yetkili Kişi Bilgileri -->
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h6 class="card-subtitle mb-3 text-muted">
+                <i class="fas fa-user me-2"></i>Yetkili Kişi Bilgileri
+              </h6>
+              
+              <dl class="row mb-0">
+                <dt class="col-sm-4">İsim</dt>
+                <dd class="col-sm-8"><%= @crane_owner.crane_owner_contact %></dd>
+                
+                <dt class="col-sm-4">E-posta</dt>
+                <dd class="col-sm-8"><%= @crane_owner.crane_owner_contact_email %></dd>
+                
+                <dt class="col-sm-4">Telefon</dt>
+                <dd class="col-sm-8"><%= @crane_owner.crane_owner_contact_phone %></dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<% content_for :head do %>
+  <style>
+    .card {
+      border: none;
+      border-radius: 0.5rem;
+    }
+    .card-header {
+      border-radius: 0.5rem 0.5rem 0 0 !important;
+    }
+    .company-avatar .rounded-circle {
+      transition: all 0.2s ease-in-out;
+    }
+    .company-avatar .rounded-circle:hover {
+      transform: scale(1.1);
+    }
+    dt {
+      font-weight: 500;
+      color: #6c757d;
+    }
+    .btn-group .btn {
+      margin: 0 0.125rem;
+    }
+  </style>
+<% end %>

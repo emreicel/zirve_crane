@@ -27,9 +27,9 @@
           <!-- Left Menu -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item"><%= link_to 'Anasayfa', root_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to 'Kontratlar', contracts_path, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to 'Vinçler', cranes_path, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to 'Müşteriler', customers_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to 'Kontratlar', contracts_path, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to 'Vinç Firmaları', crane_owners_path, class: "nav-link" %></li>
 
             <% if current_user&.super_admin? %>
