@@ -117,6 +117,8 @@
                 <% if @missing_documents.include?(payment) %>
                   <% if payment.start_date < Date.current %>
                     <span class="badge bg-danger ms-2">GECİKTİ</span>
+                  <% elsif payment.start_date == Date.current %>
+                    <span class="badge bg-warning ms-2">BUGÜN</span>
                   <% elsif payment.start_date >= Date.current.beginning_of_month && payment.start_date <= Date.current.end_of_month %>
                     <span class="badge bg-success ms-2">YAKLAŞIYOR</span>
                   <% end %>

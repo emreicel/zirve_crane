@@ -5,60 +5,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kule Vinç Kiralama Sözleşmesi</title>
     <style>
-
+        @page {
+            margin: 2.5cm 2cm;
+            size: A4;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-size: 11pt;
             line-height: 1.6;
-            background-color: #f4f4f4;
-            color: #333;
+            color: #2c3e50;
             margin: 0;
             padding: 0;
         }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 20px;
         }
-        h1, h2, h3 {
+
+        .logo {
+            max-width: 200px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
             color: #2c3e50;
+            font-size: 24pt;
+            margin: 0 0 20px 0;
+            text-align: center;
+            font-weight: bold;
         }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; border: 1px solid #ddd; }
-        th { background-color: #f4f4f4; }
+
+        h2 {
+            color: #34495e;
+            font-size: 14pt;
+            margin: 25px 0 15px 0;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            color: #34495e;
+            font-size: 12pt;
+            margin: 20px 0 10px 0;
+        }
+
         .contract-section {
             margin-bottom: 20px;
         }
-        .technical-specs {
-            margin-top: 10px;
-            border-collapse: collapse;
-            width: 100%;
+
+        p {
+            margin: 0 0 10px 0;
+            text-align: justify;
         }
-        .technical-specs th, .technical-specs td {
-            border: 1px solid #ddd;
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+
+        th, td {
             padding: 8px;
+            border: 1px solid #bdc3c7;
+            font-size: 10pt;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
             text-align: left;
         }
+
         .technical-specs th {
-            background-color: #f2f2f2;
-        }
-        .signature {
-            margin-top: 40px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .signature div {
-            text-align: center;
             width: 30%;
         }
+
         .page-break {
-            page-break-before: always; /* Yeni bir sayfaya başlar */
+            page-break-before: always;
+        }
+
+        .signature-section {
+            margin-top: 50px;
+            page-break-inside: avoid;
+        }
+
+        .signature-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .signature-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .signature-table td {
+            height: 100px;
+            vertical-align: top;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .signature-line {
+            margin-top: 60px;
+            border-top: 1px solid #000;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer {
+            position: running(footer);
+            text-align: center;
+            font-size: 9pt;
+            color: #7f8c8d;
+            padding-top: 10px;
+            border-top: 1px solid #bdc3c7;
+        }
+
+        @page {
+            @bottom-center {
+                content: "Sayfa " counter(page) " / " counter(pages);
+                font-family: 'DejaVu Sans', Arial, sans-serif;
+                font-size: 9pt;
+                color: #7f8c8d;
+            }
+        }
+
+        .payment-table {
+            font-size: 10pt;
+        }
+
+        .payment-table th {
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+
+        .payment-table td {
+            text-align: center;
+        }
+
+        strong {
+            color: #2c3e50;
         }
     </style>
     <% contract = @contract %>
 </head>
-<body>
+<body> 
     <div class="container">
         <h1>Kule Vinç Kiralama Sözleşmesi</h1>
 
