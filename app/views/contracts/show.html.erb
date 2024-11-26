@@ -1,7 +1,9 @@
 <div class="card-header d-flex justify-content-between align-items-center">
   <h1 class="card-title mb-4">Kontrat Detayları - ( <%= @contract.contract_number %> )</h1>
   <div class="d-flex gap-2">
-    <%= link_to 'PDF OLUŞTUR', show_pdf_contract_path(@contract), target: "_blank", class: "btn btn-sm btn-outline-info mx-1" %>
+    <% if policy(@contract).show_pdf? %>
+      <%= link_to 'PDF OLUŞTUR', show_pdf_contract_path(@contract), target: "_blank", class: "btn btn-sm btn-outline-info mx-1" %>
+    <% end %>
   </div>
 </div>
 <div class="card mb-4">
@@ -114,7 +116,8 @@
               <td class="text-center align-middle"><%= index + 1 %></td>
               <td class="text-center align-middle"><%= payment.rent_table_quantity %></td>
               <td class="text-center align-middle"><%= l(payment.start_date) %>
-                <% if @missing_documents.include?(payment) %>
+                  
+                <% if policy(@contract).show_info? && @missing_documents.include?(payment) %>
                   <% if payment.start_date < Date.current %>
                     <span class="badge bg-danger ms-2">GECİKTİ</span>
                   <% elsif payment.start_date == Date.current %>
@@ -208,16 +211,18 @@
                   <% end %>
 
                   <!-- Email Durumu/Butonu -->
-                  <% if payment.email_sent_at.present? %>
-                    <button class="btn btn-outline-success" disabled title="<%= payment.email_sent_at.strftime("%d.%m.%Y %H:%M") %>">
-                      <i class="material-icons" style="font-size: 16px;">check</i>
-                    </button>
-                  <% else %>
-                    <%= button_to send_payment_email_payment_table_path(payment),
-                        method: :post,
-                        class: "btn btn-outline-secondary",
-                        data: { confirm: "Email göndermek istediğinize emin misiniz?" } do %>
-                      <i class="material-icons" style="font-size: 16px;">email</i>
+                  <% if policy(@contract).send_email? %>
+                    <% if payment.email_sent_at.present? %>
+                      <button class="btn btn-outline-success" disabled title="<%= payment.email_sent_at.strftime("%d.%m.%Y %H:%M") %>">
+                        <i class="material-icons" style="font-size: 16px;">check</i>
+                      </button>
+                    <% else %>
+                      <%= button_to send_payment_email_payment_table_path(payment),
+                          method: :post,
+                          class: "btn btn-outline-secondary",
+                          data: { confirm: "Email göndermek istediğinize emin misiniz?" } do %>
+                        <i class="material-icons" style="font-size: 16px;">email</i>
+                      <% end %>
                     <% end %>
                   <% end %>
                 </div>

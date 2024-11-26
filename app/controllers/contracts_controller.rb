@@ -1,43 +1,48 @@
 class ContractsController < ApplicationController
-  before_action :set_contract, only: [:show, :edit, :update, :destroy, :show_pdf]
+  before_action :authenticate_user!
+  before_action :set_contract, only: [:show, :edit, :update, :destroy, :show_pdf, :send_email]
   before_action :set_customers_and_cranes, only: [:new, :edit, :create, :update]
   before_action :set_payment_tables, only: [:show_pdf]
 
   def index
-    @contracts = Contract.all
+    @contracts = policy_scope(Contract)
+    authorize Contract
 
     respond_to do |format|
-      format.html # Varsayılan HTML görünümü
+      format.html
       format.xlsx do
+        authorize Contract, :export?
         response.headers['Content-Disposition'] = 'attachment; filename="contracts.xlsx"'
       end
     end
   end
 
   def show
-    @contract = Contract.find(params[:id])
+    authorize @contract
     @payment_tables = @contract.payment_tables
 
     @missing_documents = @contract.payment_tables
-    .left_joins(:file_attachment)
-    .where(active_storage_attachments: { id: nil })
-    .where("start_date < ? OR (start_date >= ? AND start_date <= ?)",
-           Date.current,
-           Date.current.beginning_of_month,
-           Date.current.end_of_month)
-    .order(start_date: :asc)
+      .left_joins(:file_attachment)
+      .where(active_storage_attachments: { id: nil })
+      .where("start_date < ? OR (start_date >= ? AND start_date <= ?)",
+             Date.current,
+             Date.current.beginning_of_month,
+             Date.current.end_of_month)
+      .order(start_date: :asc)
   end
 
   def new
     @contract = Contract.new
+    authorize @contract
     @payment_methods = PaymentMethod.all
   end
 
   def create
     @contract = Contract.new(contract_params)
+    authorize @contract
+    
     if @contract.save
       update_crane_availability(@contract.crane_id, false)
-      #create_payment_schedule(@contract)
       create_payment_tables(@contract)
       redirect_to @contract, notice: "Kontrat başarıyla kaydedildi."
     else
@@ -46,9 +51,12 @@ class ContractsController < ApplicationController
   end
 
   def edit
+    authorize @contract
   end
 
   def update
+    authorize @contract
+    
     if @contract.update(contract_params)
       update_crane_availability(@contract.crane_id, false)
       @contract.payment_tables.destroy_all
@@ -60,18 +68,19 @@ class ContractsController < ApplicationController
   end
 
   def destroy
+    authorize @contract
     @contract.destroy
     redirect_to contracts_path, notice: "Kontrat başarıyla silindi."
   end
 
   def show_pdf
-    render pdf: "contract_#{@contract.id}", # PDF dosya adı
-           template: "contracts/pdf_template" # Kullanılacak şablon dosyası
+    authorize @contract, :show_pdf?
+    render pdf: "contract_#{@contract.id}",
+           template: "contracts/pdf_template"
   end
 
-  # app/controllers/contracts_controller.rb
   def send_email
-    @contract = Contract.find(params[:id])
+    authorize @contract, :send_email?
     
     if @contract.customer&.email.present?
       ContractMailer.contract_details(@contract).deliver_later
@@ -81,16 +90,13 @@ class ContractsController < ApplicationController
     end
   rescue StandardError => e
     redirect_to contracts_path, alert: "Email gönderilemedi: #{e.message}"
-  end  
-
+  end
 
   private
 
   def set_contract
     @contract = Contract.find(params[:id])
   end
-
-  
 
   def set_customers_and_cranes
     @customers = Customer.all
@@ -101,15 +107,10 @@ class ContractsController < ApplicationController
     @payment_tables = @contract.payment_tables
   end
 
-  def update_payment_tables(contract, payment_params)
-    payment_params.each do |index, payment_data|
-      payment = contract.payment_tables[index.to_i]
-      payment.update(payment_date: payment_data[:payment_date], payment_method: payment_data[:payment_method])
-    end
-  end
-
   def contract_params
-    params.require(:contract).permit(:customer_id, :crane_id, :rent_term, :rent_amount, :contract_date, :rent_start_date, :rent_finish_date, :vat_percentage)
+    params.require(:contract).permit(:customer_id, :crane_id, :rent_term, 
+                                   :rent_amount, :contract_date, :rent_start_date, 
+                                   :rent_finish_date, :vat_percentage)
   end
 
   def update_crane_availability(crane_id, availability)
@@ -135,6 +136,4 @@ class ContractsController < ApplicationController
       )
     end
   end
-
-  
 end

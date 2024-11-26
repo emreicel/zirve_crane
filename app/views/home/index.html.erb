@@ -3,100 +3,105 @@
 </div>
 
 <% if user_signed_in? %>
-<h1 class="mb-4">Genel Bakış - <%= Time.current.strftime("%d.%m.%Y") %></h1>
+  <h1 class="mb-4">Genel Bakış - <%= Time.current.strftime("%d.%m.%Y") %></h1>
 
-<div class="container-fluid">
-  <div class="row">
-    <!-- Vinç Durumları Kartı -->
-    <div class="col-md-6 mb-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-header bg-primary text-white">
-          <h5 class="card-title mb-0">Vinç Durumları</h5>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Vinç Durumları Kartı -->
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Vinç Durumları</h5>
+          </div>
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-4">
+                <h3 class="text-success"><%= Crane.where(available: true).count %></h3>
+                <small class="text-muted">Uygun Olan</small>
+              </div>
+              <div class="col-4">
+                <h3 class="text-danger"><%= Crane.where(available: false).count %></h3>
+                <small class="text-muted">Kirada Olan</small>
+              </div>
+              <div class="col-4">
+                <h3 class="text-primary"><%= Crane.count %></h3>
+                <small class="text-muted">Toplam</small>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="row text-center">
-            <div class="col-4">
-              <h3 class="text-success"><%= Crane.where(available: true).count %></h3>
-              <small class="text-muted">Uygun Olan</small>
-            </div>
-            <div class="col-4">
-              <h3 class="text-danger"><%= Crane.where(available: false).count %></h3>
-              <small class="text-muted">Kirada Olan</small>
-            </div>
-            <div class="col-4">
-              <h3 class="text-primary"><%= Crane.count %></h3>
-              <small class="text-muted">Toplam</small>
+      </div>
+
+      <!-- Kontrat Bilgileri Kartı -->
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Kontrat Bilgileri</h5>
+          </div>
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-6">
+                <h3><%= Contract.count %></h3>
+                <small class="text-muted">Toplam Kontrat</small>
+              </div>
+              <div class="col-6">
+                <h3><%= number_to_currency(Contract.sum(:rent_amount)) %></h3>
+                <small class="text-muted">Toplam Tutar</small>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Kontrat Bilgileri Kartı -->
-    <div class="col-md-6 mb-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-header bg-primary text-white">
-          <h5 class="card-title mb-0">Kontrat Bilgileri</h5>
+    <% if policy(:home).show_invoices? && @missing_documents&.any? %>
+      <div class="card mt-4">
+        <div class="card-header">
+          <h4>Faturası Kesilecek Kiralamalar</h4>
         </div>
         <div class="card-body">
-          <div class="row text-center">
-            <div class="col-6">
-              <h3><%= Contract.count %></h3>
-              <small class="text-muted">Toplam Kontrat</small>
-            </div>
-            <div class="col-6">
-              <h3><%= number_to_currency(Contract.sum(:rent_amount)) %></h3>
-              <small class="text-muted">Toplam Tutar</small>
-            </div>
-          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="text-center" style="width: 50px">Kira Tarihi</th>
+                <th class="text-center" style="width: 50px">Müşteri</th>
+                <th class="text-center" style="width: 50px">Vinç Markası</th>
+                <th class="text-center" style="width: 50px">Şasi No</th>
+                <th class="text-center" style="width: 50px">Tutar</th>
+                <th class="text-center" style="width: 50px">İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @missing_documents.each do |payment| %>
+                <tr>
+                  <td class="text-center align-middle">
+                    <%= l(payment.start_date) %>
+                    <% if payment.start_date < Date.current %>
+                      <span class="badge bg-danger ms-2">GECİKTİ</span>
+                    <% elsif payment.start_date == Date.current %>
+                      <span class="badge bg-warning ms-2">BUGÜN</span>
+                    <% elsif payment.start_date >= Date.current.beginning_of_month && payment.start_date <= Date.current.end_of_month %>
+                      <span class="badge bg-success ms-2">YAKLAŞIYOR</span>
+                    <% end %>
+                  </td>
+                  <td class="text-center align-middle"><%= payment.contract.customer.customer_name rescue "-" %></td>
+                  <td class="text-center align-middle"><%= payment.contract.crane.crane_brand_name rescue "-" %></td>
+                  <td class="text-center align-middle"><%= payment.contract.crane.crane_chassis_no rescue "-" %></td>
+                  <td class="text-center align-middle"><%= number_to_currency(payment.amount_excluding_vat) %></td>
+                  <td class="text-center align-middle">
+                    <% if policy(payment.contract).show? %>
+                      <%= link_to "Detay", contract_path(payment.contract), class: "btn btn-sm btn-primary" %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>
-  </div>
+    <% end %>
 
-  <div class="card mt-4">
-    <div class="card-header">
-      <h4>Faturası Kesilecek Kiralamalar</h4>
-    </div>
-    <div class="card-body">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th class="text-center" style="width: 50px">Kira Tarihi</th>
-            <th class="text-center" style="width: 50px">Müşteri</th>
-            <th class="text-center" style="width: 50px">Vinç Markası</th>
-            <th class="text-center" style="width: 50px">Şasi No</th>
-            <th class="text-center" style="width: 50px">Tutar</th>
-            <th class="text-center" style="width: 50px">İşlemler</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @missing_documents.each do |payment| %>
-            <tr>
-              <td class="text-center align-middle"><%= l(payment.start_date) %>
-                <% if payment.start_date < Date.current %>
-                  <span class="badge bg-danger ms-2">GECİKTİ</span>
-                <% elsif payment.start_date == Date.current %>
-                  <span class="badge bg-warning ms-2">BUGÜN</span>
-                <% elsif payment.start_date >= Date.current.beginning_of_month && payment.start_date <= Date.current.end_of_month %>
-                  <span class="badge bg-success ms-2">YAKLAŞIYOR</span>
-                <% end %>
-              </td>
-              <td class="text-center align-middle"><%= payment.contract.customer.customer_name rescue "-" %></td>
-              <td class="text-center align-middle"><%= payment.contract.crane.crane_brand_name rescue "-" %></td>
-              <td class="text-center align-middle"><%= payment.contract.crane.crane_chassis_no rescue "-" %></td>
-              <td class="text-center align-middle"><%= number_to_currency(payment.amount_excluding_vat) %></td>
-              <td class="text-center align-middle">
-                <%= link_to "Detay", contract_path(payment.contract), class: "btn btn-sm btn-primary" %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
   </div>
-
-</div>
 
 <% else %>
   <% if current_user&.super_admin? %>
