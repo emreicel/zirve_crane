@@ -1,0 +1,23 @@
+tr:
+  devise:
+    failure:
+      user:
+        invalid: "Geçersiz e-posta veya şifre."
+        not_found_in_database: "E-posta adresi veya şifre hatalı."
+        unauthenticated: "Devam etmek için lütfen giriş yapın."
+        unconfirmed: "Devam etmeden önce lütfen e-posta adresinizi onaylayın."
+        locked: "Hesabınız kilitlendi."
+        last_attempt: "Hesabınız kilitlenmeden önce son bir deneme hakkınız kaldı."
+        timeout: "Oturumunuz sonlandı. Devam etmek için lütfen tekrar giriş yapın."
+    sessions:
+      signed_in: "Başarıyla giriş yapıldı."
+      signed_out: "Başarıyla çıkış yapıldı."
+      already_signed_out: "Zaten çıkış yapılmış."
+    registrations:
+      signed_up: "Hoş geldiniz! Başarıyla kayıt oldunuz."
+      updated: "Hesabınız başarıyla güncellendi."
+      destroyed: "Hesabınız başarıyla silindi. Tekrar görüşmek dileğiyle!"
+    passwords:
+      no_token: "Şifre sıfırlama e-postasından gelmeden bu sayfaya erişemezsiniz."
+      send_instructions: "Birkaç dakika içinde şifrenizi nasıl sıfırlayacağınız hakkında bir e-posta alacaksınız."
+      updated: "Şifreniz başarıyla değiştirildi. Şimdi giriş yapmış durumdasınız."

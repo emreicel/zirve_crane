@@ -1,43 +1,60 @@
-<h1 class="mb-4">Yeni Kullanıcı Oluştur</h1>
-
-<div class="container mt-4">
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <%= form_with model: @user, url: users_path do |f| %>
-        <div class="mb-3">
-          <%= f.label :name, "Ad", class: "form-label" %>
-          <%= f.text_field :name, class: "form-control" %>
+<div class="container-fluid py-5">
+  <div class="row justify-content-center">
+    <div class="col-xl-8 col-lg-10">
+      <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white py-4">
+          <h3 class="card-title mb-0 text-center fs-2">Yeni Kullanıcı Oluştur</h3>
         </div>
+        
+        <div class="card-body p-5">
+          <%= form_with model: @user, url: users_path, class: "needs-validation" do |f| %>
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <%= f.label :name, "Ad", class: "form-label fw-bold fs-5" %>
+                <%= f.text_field :name, class: "form-control form-control-lg", placeholder: "Kullanıcı adını giriniz" %>
+              </div>
 
-        <div class="mb-3">
-          <%= f.label :email, "E-posta", class: "form-label" %>
-          <%= f.email_field :email, class: "form-control" %>
-        </div>
+              <div class="col-md-6 mb-4">
+                <%= f.label :email, "E-posta", class: "form-label fw-bold fs-5" %>
+                <%= f.email_field :email, class: "form-control form-control-lg", placeholder: "ornek@email.com" %>
+              </div>
+            </div>
 
-        <div class="mb-3">
-          <%= f.label :password, "Şifre", class: "form-label" %>
-          <%= f.password_field :password, class: "form-control" %>
-        </div>
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <%= f.label :password, "Şifre", class: "form-label fw-bold fs-5" %>
+                <%= f.password_field :password, class: "form-control form-control-lg", placeholder: "********" %>
+              </div>
 
-        <div class="mb-3">
-          <%= f.label :password_confirmation, "Şifre Doğrulama", class: "form-label" %>
-          <%= f.password_field :password_confirmation, class: "form-control" %>
-        </div>
+              <div class="col-md-6 mb-4">
+                <%= f.label :password_confirmation, "Şifre Doğrulama", class: "form-label fw-bold fs-5" %>
+                <%= f.password_field :password_confirmation, class: "form-control form-control-lg", placeholder: "********" %>
+              </div>
+            </div>
 
-        <div class="mb-3">
-  <%= f.label :role_id, "Rol", class: "form-label" %>
-  <%= f.collection_select :role_id, 
-                         Role.all, 
-                         :id, 
-                         :description, 
-                         {}, 
-                         class: "form-select" %>
-        </div>
+            <div class="row">
+              <div class="col-md-12 mb-4">
+                <%= f.label :role_id, "Kullanıcı Rolü", class: "form-label fw-bold fs-5" %>
+                <%= f.collection_select :role_id, 
+                                      Role.all, 
+                                      :id, 
+                                      :description, 
+                                      { prompt: "Rol seçiniz" }, 
+                                      class: "form-select form-select-lg" %>
+              </div>
+            </div>
 
-        <div class="text-end">
-          <%= f.submit "Kaydet", class: "btn btn-primary" %>
+            <div class="row mt-5">
+              <div class="col-md-6 mb-3">
+                <%= f.submit "Kullanıcı Oluştur", class: "btn btn-primary btn-lg w-100 py-3" %>
+              </div>
+              <div class="col-md-6 mb-3">
+                <%= link_to "Vazgeç", users_path, class: "btn btn-outline-secondary btn-lg w-100 py-3" %>
+              </div>
+            </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>

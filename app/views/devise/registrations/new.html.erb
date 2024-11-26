@@ -1,34 +1,63 @@
-<h2>Sign up</h2>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white text-center py-3">
+          <h2 class="mb-0">Kayıt Ol</h2>
+        </div>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+        <div class="card-body p-4">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+            <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
+            <div class="mb-3">
+              <%= f.label :name, "Ad Soyad", class: "form-label fw-bold" %>
+              <%= f.text_field :name, 
+                              autofocus: true, 
+                              autocomplete: "name", 
+                              class: "form-control form-control-lg",
+                              placeholder: "Adınızı giriniz" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :email, "E-posta", class: "form-label fw-bold" %>
+              <%= f.email_field :email, 
+                               autocomplete: "email", 
+                               class: "form-control form-control-lg",
+                               placeholder: "ornek@email.com" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :password, "Şifre", class: "form-label fw-bold" %>
+              <% if @minimum_password_length %>
+                <small class="text-muted">
+                  (En az <%= @minimum_password_length %> karakter)
+                </small>
+              <% end %>
+              <%= f.password_field :password, 
+                                 autocomplete: "new-password", 
+                                 class: "form-control form-control-lg",
+                                 placeholder: "********" %>
+            </div>
+
+            <div class="mb-4">
+              <%= f.label :password_confirmation, "Şifre Tekrar", class: "form-label fw-bold" %>
+              <%= f.password_field :password_confirmation, 
+                                 autocomplete: "new-password", 
+                                 class: "form-control form-control-lg",
+                                 placeholder: "********" %>
+            </div>
+
+            <div class="d-grid gap-2">
+              <%= f.submit "Kayıt Ol", class: "btn btn-primary btn-lg" %>
+            </div>
+          <% end %>
+
+          <div class="mt-4 text-center">
+            <%= render "devise/shared/links" %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
