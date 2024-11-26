@@ -7,7 +7,10 @@ Rails.application.routes.draw do
   get "roles/destroy"
   get "payment_tables/update"
   # Devise user authentication
-  devise_for :users
+  devise_for :users, skip: [:registrations], controllers: {
+    sessions: 'devise/sessions',
+    passwords: 'devise/passwords'
+  }
 
   # Health check and PWA routes
   get "up" => "rails/health#show", as: :rails_health_check

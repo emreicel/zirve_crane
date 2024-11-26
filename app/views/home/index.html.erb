@@ -99,8 +99,8 @@
 </div>
 
 <% else %>
-  <%= link_to 'Sign up', new_user_registration_path %> |
+  <% if current_user&.super_admin? %>
+    <%= link_to 'Sign up', new_user_path %> |
+  <% end %>
   <%= link_to 'Log in', new_user_session_path %>
-
-  
 <% end %>

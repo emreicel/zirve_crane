@@ -8,7 +8,7 @@
           </h5>
           <small class="text-muted">Toplam <%= @users.count %> kullanıcı</small>
         </div>
-        <%= link_to new_user_registration_path, class: "btn btn-sm btn-success" do %>
+        <%= link_to new_user_path, class: "btn btn-sm btn-success" do %>
           <i class="fas fa-user-plus me-1"></i>Yeni Kullanıcı
         <% end %>
       </div>
@@ -57,18 +57,18 @@
 
                 <td class="text-end pe-3">
                   <div class="btn-group btn-group-sm">
-                    <%= link_to edit_user_registration_path(user), 
-                        class: "btn btn-outline-primary",
-                        data: { 
-                          bs_toggle: "tooltip",
-                          bs_placement: "top"
-                        },
-                        title: "Düzenle" do %>
+                    <%= link_to edit_user_path(user), 
+                    class: "btn btn-outline-primary",
+                    data: { 
+                      bs_toggle: "tooltip",
+                      bs_placement: "top"
+                    },
+                    title: "Düzenle" do %>
                       <i class="fas fa-edit"></i>
                     <% end %>
                     
                     <% if current_user.admin? && user != current_user %>
-                      <%= button_to user_registration_path(user),
+                      <%= button_to user_path(user),
                           method: :delete,
                           class: "btn btn-outline-danger",
                           data: { 

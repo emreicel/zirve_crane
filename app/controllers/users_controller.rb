@@ -13,9 +13,14 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    # Yeni kullanıcı için otomatik şifre oluştur
+    generated_password = Devise.friendly_token.first(8)
+    @user.password = generated_password
+    @user.password_confirmation = generated_password
     
     if @user.save
-      redirect_to users_path, notice: 'Kullanıcı başarıyla oluşturuldu.'
+      # Başarılı olduğunda şifreyi göster
+      redirect_to users_path, notice: "Kullanıcı başarıyla oluşturuldu. Geçici şifre: #{generated_password}"
     else
       flash.now[:alert] = 'Kullanıcı oluşturulurken bir hata oluştu.'
       render :new, status: :unprocessable_entity
@@ -23,21 +28,21 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @user = User.find(params[:id])
   end
 
   def update
-    if updating_password?
-      if @user.update(user_params)
-        redirect_to users_path, notice: 'Kullanıcı başarıyla güncellendi.'
-      else
-        render :edit, status: :unprocessable_entity
-      end
+    @user = User.find(params[:id])
+    
+    if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
+    end
+  
+    if @user.update(user_params)
+      redirect_to users_path, notice: 'Kullanıcı başarıyla güncellendi.'
     else
-      if @user.update(user_params_without_password)
-        redirect_to users_path, notice: 'Kullanıcı başarıyla güncellendi.'
-      else
-        render :edit, status: :unprocessable_entity
-      end
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -63,7 +68,11 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role_id)
+    if params[:user][:password].present?
+      params.require(:user).permit(:name, :email, :role_id, :password, :password_confirmation)
+    else
+      params.require(:user).permit(:name, :email, :role_id)
+    end
   end
 
   def user_params_without_password

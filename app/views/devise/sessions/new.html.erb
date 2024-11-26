@@ -1,26 +1,96 @@
-<h2>Log in</h2>
+<div class="container-fluid">
+  <div class="row justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="col-11 col-sm-8 col-md-6 col-lg-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-sm-5">
+          <div class="text-center mb-4">
+            <h3 class="fw-bold mb-1">Hoş Geldiniz</h3>
+            <p class="text-muted">Lütfen hesabınıza giriş yapın</p>
+          </div>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name), 
+              html: { class: "needs-validation" }) do |f| %>
+            
+            <% if flash[:alert] %>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= flash[:alert] %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <% end %>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
+            <div class="form-floating mb-3">
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", 
+                  class: "form-control", placeholder: "name@example.com" %>
+              <%= f.label :email, "E-posta Adresi" %>
+            </div>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+            <div class="form-floating mb-3">
+              <%= f.password_field :password, autocomplete: "current-password", 
+                  class: "form-control", placeholder: "Şifre" %>
+              <%= f.label :password, "Şifre" %>
+            </div>
+
+            <% if devise_mapping.rememberable? %>
+              <div class="form-check mb-3">
+                <%= f.check_box :remember_me, class: "form-check-input" %>
+                <%= f.label :remember_me, "Beni Hatırla", class: "form-check-label" %>
+              </div>
+            <% end %>
+
+            <div class="d-grid mb-4">
+              <%= f.submit "Giriş Yap", class: "btn btn-primary btn-lg" %>
+            </div>
+
+            <div class="text-center">
+              <%= render "devise/shared/links" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
+</div>
 
-<%= render "devise/shared/links" %>
+<% content_for :head do %>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .card {
+      border-radius: 1rem;
+    }
+
+    .form-floating > .form-control {
+      height: calc(3.5rem + 2px);
+      line-height: 1.25;
+    }
+
+    .form-floating > label {
+      padding: 1rem 0.75rem;
+    }
+
+    .btn-primary {
+      padding: 0.8rem 1rem;
+    }
+
+    .form-check-input:checked {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+
+    .btn-link {
+      text-decoration: none;
+    }
+
+    .btn-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 576px) {
+      .card-body {
+        padding: 1.5rem !important;
+      }
+    }
+  </style>
+<% end %>

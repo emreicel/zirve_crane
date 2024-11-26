@@ -25,8 +25,13 @@
         </div>
 
         <div class="mb-3">
-          <%= f.label :role, "Rol", class: "form-label" %>
-          <%= f.select :role, User.roles.keys.map { |role| [role.titleize, role] }, {}, class: "form-select" %>
+  <%= f.label :role_id, "Rol", class: "form-label" %>
+  <%= f.collection_select :role_id, 
+                         Role.all, 
+                         :id, 
+                         :description, 
+                         {}, 
+                         class: "form-select" %>
         </div>
 
         <div class="text-end">
