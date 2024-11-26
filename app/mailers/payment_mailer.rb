@@ -6,7 +6,7 @@ class PaymentMailer < ApplicationMailer
       @contract = payment.contract
       
       mail(
-        to: @contract.customer.email,
+        to: [@contract.customer.email, 'gokhanyard@gmail.com'],
         subject: "#{@contract.contract_number} - Fatura Talebi - #{l(@payment.start_date)}"
       )
     end
