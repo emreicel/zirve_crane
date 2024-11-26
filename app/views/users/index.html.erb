@@ -67,7 +67,7 @@
                       <i class="fas fa-edit"></i>
                     <% end %>
                     
-                    <% if current_user.admin? && user != current_user %>
+                    <% if current_user.super_admin? && user != current_user %>
                       <%= button_to user_path(user),
                           method: :delete,
                           class: "btn btn-outline-danger",

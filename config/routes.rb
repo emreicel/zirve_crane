@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       post :upload_invoice
     end
   end
-  resources :users, only: [:index, :new, :edit, :create, :update]
+  resources :users, only: [:index, :new, :edit, :create, :update, :destroy]
   resources :roles
   resources :payment_methods
   resources :payment_tables do
