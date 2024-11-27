@@ -8,8 +8,9 @@
           </h5>
           <small class="text-muted">Toplam <%= @payment_methods.count %> ödeme yöntemi</small>
         </div>
-        <%= link_to new_payment_method_path, class: "btn btn-primary btn-sm" do %>
-          <i class="fas fa-plus-circle me-1"></i>Yeni Ödeme Yöntemi
+        
+        <%= link_to new_payment_method_path, class: "btn btn-sm btn-success" do %>
+          <i class="fas fa-plus me-1"></i>Yeni Ekle
         <% end %>
       </div>
     </div>

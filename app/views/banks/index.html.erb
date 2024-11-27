@@ -1,0 +1,65 @@
+<div class="container-fluid mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-light py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-0">
+            <i class="fas fa-university me-2"></i>Banka Hesapları
+          </h5>
+          <small class="text-muted">Toplam <%= @banks.count %> hesap</small>
+        </div>
+        <div class="btn-group">
+          <%= link_to new_bank_path, class: "btn btn-sm btn-success" do %>
+            <i class="fas fa-plus me-1"></i>Yeni Ekle
+          <% end %>
+          <%= link_to banks_path(format: :xlsx), class: "btn btn-sm btn-primary" do %>
+            <i class="fas fa-file-excel me-1"></i>Excel
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Banka Bilgileri</th>
+              <th>IBAN</th>
+              <th>Para Birimi</th>
+              <th>SWIFT</th>
+              <th class="text-end pe-3">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @banks.each do |bank| %>
+              <tr>
+                <td>
+                  <div class="fw-bold"><%= bank.bank_name %></div>
+                  <small class="text-muted"><%= bank.branch_name %> Şubesi</small>
+                </td>
+                <td><%= bank.iban_no %></td>
+                <td>
+                  <span class="badge bg-info"><%= bank.currency %></span>
+                </td>
+                <td><%= bank.swift_no %></td>
+                <td class="text-end">
+                  <div class="btn-group btn-group-sm">
+                    <%= link_to edit_bank_path(bank), class: "btn btn-outline-primary" do %>
+                      <i class="fas fa-edit"></i>
+                    <% end %>
+                    <%= button_to bank_path(bank), method: :delete, 
+                        data: { turbo_confirm: 'Bu banka hesabını silmek istediğinize emin misiniz?' }, 
+                        class: "btn btn-outline-danger" do %>
+                      <i class="fas fa-trash"></i>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

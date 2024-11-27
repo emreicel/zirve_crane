@@ -1,0 +1,54 @@
+<%= form_with(model: bank, local: true) do |f| %>
+    <% if bank.errors.any? %>
+      <div class="alert alert-danger">
+        <h6 class="alert-heading"><%= pluralize(bank.errors.count, "hata") %> nedeniyle kayıt yapılamadı:</h6>
+        <ul class="mb-0">
+          <% bank.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :bank_name, "Banka Adı", class: "form-label" %>
+          <%= f.text_field :bank_name, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :branch_name, "Şube Adı", class: "form-label" %>
+          <%= f.text_field :branch_name, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="col-md-4">
+        <div class="form-group">
+          <%= f.label :currency, "Para Birimi", class: "form-label" %>
+          <%= f.select :currency, Bank::CURRENCIES, {}, class: "form-select" %>
+        </div>
+      </div>
+  
+      <div class="col-md-8">
+        <div class="form-group">
+          <%= f.label :iban_no, "IBAN", class: "form-label" %>
+          <%= f.text_field :iban_no, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :swift_no, "SWIFT Kodu", class: "form-label" %>
+          <%= f.text_field :swift_no, class: "form-control" %>
+        </div>
+      </div>
+    </div>
+  
+    <div class="mt-4">
+      <%= f.submit "Kaydet", class: "btn btn-primary" %>
+      <%= link_to "İptal", banks_path, class: "btn btn-light" %>
+    </div>
+  <% end %>

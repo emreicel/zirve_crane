@@ -1,0 +1,2 @@
+module CraneFixingsHelper
+end

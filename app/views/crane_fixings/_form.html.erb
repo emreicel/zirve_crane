@@ -1,0 +1,22 @@
+<%= form_with(model: crane_fixing, local: true) do |form| %>
+    <% if crane_fixing.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(crane_fixing.errors.count, "error") %> prohibited this crane_fixing from being saved:</h2>
+
+        <ul>
+          <% crane_fixing.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :crane_fixing %>
+      <%= form.text_field :crane_fixing %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit %>
+    </div>
+  <% end %>

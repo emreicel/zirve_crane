@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get "banks/index"
+  get "banks/new"
+  get "banks/create"
+  get "banks/edit"
+  get "banks/update"
+  get "banks/destroy"
   get "roles/index"
   get "roles/new"
   get "roles/create"
@@ -24,6 +30,8 @@ Rails.application.routes.draw do
   resources :cranes
   resources :customers
   resources :crane_owners
+  resources :crane_fixings
+  resources :banks
   resources :contracts do
     member do
       get :show_pdf
