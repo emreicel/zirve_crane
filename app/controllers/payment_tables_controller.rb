@@ -72,17 +72,48 @@ class PaymentTablesController < ApplicationController
   def send_payment_email
     @payment = PaymentTable.find(params[:id])
     
+    # Debug logları ekleyelim
+    Rails.logger.debug "Payment Email Debug: Starting process"
+    Rails.logger.debug "Payment ID: #{@payment.id}"
+    Rails.logger.debug "Contract: #{@payment.contract.inspect}"
+    Rails.logger.debug "Customer: #{@payment.contract.customer.inspect}"
+    Rails.logger.debug "Customer Email: #{@payment.contract.customer.email}"
+    
     begin
-      if @payment.contract.customer.email.present?
-        PaymentMailer.payment_notification(@payment).deliver_now
-        @payment.update(email_sent_at: Time.current)
-        flash[:notice] = 'Email başarıyla gönderildi.'
-      else
-        flash[:alert] = 'Müşterinin email adresi bulunamadı!'
+      customer = @payment.contract.customer
+      
+      if !customer
+        flash[:alert] = 'Müşteri bilgisi bulunamadı!'
+        Rails.logger.error "Payment Email Error: Customer not found"
+        return redirect_to contract_path(@payment.contract)
       end
+      
+      if !customer.email.present?
+        flash[:alert] = 'Müşterinin email adresi bulunamadı!'
+        Rails.logger.error "Payment Email Error: Customer email is blank"
+        return redirect_to contract_path(@payment.contract)
+      end
+  
+      # Mailer'ı çağırmadan önce kontrol
+      Rails.logger.debug "Preparing to send email to: #{customer.email}"
+      
+      # Mailer'ı çağır
+      mail = PaymentMailer.payment_notification(@payment)
+      Rails.logger.debug "Mailer object created: #{mail.inspect}"
+      
+      # Email'i gönder
+      result = mail.deliver_now
+      Rails.logger.debug "Email delivery result: #{result.inspect}"
+      
+      # Başarılı gönderim sonrası
+      @payment.update!(email_sent_at: Time.current)
+      flash[:notice] = 'Email başarıyla gönderildi.'
+      
     rescue => e
-      flash[:error] = "Email gönderilirken hata oluştu: #{e.message}"
-      Rails.logger.error("Email gönderme hatası: #{e.message}")
+      error_message = "Email gönderme hatası: #{e.message}"
+      Rails.logger.error error_message
+      Rails.logger.error e.backtrace.join("\n")
+      flash[:error] = "Email gönderilemedi: #{e.message}"
     end
   
     redirect_to contract_path(@payment.contract)
