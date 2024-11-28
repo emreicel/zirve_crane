@@ -46,6 +46,12 @@ class CranePolicy < ApplicationPolicy
         end
       end
     end
+
+    def export?
+      super_admin? || admin?  # veya istediğiniz yetki kontrolü
+    end
+  
+
   
     private
   

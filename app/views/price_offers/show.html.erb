@@ -1,0 +1,140 @@
+<div class="container-fluid mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-light py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+          <i class="fas fa-file-invoice me-2"></i>Teklif Detayı
+        </h5>
+        <div class="btn-group">
+          <%= link_to edit_price_offer_path(@price_offer), class: "btn btn-sm btn-primary" do %>
+            <i class="fas fa-edit me-1"></i>Düzenle
+          <% end %>
+          <%= link_to price_offer_path(@price_offer), 
+              method: :delete,
+              data: { turbo_confirm: "Bu teklifi silmek istediğinize emin misiniz?" },
+              class: "btn btn-sm btn-danger" do %>
+            <i class="fas fa-trash me-1"></i>Sil
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-4">
+            <h6 class="text-muted mb-2">Müşteri Bilgileri</h6>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <tr>
+                  <th class="bg-light" style="width: 30%">Müşteri Adı:</th>
+                  <td><%= @price_offer.customer.customer_name %></td>
+                </tr>
+                <tr>
+                  <th class="bg-light">Yetkili Kişi:</th>
+                  <td><%= @price_offer.customer.contact_person_name %></td>
+                </tr>
+                <tr>
+                  <th class="bg-light">Telefon:</th>
+                  <td><%= @price_offer.customer.contact_person_phone %></td>
+                </tr>
+                <tr>
+                  <th class="bg-light">Email:</th>
+                  <td><%= @price_offer.customer.contact_person_email %></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mb-4">
+            <h6 class="text-muted mb-2">Teklif Bilgileri</h6>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <tr>
+                  <th class="bg-light" style="width: 30%">Teklif No:</th>
+                  <td><%= @price_offer.id %></td>
+                </tr>
+                <tr>
+                  <th class="bg-light">Teklif Tarihi:</th>
+                  <td><%= @price_offer.price_offer_date&.strftime("%d.%m.%Y") %></td>
+                </tr>
+                <tr>
+                  <th class="bg-light">Ödeme Şekli:</th>
+                  <td><%= @price_offer.payment_method.payment_method %></td>
+                </tr>
+                <tr>
+                  <th class="bg-light">Planlanan Teslim:</th>
+                  <td><%= @price_offer.price_offer_planned_date&.strftime("%d.%m.%Y") %></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vinç Bilgileri -->
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header bg-light">
+              <h6 class="mb-0">Vinç Bilgileri</h6>
+            </div>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <div class="table-responsive">
+                    <table class="table table-bordered">
+                      <tr>
+                        <th class="bg-light" style="width: 30%">Seçilen Vinç:</th>
+                        <td>
+                          <%= "#{@price_offer.crane.crane_brand_name} - #{@price_offer.crane.crane_model_name} - #{@price_offer.crane.crane_chassis_no}" %>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 30%">Açıklamalar</th>
+                      <th style="width: 35%">Mevcut</th>
+                      <th style="width: 35%">Talep</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Serbest Duruş</td>
+                      <td><%= @price_offer.crane.crane_height %> m</td>
+                      <td><%= @price_offer.requested_crane_height %> m</td>
+                    </tr>
+                    <tr>
+                      <td>Bom Uzunluğu</td>
+                      <td><%= @price_offer.crane.crane_boom_length %> m</td>
+                      <td><%= @price_offer.requested_crane_boom_length %> m</td>
+                    </tr>
+                    <tr>
+                      <td>Maksimum Kapasite</td>
+                      <td><%= @price_offer.crane.crane_tonnage %> kg</td>
+                      <td><%= @price_offer.requested_crane_tonnage %> kg</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <%= link_to price_offers_path, class: "btn btn-light" do %>
+          <i class="fas fa-arrow-left me-1"></i>Geri Dön
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

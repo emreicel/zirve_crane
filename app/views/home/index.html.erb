@@ -75,7 +75,7 @@
               <% @missing_documents.each do |payment| %>
                 <tr>
                   <td class="text-center align-middle">
-                    <%= l(payment.start_date) %>
+                    <%= payment.start_date&.strftime("%d/%m/%Y") %>
                     <% if payment.start_date < Date.current %>
                       <span class="badge bg-danger ms-2">GECİKTİ</span>
                     <% elsif payment.start_date == Date.current %>

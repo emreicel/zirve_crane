@@ -2,15 +2,10 @@
   <div class="card shadow-sm">
     <div class="card-header bg-light py-3">
       <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h5 class="mb-0">
-            <i class="fas fa-user-edit me-2"></i>Müşteri Düzenle
-          </h5>
-          <small class="text-muted">
-            <i class="fas fa-clock me-1"></i>Son güncelleme: <%= @customer.updated_at.strftime("%d.%m.%Y %H:%M") %>
-          </small>
-        </div>
-        <%= link_to customers_path, class: "btn btn-sm btn-outline-secondary" do %>
+        <h5 class="mb-0">
+          <i class="fas fa-user-edit me-2"></i>Müşteri Düzenle
+        </h5>
+        <%= link_to customer_path(@customer), class: "btn btn-sm btn-outline-secondary" do %>
           <i class="fas fa-arrow-left me-1"></i>Geri
         <% end %>
       </div>
@@ -20,31 +15,14 @@
       <%= form_with model: @customer, local: true, class: "needs-validation" do |f| %>
         <div class="row g-4">
           <!-- Temel Bilgiler -->
-          <div class="col-12">
-            <h6 class="text-muted mb-3">
-              <i class="fas fa-info-circle me-2"></i>Temel Bilgiler
-            </h6>
-          </div>
-
           <div class="col-md-6">
             <div class="form-floating mb-3">
               <%= f.text_field :customer_name,
                   class: "form-control",
                   required: true,
-                  placeholder: "Müşteri Adı" %>
+                  placeholder: "Firma Adı" %>
               <%= f.label :customer_name do %>
-                <i class="fas fa-user me-1"></i>Müşteri Adı
-              <% end %>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="form-floating mb-3">
-              <%= f.email_field :email,
-                  class: "form-control",
-                  placeholder: "E-posta" %>
-              <%= f.label :email do %>
-                <i class="fas fa-envelope me-1"></i>E-posta
+                <i class="fas fa-user me-1"></i>Firma Adı
               <% end %>
             </div>
           </div>
@@ -58,14 +36,6 @@
                 <i class="fas fa-building me-1"></i>Vergi Dairesi
               <% end %>
             </div>
-          </div>
-
-          <!-- İletişim Bilgileri -->
-          <div class="col-12">
-            <hr class="text-muted">
-            <h6 class="text-muted mb-3">
-              <i class="fas fa-address-card me-2"></i>İletişim Bilgileri
-            </h6>
           </div>
 
           <div class="col-md-6">
@@ -94,12 +64,58 @@
             </div>
           </div>
 
+          <!-- Yetkili Kişi Bilgileri -->
+          <div class="col-12">
+            <hr class="text-muted">
+            <h6 class="text-muted mb-3">
+              <i class="fas fa-address-card me-2"></i>Yetkili Kişi Bilgileri
+            </h6>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <%= f.text_field :contact_person_name,
+                  class: "form-control",
+                  placeholder: "Yetkili Kişi Adı" %>
+              <%= f.label :contact_person_name do %>
+                <i class="fas fa-user-tie me-1"></i>Adı
+              <% end %>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <%= f.email_field :contact_person_email,
+                  class: "form-control",
+                  placeholder: "E-posta Adresi" %>
+              <%= f.label :contact_person_email do %>
+                <i class="fas fa-envelope me-1"></i>E-posta
+              <% end %>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <%= f.telephone_field :contact_person_phone,
+                  class: "form-control",
+                  placeholder: "5XX XXX XX XX",
+                  pattern: "[0-9]{10}",
+                  title: "Lütfen geçerli bir telefon numarası girin (5XX XXX XX XX)" %>
+              <%= f.label :contact_person_phone do %>
+                <i class="fas fa-phone me-1"></i>Telefon Numarası
+              <% end %>
+              <div class="form-text">Örnek: 5XX XXX XX XX</div>
+            </div>
+          </div>
+
           <!-- Form Butonları -->
           <div class="col-12 mt-4">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <%= link_to "İptal", customers_path, class: "btn btn-outline-secondary me-2" %>
+              <%= link_to customer_path(@customer), class: "btn btn-outline-secondary me-2" do %>
+                <i class="fas fa-times me-1"></i>İptal
+              <% end %>
               <%= button_tag type: 'submit', class: "btn btn-primary" do %>
-                <i class="fas fa-save me-1"></i>Güncelle
+                <i class="fas fa-save me-1"></i>Değişiklikleri Kaydet
               <% end %>
             </div>
           </div>
@@ -134,9 +150,6 @@
     }
     textarea.form-control {
       min-height: 100px;
-    }
-    .text-muted {
-      font-size: 0.875rem;
     }
   </style>
 <% end %>

@@ -27,15 +27,15 @@
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span class="text-muted">Kontrat Tarihi:</span>
-              <strong><%= l(@contract.contract_date) %></strong>
+              <strong><%= @contract.contract_date&.strftime("%d/%m/%Y") %></strong>
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span class="text-muted">Kira Başlangıç Tarihi:</span>
-              <strong><%= l(@contract.rent_start_date) %></strong>
+              <strong><%= @contract.rent_start_date&.strftime("%d/%m/%Y") %></strong>
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span class="text-muted">Kira Bitiş Tarihi:</span>
-              <strong><%= l(@contract.rent_finish_date) %></strong>
+              <strong><%= @contract.rent_finish_date&.strftime("%d/%m/%Y") %></strong>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@
             <tr>
               <td class="text-center align-middle"><%= index + 1 %></td>
               <td class="text-center align-middle"><%= payment.rent_table_quantity %></td>
-              <td class="text-center align-middle"><%= l(payment.start_date) %>
+              <td class="text-center align-middle"><%= payment.start_date&.strftime("%d/%m/%Y") %>
                   
                 <% if policy(@contract).show_info? && @missing_documents.include?(payment) %>
                   <% if payment.start_date < Date.current %>
@@ -127,7 +127,7 @@
                   <% end %>
                 <% end %>
               </td>
-              <td class="text-center align-middle"><%= l(payment.end_date) %></td>
+              <td class="text-center align-middle"><%= payment.end_date&.strftime("%d/%m/%Y") %></td>
               <td class="text-center align-middle">
                 <span class="text-muted"><%= number_to_currency(payment.amount_excluding_vat) %></span>
               </td>
@@ -140,7 +140,7 @@
               <td class="text-center align-middle">
                 <% if payment.payment_date.present? %>
                   <span class="<%= payment.payment_date < Date.current ? 'text-danger' : '' %>">
-                    <%= l(payment.payment_date) %>
+                    <%= payment.payment_date&.strftime("%d/%m/%Y") %>
                   </span>
                 <% else %>
                   <span class="text-muted">-</span>

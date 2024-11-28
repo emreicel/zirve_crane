@@ -224,7 +224,7 @@
               etmektedir.
             </p>
             <p>
-              3.1.a Kiralama Başlama Tarihi: <%= l(contract.rent_start_date) %> (madde:3.1) Kiralama Bitiş Tarihi : <%= l(contract.rent_finish_date) %>
+              3.1.a Kiralama Başlama Tarihi: <%= contract.rent_start_date&.strftime("%d/%m/%Y") %> (madde:3.1) Kiralama Bitiş Tarihi : <%= contract.rent_finish_date&.strftime("%d/%m/%Y") %>
             </p>
             <p>
               3.1.b Kule vinç ?? GÜRSU TOKİ KONUTLARI Gürsu/BURSA ?? adresinde sözleşme hükümlerine göre kullanılmak
@@ -337,12 +337,12 @@
                     <tr>
                       <td class="text-center align-middle"><%= index + 1 %></td>
                       <td class="text-center align-middle"><%= payment.rent_table_quantity %></td>
-                      <td class="text-center align-middle"><%= l(payment.start_date) %></td>
-                      <td class="text-center align-middle"><%= l(payment.end_date) %></td>
+                      <td class="text-center align-middle"><%= payment.start_date&.strftime("%d/%m/%Y") %></td>
+                      <td class="text-center align-middle"><%= payment.end_date&.strftime("%d/%m/%Y") %></td>
                       <td class="text-center align-middle"><%= number_to_currency(payment.amount_excluding_vat) %></td>
                       <td class="text-center align-middle"><%= payment.vat_percentage %>%</td>
                       <td class="text-center align-middle"><%= number_to_currency(payment.amount_including_vat) %></td>
-                      <td class="text-center align-middle"><%= payment.payment_date %></td>
+                      <td class="text-center align-middle"><%= payment.payment_date&.strftime("%d/%m/%Y") %></td>
                       <td class="text-center align-middle"><%= payment.payment_method&.payment_method || '-' %></td>
                       <td class="text-center align-middle"><%= payment.note %></td>
                     </tr>
@@ -596,7 +596,7 @@
               14.1.Bu sözleşmeden doğabilecek her türlü itilafın hal merci münhasıran BURSA mahkemeleri ve icra daireleridir.
             </p>
             <p>
-              14.2.Bu KULE VİNÇ kira sözleşmesi <%= l(contract.contract_date) %> tarihinde 2 nüsha olarak akdedilmiştir.
+              14.2.Bu KULE VİNÇ kira sözleşmesi <%= contract.contract_date&.strftime("%d/%m/%Y") %> tarihinde 2 nüsha olarak akdedilmiştir.
             </p>
         </div>
 

@@ -65,6 +65,15 @@ class CranesController < ApplicationController
     render json: { serial_numbers: @crane.serial_numbers }
   end
 
+  def info
+    crane = Crane.find(params[:id])
+    render json: {
+    crane_height: crane.crane_height,
+    crane_boom_length: crane.crane_boom_length,
+    crane_tonnage: crane.crane_tonnage
+    }
+  end
+
   private
 
   def set_crane

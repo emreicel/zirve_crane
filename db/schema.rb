@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_27_221628) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_28_220449) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -109,6 +109,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_221628) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
+    t.string "contact_person_name"
+    t.string "contact_person_phone"
+    t.string "contact_person_email"
   end
 
   create_table "payment_methods", force: :cascade do |t|
@@ -133,6 +136,23 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_221628) do
     t.text "note"
     t.datetime "email_sent_at"
     t.index ["contract_id"], name: "index_payment_tables_on_contract_id"
+  end
+
+  create_table "price_offers", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.date "price_offer_date"
+    t.bigint "payment_method_id", null: false
+    t.date "price_offer_planned_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "crane_id"
+    t.decimal "requested_crane_height"
+    t.decimal "requested_crane_boom_length"
+    t.decimal "requested_crane_tonnage"
+    t.string "requested_crane_boom_tonnage"
+    t.index ["crane_id"], name: "index_price_offers_on_crane_id"
+    t.index ["customer_id"], name: "index_price_offers_on_customer_id"
+    t.index ["payment_method_id"], name: "index_price_offers_on_payment_method_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -160,4 +180,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_221628) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "payment_tables", "contracts"
+  add_foreign_key "price_offers", "cranes"
+  add_foreign_key "price_offers", "customers"
+  add_foreign_key "price_offers", "payment_methods"
 end

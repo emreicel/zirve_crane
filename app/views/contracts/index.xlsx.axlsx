@@ -22,9 +22,9 @@ wb.add_worksheet(name: "Contracts") do |sheet|
       contract.crane&.crane_chassis_no || "Bilinmiyor",
       "#{contract.rent_term} ay",
       contract.rent_amount,
-      l(contract.contract_date),
-      l(contract.rent_start_date),
-      l(contract.rent_finish_date),
+      contract.contract_date&.strftime("%d/%m/%Y"),
+      contract.rent_start_date&.strftime("%d/%m/%Y"),
+      contract.rent_finish_date&.strftime("%d/%m/%Y"),
       contract.vat_percentage
     ]
   end

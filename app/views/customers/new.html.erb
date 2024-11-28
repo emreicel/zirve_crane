@@ -20,10 +20,10 @@
               <%= f.text_field :customer_name,
                   class: "form-control",
                   required: true,
-                  placeholder: "Müşteri Adı",
+                  placeholder: "Firma Adı",
                   autofocus: true %>
               <%= f.label :customer_name do %>
-                <i class="fas fa-user me-1"></i>Müşteri Adı
+                <i class="fas fa-user me-1"></i>Firma Adı
               <% end %>
             </div>
           </div>
@@ -37,14 +37,6 @@
                 <i class="fas fa-building me-1"></i>Vergi Dairesi
               <% end %>
             </div>
-          </div>
-
-          <!-- İletişim Bilgileri -->
-          <div class="col-12">
-            <hr class="text-muted">
-            <h6 class="text-muted mb-3">
-              <i class="fas fa-address-card me-2"></i>İletişim Bilgileri
-            </h6>
           </div>
 
           <div class="col-md-6">
@@ -73,6 +65,53 @@
             </div>
           </div>
 
+          <!-- Yetkili Kişi Bilgileri -->
+          <div class="col-12">
+            <hr class="text-muted">
+            <h6 class="text-muted mb-3">
+              <i class="fas fa-address-card me-2"></i>Yetkili Kişi Bilgileri
+            </h6>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <%= f.text_field :contact_person_name,
+                  class: "form-control",
+                  placeholder: "Yetkili Kişi Adı" %>
+              <%= f.label :contact_person_name do %>
+                <i class="fas fa-user-tie me-1"></i>Adı
+              <% end %>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <%= f.email_field :contact_person_email,
+                  class: "form-control",
+                  placeholder: "E-posta Adresi" %>
+              <%= f.label :contact_person_email do %>
+                <i class="fas fa-envelope me-1"></i>E-posta
+              <% end %>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <%= f.telephone_field :contact_person_phone,
+                  class: "form-control",
+                  placeholder: "5XX XXX XX XX",
+                  pattern: "[0-9]{10}",
+                  title: "Lütfen geçerli bir telefon numarası girin (5XX XXX XX XX)" %>
+              <%= f.label :contact_person_phone do %>
+                <i class="fas fa-phone me-1"></i>Telefon Numarası
+              <% end %>
+              <div class="form-text">Örnek: 5XX XXX XX XX</div>
+            </div>
+          </div>
+
+          
+
+          
           <!-- Form Butonları -->
           <div class="col-12 mt-4">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">

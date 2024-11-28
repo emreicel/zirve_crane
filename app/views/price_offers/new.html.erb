@@ -1,0 +1,174 @@
+<div class="container-fluid mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-light py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+          <i class="fas fa-file-invoice me-2"></i>Yeni Teklif Oluştur
+        </h5>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <%= form_with(model: @price_offer, local: true) do |f| %>
+        <div class="row g-3">
+          <!-- Müşteri Bilgileri -->
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Müşteri Bilgileri</h6>
+              </div>
+              <div class="card-body">
+                <div class="row g-3" data-controller="customer-select">
+                  <!-- Müşteri Seçimi -->
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <%= f.label :customer_id, "Müşteri Adı", class: "form-label" %>
+                      <%= f.collection_select :customer_id, 
+                          @customers, 
+                          :id, 
+                          :customer_name, 
+                          { prompt: "Müşteri Seçiniz" }, 
+                          { 
+                            class: "form-select",
+                            data: { action: "change->customer-select#updateCustomerInfo" }
+                          } 
+                      %>
+                    </div>
+                  </div>
+
+                  <!-- Teklif Tarihi -->
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <%= f.label :price_offer_date, "Teklif Tarihi", class: "form-label" %>
+                      <%= f.date_field :price_offer_date, class: "form-control" %>
+                    </div>
+                  </div>
+
+                  <!-- Ödeme Şekli -->
+                  <div class="col-md-4">
+                    <div class="form-group" data-controller="payment-method">
+                      <%= f.label :payment_method_id, "Ödeme Şekli", class: "form-label" %>
+                      <div class="d-flex gap-2">
+                        <%= f.collection_select :payment_method_id, 
+                            @payment_methods, 
+                            :id, 
+                            :payment_method, 
+                            { prompt: "Ödeme Şekli Seçiniz" }, 
+                            { 
+                              class: "form-select",
+                              data: { 
+                                payment_method_target: "select",
+                                action: "change->payment-method#toggleCustom"
+                              }
+                            } 
+                        %>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Planlanan Teslim Tarihi -->
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <%= f.label :price_offer_planned_date, "Planlanan Teslim Tarihi", class: "form-label" %>
+                      <%= f.date_field :price_offer_planned_date, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vinç Bilgileri -->
+        <div class="row g-3 mt-4">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Vinç Bilgileri</h6>
+              </div>
+              <div class="card-body" data-controller="crane-select">
+                <!-- Vinç Seçimi -->
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <%= f.label :crane_id, "Vinç Seçimi", class: "form-label" %>
+                      <%= f.collection_select :crane_id,
+                          @cranes,
+                          :id,
+                          ->(crane) { "#{crane.crane_brand_name} - #{crane.crane_model_name} - #{crane.crane_chassis_no}" },
+                          { prompt: "Vinç Seçiniz" },
+                          {
+                            class: "form-select",
+                            data: { action: "change->crane-select#updateCraneInfo" }
+                          }
+                      %>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Vinç Detay Tablosu -->
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th style="width: 30%">Açıklamalar</th>
+                        <th style="width: 35%">Mevcut</th>
+                        <th style="width: 35%">Talep</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Serbest Duruş</td>
+                        <td>
+                          <span id="crane-height" data-crane-select-target="height"></span>
+                        </td>
+                        <td>
+                          <%= f.number_field :requested_crane_height,
+                              class: "form-control",
+                              step: "0.1",
+                              placeholder: "Talep edilen yükseklik"
+                          %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Bom Uzunluğu</td>
+                        <td>
+                          <span id="crane-boom-length" data-crane-select-target="boomLength"></span>
+                        </td>
+                        <td>
+                          <%= f.number_field :requested_crane_boom_length,
+                              class: "form-control",
+                              step: "0.1",
+                              placeholder: "Talep edilen bom uzunluğu"
+                          %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Maksimum Kapasite</td>
+                        <td>
+                          <span id="crane-tonnage" data-crane-select-target="tonnage"></span>
+                        </td>
+                        <td>
+                          <%= f.number_field :requested_crane_tonnage,
+                              class: "form-control",
+                              step: "0.1",
+                              placeholder: "Talep edilen kapasite"
+                          %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <%= f.submit "Teklif Oluştur", class: "btn btn-primary" %>
+          <%= link_to "İptal", price_offers_path, class: "btn btn-light" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

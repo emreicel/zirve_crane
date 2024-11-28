@@ -1,7 +1,50 @@
 tr:
-  date:
+  ate:
     formats:
-      default: "%d/%m/%Y"
+      default: "%d.%m.%Y"
+      long: "%d %B %Y" # Örnek: 28 Kasım 2024
+      short: "%d %b"   # Örnek: 28 Kas
+  time:
+    formats:
+      default: "%d.%m.%Y %H:%M"
+      long: "%d %B %Y %H:%M"
+      short: "%d %b %H:%M"
+  datetime:
+    distance_in_words:
+      half_a_minute: "yarım dakika"
+      less_than_x_seconds:
+        one: "bir saniyeden az"
+        other: "%{count} saniyeden az"
+      x_seconds:
+        one: "1 saniye"
+        other: "%{count} saniye"
+      less_than_x_minutes:
+        one: "bir dakikadan az"
+        other: "%{count} dakikadan az"
+      x_minutes:
+        one: "1 dakika"
+        other: "%{count} dakika"
+      about_x_hours:
+        one: "yaklaşık 1 saat"
+        other: "yaklaşık %{count} saat"
+      x_days:
+        one: "1 gün"
+        other: "%{count} gün"
+      about_x_months:
+        one: "yaklaşık 1 ay"
+        other: "yaklaşık %{count} ay"
+      x_months:
+        one: "1 ay"
+        other: "%{count} ay"
+      about_x_years:
+        one: "yaklaşık 1 yıl"
+        other: "yaklaşık %{count} yıl"
+      over_x_years:
+        one: "1 yıldan fazla"
+        other: "%{count} yıldan fazla"
+      almost_x_years:
+        one: "neredeyse 1 yıl"
+        other: "neredeyse %{count} yıl"
 
   number:
     currency:

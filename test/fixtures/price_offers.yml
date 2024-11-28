@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer: one
+  price_offer_date: 2024-11-28
+  payment_method: one
+  price_offer_planned_date: 2024-11-28
+
+two:
+  customer: two
+  price_offer_date: 2024-11-28
+  payment_method: two
+  price_offer_planned_date: 2024-11-28

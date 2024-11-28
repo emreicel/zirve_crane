@@ -57,7 +57,7 @@
                 <dd class="col-sm-8"><%= @customer.vat_office_name %></dd>
                 
                 <dt class="col-sm-4">Telefon</dt>
-            
+                <dd class="col-sm-8"><%= @customer.customer_phone_number %></dd>
                 
                 <dt class="col-sm-4">Adres</dt>
                 <dd class="col-sm-8"><%= @customer.customer_address %></dd>
@@ -76,13 +76,14 @@
               
               <dl class="row mb-0">
                 <dt class="col-sm-4">İsim</dt>
+                <dd class="col-sm-8"><%= @customer.contact_person_name %></dd>
              
                 
                 <dt class="col-sm-4">E-posta</dt>
-        
+                <dd class="col-sm-8"><%= @customer.contact_person_email %></dd>
                 
                 <dt class="col-sm-4">Telefon</dt>
-      
+                <dd class="col-sm-8"><%= @customer.contact_person_phone %></dd>
               </dl>
             </div>
           </div>

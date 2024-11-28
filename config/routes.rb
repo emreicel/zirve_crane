@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  # Müşteri bilgilerini almak için API endpoint'i
+  get 'customers/:id/info', to: 'customers#info'
+  get 'cranes/:id/info', to: 'cranes#info', as: 'crane_info'
 
   # Root path
   root to: "home#index"
@@ -32,6 +35,7 @@ Rails.application.routes.draw do
   resources :crane_owners
   resources :crane_fixings
   resources :banks
+  resources :price_offers
   resources :contracts do
     member do
       get :show_pdf

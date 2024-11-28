@@ -37,6 +37,14 @@ class CustomersController < ApplicationController
     redirect_to customers_path, notice: "Müşteri başarıyla silindi."
   end
 
+  def info
+    customer = Customer.find(params[:id])
+    render json: {
+      phone_number: customer.customer_phone_number,
+      email: customer.email
+    }
+  end
+
   private
 
   def set_customer
@@ -44,6 +52,6 @@ class CustomersController < ApplicationController
   end
 
   def customer_params
-    params.require(:customer).permit(:customer_name, :vat_office_name, :customer_address, :customer_phone_number, :email)
+    params.require(:customer).permit(:customer_name, :vat_office_name, :customer_address, :customer_phone_number, :email, :contact_person_name, :contact_person_phone, :contact_person_email)
   end
 end

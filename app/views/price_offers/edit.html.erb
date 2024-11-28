@@ -1,0 +1,235 @@
+<div class="container-fluid mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-light py-3">
+      <h5 class="mb-0">
+        <i class="fas fa-edit me-2"></i>Teklif Düzenle
+      </h5>
+    </div>
+    <div class="card-body">
+      <%= form_with(model: @price_offer, local: true) do |f| %>
+        <% if @price_offer.errors.any? %>
+          <div class="alert alert-danger">
+            <h6 class="alert-heading"><%= pluralize(@price_offer.errors.count, "hata") %> nedeniyle kaydedilemedi:</h6>
+            <ul class="mb-0">
+              <% @price_offer.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="row g-3">
+          <!-- Müşteri Bilgileri -->
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Müşteri Bilgileri</h6>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <!-- Müşteri Seçimi -->
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <%= f.label :customer_id, "Müşteri Adı", class: "form-label" %>
+                      <%= f.collection_select :customer_id, 
+                          @customers, 
+                          :id, 
+                          :customer_name, 
+                          { prompt: "Müşteri Seçiniz" }, 
+                          { 
+                            class: "form-select",
+                            data: { 
+                              controller: "customer-select",
+                              action: "change->customer-select#updateCustomerInfo"
+                            }
+                          } 
+                      %>
+                    </div>
+                  </div>
+
+                  <!-- Teklif Tarihi -->
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <%= f.label :price_offer_date, "Teklif Tarihi", class: "form-label" %>
+                      <%= f.date_field :price_offer_date, class: "form-control" %>
+                    </div>
+                  </div>
+
+                  <!-- Ödeme Şekli -->
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <%= f.label :payment_method_id, "Ödeme Şekli", class: "form-label" %>
+                      <%= f.collection_select :payment_method_id, 
+                          @payment_methods, 
+                          :id, 
+                          :payment_method, 
+                          { prompt: "Ödeme Şekli Seçiniz" }, 
+                          { class: "form-select" } 
+                      %>
+                    </div>
+                  </div>
+
+                  <!-- Planlanan Teslim Tarihi -->
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <%= f.label :price_offer_planned_date, "Planlanan Teslim Tarihi", class: "form-label" %>
+                      <%= f.date_field :price_offer_planned_date, class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Önceki kodlar aynı kalacak -->
+
+        <!-- Vinç Bilgileri -->
+        <div class="row g-3 mt-4">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Vinç Bilgileri</h6>
+              </div>
+              <div class="card-body" data-controller="crane-select">
+                <!-- Vinç Seçimi -->
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <%= f.label :crane_id, "Vinç Seçimi", class: "form-label" %>
+                      <%= f.collection_select :crane_id,
+                          @cranes,
+                          :id,
+                          ->(crane) { "#{crane.crane_brand_name} - #{crane.crane_model_name} - #{crane.crane_chassis_no}" },
+                          { prompt: "Vinç Seçiniz" },
+                          {
+                            class: "form-select",
+                            data: { action: "change->crane-select#updateCraneInfo" }
+                          }
+                      %>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Vinç Detay Tablosu -->
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th style="width: 30%">Açıklamalar</th>
+                        <th style="width: 35%">Mevcut</th>
+                        <th style="width: 35%">Talep</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Serbest Duruş</td>
+                        <td>
+                          <span id="crane-height" data-crane-select-target="height"></span>
+                        </td>
+                        <td>
+                          <%= f.number_field :requested_crane_height,
+                              class: "form-control",
+                              step: "0.1",
+                              placeholder: "Talep edilen yükseklik"
+                          %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Bom Uzunluğu</td>
+                        <td>
+                          <span id="crane-boom-length" data-crane-select-target="boomLength"></span>
+                        </td>
+                        <td>
+                          <%= f.number_field :requested_crane_boom_length,
+                              class: "form-control",
+                              step: "0.1",
+                              placeholder: "Talep edilen bom uzunluğu"
+                          %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Maksimum Kapasite</td>
+                        <td>
+                          <span id="crane-tonnage" data-crane-select-target="tonnage"></span>
+                        </td>
+                        <td>
+                          <%= f.number_field :requested_crane_tonnage,
+                              class: "form-control",
+                              step: "0.1",
+                              placeholder: "Talep edilen kapasite"
+                          %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <%= f.submit "Değişiklikleri Kaydet", class: "btn btn-primary" %>
+          <%= link_to "İptal", price_offer_path(@price_offer), class: "btn btn-light" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% content_for :scripts do %>
+  <script>
+    document.addEventListener('turbo:load', function() {
+      // Müşteri seçimi için mevcut kod
+      const customerSelect = document.querySelector('select[name="price_offer[customer_id]"]');
+      if (customerSelect) {
+        customerSelect.addEventListener('change', function() {
+          const customerId = this.value;
+          if (customerId) {
+            fetch(`/customers/${customerId}/info`)
+              .then(response => response.json())
+              .then(data => {
+                document.getElementById('customer-phone').value = data.phone_number;
+                document.getElementById('customer-email').value = data.email;
+              });
+          }
+        });
+      }
+
+      // Vinç seçimi için yeni kod
+      const craneSelect = document.querySelector('select[name="price_offer[crane_id]"]');
+      if (craneSelect) {
+        // Sayfa yüklendiğinde mevcut vinç bilgilerini göster
+        const currentCraneId = craneSelect.value;
+        if (currentCraneId) {
+          fetch(`/cranes/${currentCraneId}/info`)
+            .then(response => response.json())
+            .then(data => {
+              document.getElementById('crane-height').textContent = `${data.height} m`;
+              document.getElementById('crane-boom-length').textContent = `${data.boom_length} m`;
+              document.getElementById('crane-tonnage').textContent = `${data.tonnage} ton`;
+            });
+        }
+
+        // Vinç seçimi değiştiğinde bilgileri güncelle
+        craneSelect.addEventListener('change', function() {
+          const craneId = this.value;
+          if (craneId) {
+            fetch(`/cranes/${craneId}/info`)
+              .then(response => response.json())
+              .then(data => {
+                document.getElementById('crane-height').textContent = `${data.height} m`;
+                document.getElementById('crane-boom-length').textContent = `${data.boom_length} m`;
+                document.getElementById('crane-tonnage').textContent = `${data.tonnage} ton`;
+              });
+          } else {
+            document.getElementById('crane-height').textContent = '';
+            document.getElementById('crane-boom-length').textContent = '';
+            document.getElementById('crane-tonnage').textContent = '';
+          }
+        });
+      }
+    });
+  </script>
+<% end %>
