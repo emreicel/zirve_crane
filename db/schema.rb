@@ -66,6 +66,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_02_205944) do
     t.string "contract_number"
     t.text "contract_note"
     t.boolean "completed", default: false
+    t.integer "contract_requested_crane_boom_length"
+    t.integer "contract_requested_crane_height"
+    t.integer "contract_requested_crane_tonnage"
+    t.integer "contract_requested_crane_boom_tonnage"
     t.index ["contract_number"], name: "index_contracts_on_contract_number", unique: true
   end
 

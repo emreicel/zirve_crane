@@ -9,17 +9,24 @@
         <i class="fas fa-file-pdf me-1"></i>PDF Oluştur
       <% end %>
     <% end %>
-    
+        
     <% unless @contract.completed? %>
-      <%= button_to complete_contract_path(@contract),
-          method: :patch,
-          class: "btn btn-sm btn-success",
-          data: { turbo_confirm: "Bu kontratı tamamlamak istediğinize emin misiniz?" } do %>
-        <i class="fas fa-check me-1"></i>Tamamlandı
+      <% if @all_files_uploaded %>
+        <%= button_to complete_contract_path(@contract),
+            method: :patch,
+            class: "btn btn-success btn-sm",
+            data: { turbo_confirm: "Bu kontratı tamamlamak istediğinize emin misiniz?" } do %>
+          <i class="fas fa-check me-1"></i>Kontratı Tamamla
+        <% end %>
+      <% else %>
+        <button class="btn btn-secondary btn-sm" disabled>
+          <i class="fas fa-clock me-1"></i>Dosyalar Bekleniyor
+        </button>
+        </div>
       <% end %>
     <% else %>
-      <span class="badge bg-success d-flex align-items-center">
-        <i class="fas fa-check me-1"></i>Tamamlanmış Kontrat
+      <span class="badge bg-success">
+        <i class="fas fa-check me-1"></i>Tamamlanmış
       </span>
     <% end %>
   </div>
@@ -88,20 +95,24 @@
                 <div class="mb-2">
                   <small class="text-muted d-block">Maks. Kapasite</small>
                   <strong><%= @contract.crane.crane_tonnage %> KG</strong>
+                  <small class="text-muted d-block">İstenilen: <%= @contract.contract_requested_crane_tonnage %> KG</small>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mb-2">
                   <small class="text-muted d-block">Yükseklik</small>
                   <strong><%= @contract.crane.crane_height %> MT</strong>
+                  <small class="text-muted d-block">İstenilen: <%= @contract.contract_requested_crane_height %> MT</small>
                 </div>
                 <div class="mb-2">
                   <small class="text-muted d-block">Bom Uzunluğu</small>
                   <strong><%= @contract.crane.crane_boom_length %> MT</strong>
+                  <small class="text-muted d-block">İstenilen: <%= @contract.contract_requested_crane_boom_length %> MT</small>
                 </div>
                 <div class="mb-2">
                   <small class="text-muted d-block">Bom Ucu Tonajı</small>
                   <strong><%= @contract.crane.crane_boom_tonnage %> KG</strong>
+                  <small class="text-muted d-block">İstenilen: <%= @contract.contract_requested_crane_boom_tonnage %> KG</small>
                 </div>
               </div>
             </div>
@@ -132,7 +143,16 @@
 <div class="card mt-4">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Ödeme Planı</h5>
-    <span class="badge bg-primary">Toplam Kalan Ödeme Sayısı: <%= @payment_tables.count - @payment_tables.count { |payment| payment.file.attached? } %> </span>
+    <div class="d-flex gap-2 align-items-center">
+        <% if @missing_files_count > 0 %>
+          <span class="badge bg-danger">
+            Eksik Dosya: <%= @missing_files_count %>
+          </span>
+        <% end %>
+        <span class="badge bg-primary">
+          Toplam Ödeme: <%= @payment_tables.count %>
+        </span>
+      </div>
   </div>
   
   <div class="card-body p-0"> <!-- padding'i kaldırarak daha kompakt görünüm -->

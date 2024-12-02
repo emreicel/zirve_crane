@@ -33,7 +33,8 @@ class ContractsController < ApplicationController
   def show
     authorize @contract
     @payment_tables = @contract.payment_tables
-
+    
+    # Eksik dosyaları bul
     @missing_documents = @contract.payment_tables
       .left_joins(:file_attachment)
       .where(active_storage_attachments: { id: nil })
@@ -42,6 +43,18 @@ class ContractsController < ApplicationController
              Date.current.beginning_of_month,
              Date.current.end_of_month)
       .order(start_date: :asc)
+      
+    # Tüm dosyaların yüklenip yüklenmediğini kontrol et
+    @all_files_uploaded = @contract.payment_tables
+      .left_joins(:file_attachment)
+      .where(active_storage_attachments: { id: nil })
+      .count.zero?
+      
+    # Eksik dosya sayısı
+    @missing_files_count = @contract.payment_tables
+      .left_joins(:file_attachment)
+      .where(active_storage_attachments: { id: nil })
+      .count
   end
 
   def new
@@ -89,6 +102,16 @@ class ContractsController < ApplicationController
   def complete
     @contract = Contract.find(params[:id])
     authorize @contract, :complete?
+
+    missing_files = @contract.payment_tables
+    .left_joins(:file_attachment)
+    .where(active_storage_attachments: { id: nil })
+    .count
+
+    if missing_files > 0
+      redirect_to @contract, alert: "#{missing_files} adet ödeme için dosya eksik. Tüm dosyalar yüklenmeden kontrat tamamlanamaz."
+      return
+    end
     
     if @contract.update(completed: true)
       update_crane_availability(@contract.crane_id, true)
@@ -135,7 +158,10 @@ class ContractsController < ApplicationController
   def contract_params
     params.require(:contract).permit(:customer_id, :crane_id, :rent_term, 
                                    :rent_amount, :contract_date, :rent_start_date, 
-                                   :rent_finish_date, :vat_percentage, :contract_note, :completed)
+                                   :rent_finish_date, :vat_percentage, :contract_note, 
+                                   :completed, :contract_requested_crane_boom_length,
+                                   :contract_requested_crane_height, :contract_requested_crane_tonnage,
+                                   :contract_requested_crane_boom_tonnage)
   end
 
   def update_crane_availability(crane_id, availability)
