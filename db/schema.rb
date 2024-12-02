@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_28_220449) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_02_135454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,6 +64,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_28_220449) do
     t.datetime "updated_at", null: false
     t.integer "vat_percentage"
     t.string "contract_number"
+    t.text "contract_note"
     t.index ["contract_number"], name: "index_contracts_on_contract_number", unique: true
   end
 

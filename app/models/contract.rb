@@ -6,6 +6,8 @@ class Contract < ApplicationRecord
   
     after_commit :generate_contract_number, on: :create
     after_destroy :make_crane_available
+
+    validates :contract_note, length: { maximum: 1000 } # Maksimum 1000 karakter
   
     private
   

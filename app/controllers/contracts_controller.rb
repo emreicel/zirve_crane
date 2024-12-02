@@ -110,7 +110,7 @@ class ContractsController < ApplicationController
   def contract_params
     params.require(:contract).permit(:customer_id, :crane_id, :rent_term, 
                                    :rent_amount, :contract_date, :rent_start_date, 
-                                   :rent_finish_date, :vat_percentage)
+                                   :rent_finish_date, :vat_percentage, :contract_note)
   end
 
   def update_crane_availability(crane_id, availability)
