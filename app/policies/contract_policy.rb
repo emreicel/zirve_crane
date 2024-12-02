@@ -26,6 +26,10 @@ class ContractPolicy < ApplicationPolicy
     def destroy?
       super_admin? || admin?
     end
+
+    def complete?
+      super_admin? || admin?
+    end
   
     def show_pdf?
       super_admin? || admin? || accountant?

@@ -1,0 +1,30 @@
+<% if policy(contract).show? %>
+  <%= link_to contract_path(contract), 
+      class: "btn btn-outline-info", 
+      title: "Görüntüle",
+      data: { bs_toggle: "tooltip" } do %>
+    <i class="fas fa-eye"></i>
+  <% end %>
+<% end %>
+
+<% if policy(contract).edit? %>
+  <%= link_to edit_contract_path(contract), 
+      class: "btn btn-outline-warning", 
+      title: "Düzenle",
+      data: { bs_toggle: "tooltip" } do %>
+    <i class="fas fa-edit"></i>
+  <% end %>
+<% end %>
+
+<% if policy(contract).destroy? %>
+  <%= button_to contract, 
+      method: :delete, 
+      data: { 
+        turbo_confirm: 'Bu kontratı silmek istediğinize emin misiniz?',
+        bs_toggle: "tooltip"
+      }, 
+      class: "btn btn-outline-danger",
+      title: "Sil" do %>
+    <i class="fas fa-trash"></i>
+  <% end %>
+<% end %>

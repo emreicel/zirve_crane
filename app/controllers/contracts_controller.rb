@@ -5,14 +5,27 @@ class ContractsController < ApplicationController
   before_action :set_payment_tables, only: [:show_pdf]
 
   def index
-    @contracts = policy_scope(Contract)
     authorize Contract
-
+    
+    @active_contracts = policy_scope(Contract).where(completed: false)
+    @completed_contracts = policy_scope(Contract).where(completed: true)
+  
     respond_to do |format|
       format.html
       format.xlsx do
         authorize Contract, :export?
-        response.headers['Content-Disposition'] = 'attachment; filename="contracts.xlsx"'
+        status = params[:status] || 'all'
+        @contracts = case status
+                     when 'active'
+                       policy_scope(Contract).where(completed: false)
+                     when 'completed'
+                       policy_scope(Contract).where(completed: true)
+                     else
+                       policy_scope(Contract)
+                     end.order(created_at: :desc)
+        
+        filename = "contracts_#{status}_#{Time.current.strftime('%Y%m%d')}.xlsx"
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
       end
     end
   end
@@ -73,6 +86,18 @@ class ContractsController < ApplicationController
     redirect_to contracts_path, notice: "Kontrat başarıyla silindi."
   end
 
+  def complete
+    @contract = Contract.find(params[:id])
+    authorize @contract, :complete?
+    
+    if @contract.update(completed: true)
+      update_crane_availability(@contract.crane_id, true)
+      redirect_to @contract, notice: 'Kontrat başarıyla tamamlandı.'
+    else
+      redirect_to @contract, alert: 'Kontrat tamamlanırken bir hata oluştu.'
+    end
+  end
+
   def show_pdf
     authorize @contract, :show_pdf?
     render pdf: "contract_#{@contract.id}",
@@ -110,7 +135,7 @@ class ContractsController < ApplicationController
   def contract_params
     params.require(:contract).permit(:customer_id, :crane_id, :rent_term, 
                                    :rent_amount, :contract_date, :rent_start_date, 
-                                   :rent_finish_date, :vat_percentage, :contract_note)
+                                   :rent_finish_date, :vat_percentage, :contract_note, :completed)
   end
 
   def update_crane_availability(crane_id, availability)

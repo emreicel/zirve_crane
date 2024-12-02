@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       get :show_pdf
       post :send_email
       post :upload_invoice
+      patch :complete
     end
   end
   resources :users, only: [:index, :new, :edit, :create, :update, :destroy]

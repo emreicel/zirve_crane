@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_02_135454) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_02_205944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_02_135454) do
     t.integer "vat_percentage"
     t.string "contract_number"
     t.text "contract_note"
+    t.boolean "completed", default: false
     t.index ["contract_number"], name: "index_contracts_on_contract_number", unique: true
   end
 
