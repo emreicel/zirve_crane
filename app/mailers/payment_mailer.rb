@@ -12,11 +12,11 @@ class PaymentMailer < ApplicationMailer
       Rails.logger.debug "Customer: #{@customer.inspect}"
       Rails.logger.debug "To Email: #{@customer.email}"
 
-      raise "Customer email is missing" if @customer.email.blank?
+      raise "Customer email is missing" if @customer.contact_person_email.blank?
       
       mail(
-        to: [@contract.customer.email, 'gokhanyard@gmail.com'],
-        subject: "#{@contract.contract_number} - Fatura Talebi - #{l(@payment.start_date)}"
+        to: [@contract.customer.contact_person_email],
+        subject: "#{@contract.contract_number} - Fatura Talebi - #{@payment.start_date&.strftime("%d/%m/%Y")}"
       )
     end
   end

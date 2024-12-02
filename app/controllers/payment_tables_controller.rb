@@ -77,7 +77,7 @@ class PaymentTablesController < ApplicationController
     Rails.logger.debug "Payment ID: #{@payment.id}"
     Rails.logger.debug "Contract: #{@payment.contract.inspect}"
     Rails.logger.debug "Customer: #{@payment.contract.customer.inspect}"
-    Rails.logger.debug "Customer Email: #{@payment.contract.customer.email}"
+    Rails.logger.debug "Customer Email: #{@payment.contract.customer.contact_person_email}"
     
     begin
       customer = @payment.contract.customer
@@ -88,14 +88,14 @@ class PaymentTablesController < ApplicationController
         return redirect_to contract_path(@payment.contract)
       end
       
-      if !customer.email.present?
+      if !customer.contact_person_email.present?
         flash[:alert] = 'Müşterinin email adresi bulunamadı!'
         Rails.logger.error "Payment Email Error: Customer email is blank"
         return redirect_to contract_path(@payment.contract)
       end
   
       # Mailer'ı çağırmadan önce kontrol
-      Rails.logger.debug "Preparing to send email to: #{customer.email}"
+      Rails.logger.debug "Preparing to send email to: #{customer.contact_person_email}"
       
       # Mailer'ı çağır
       mail = PaymentMailer.payment_notification(@payment)

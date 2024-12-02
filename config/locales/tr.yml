@@ -1,9 +1,17 @@
 tr:
-  ate:
+  date:
     formats:
       default: "%d.%m.%Y"
-      long: "%d %B %Y" # Örnek: 28 Kasım 2024
-      short: "%d %b"   # Örnek: 28 Kas
+      long: "%d %B %Y"
+      short: "%d %b"
+    day_names: [Pazar, Pazartesi, Salı, Çarşamba, Perşembe, Cuma, Cumartesi]
+    abbr_day_names: [Paz, Pts, Sal, Çar, Per, Cum, Cts]
+    month_names: [~, Ocak, Şubat, Mart, Nisan, Mayıs, Haziran, Temmuz, Ağustos, Eylül, Ekim, Kasım, Aralık]
+    abbr_month_names: [~, Oca, Şub, Mar, Nis, May, Haz, Tem, Ağu, Eyl, Eki, Kas, Ara]
+    order:
+      - :day
+      - :month
+      - :year
   time:
     formats:
       default: "%d.%m.%Y %H:%M"

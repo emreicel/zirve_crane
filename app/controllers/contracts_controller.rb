@@ -82,7 +82,7 @@ class ContractsController < ApplicationController
   def send_email
     authorize @contract, :send_email?
     
-    if @contract.customer&.email.present?
+    if @contract.customer&.contact_person_email.present?
       ContractMailer.contract_details(@contract).deliver_later
       redirect_to contracts_path, notice: 'Kontrat detayları email olarak gönderildi.'
     else
