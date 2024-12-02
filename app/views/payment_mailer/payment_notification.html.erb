@@ -49,12 +49,8 @@
       <h3>Fatura Detayları</h3>
       <table style="width: 100%;">
         <tr>
-          <td style="width: 150px;"><strong>Kira Başlangıç:</strong></td>
-          <td><%= l(@payment.start_date) %></td>
-        </tr>
-        <tr>
-          <td><strong>Kira Bitiş:</strong></td>
-          <td><%= l(@payment.end_date) %></td>
+          <td style="width: 150px;"><strong>Kira Dönemi:</strong></td>
+          <td><%= l(@payment.start_date) %> - <%= l(@payment.end_date) %></td>
         </tr>
         <tr>
           <td><strong>Ödeme Şekli:</strong></td>
