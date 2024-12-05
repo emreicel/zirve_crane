@@ -15,7 +15,7 @@ wb.add_worksheet(name: "Contracts") do |sheet|
   ]
 
   # Veriler
-  @contracts.each do |contract|
+  @active_contracts.each do |contract|
     sheet.add_row [
       contract.customer&.customer_name || "Bilinmiyor",
       contract.crane&.crane_brand_name || "Bilinmiyor",

@@ -3,6 +3,7 @@ class HomeController < ApplicationController
 
   def index
     @home_policy = HomePolicy.new(current_user, :home)
+    @active_contracts = policy_scope(Contract).where(completed: false)
 
     # Tüm ödeme kayıtları (yetkilendirmeye göre)
     @payment_records = policy_scope(PaymentTable)
