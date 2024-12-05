@@ -1,45 +1,51 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["height", "boomLength", "tonnage"]
+  static targets = [
+    "crane_fixing",
+    "crane_chassis_size",
+    "crane_mast_size",
+    "height",
+    "boomLength",
+    "tonnage",
+    "boomTonnage"
+  ]
 
   connect() {
-    console.log("Crane select controller connected") // Debug için
+    console.log("Crane select controller connected")
   }
 
   updateCraneInfo(event) {
-    console.log("Updating crane info...") // Debug için
     const craneId = event.target.value
-    
     if (!craneId) {
-      this.clearCraneInfo()
+      this.clearInfo()
       return
     }
 
-    fetch(`/cranes/${craneId}/info`, {
-      headers: {
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    })
-      .then(response => {
-        console.log("Response received") // Debug için
-        return response.json()
-      })
+    fetch(`/cranes/${craneId}.json`)
+      .then(response => response.json())
       .then(data => {
-        console.log("Data received:", data) // Debug için
-        document.getElementById('crane-height').textContent = `${data.height} m`
-        document.getElementById('crane-boom-length').textContent = `${data.boom_length} m`
-        document.getElementById('crane-tonnage').textContent = `${data.tonnage} ton`
+        this.crane_fixingTarget.textContent = data.crane_fixing || '-'
+        this.crane_chassis_sizeTarget.textContent = data.crane_chassis_size || '-'
+        this.crane_mast_sizeTarget.textContent = data.crane_mast_size || '-'
+        this.heightTarget.textContent = data.crane_height ? `${data.crane_height} m` : '-'
+        this.boomLengthTarget.textContent = data.crane_boom_length ? `${data.crane_boom_length} m` : '-'
+        this.tonnageTarget.textContent = data.crane_tonnage ? `${data.crane_tonnage} kg` : '-'
+        this.boomTonnageTarget.textContent = data.crane_boom_tonnage ? `${data.crane_boom_tonnage} kg` : '-'
       })
       .catch(error => {
-        console.error("Error fetching crane info:", error)
+        console.error('Error:', error)
+        this.clearInfo()
       })
   }
 
-  clearCraneInfo() {
-    document.getElementById('crane-height').textContent = ''
-    document.getElementById('crane-boom-length').textContent = ''
-    document.getElementById('crane-tonnage').textContent = ''
+  clearInfo() {
+    this.crane_fixingTarget.textContent = '-'
+    this.crane_chassis_sizeTarget.textContent = '-'
+    this.crane_mast_sizeTarget.textContent = '-'
+    this.heightTarget.textContent = '-'
+    this.boomLengthTarget.textContent = '-'
+    this.tonnageTarget.textContent = '-'
+    this.boomTonnageTarget.textContent = '-'
   }
 }

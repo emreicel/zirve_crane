@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_02_205944) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_05_204824) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -105,6 +105,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_02_205944) do
     t.datetime "updated_at", null: false
     t.boolean "available", default: true
     t.integer "crane_owner_id"
+    t.string "crane_mast_size"
+    t.string "crane_chassis_size"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -144,6 +146,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_02_205944) do
     t.index ["contract_id"], name: "index_payment_tables_on_contract_id"
   end
 
+  create_table "price_offer_details", force: :cascade do |t|
+    t.bigint "price_offer_id", null: false
+    t.string "price_offer_list_description"
+    t.integer "price_offer_list_quantity"
+    t.string "price_offer_list_unit"
+    t.float "price_offer_detail_unit_price"
+    t.float "total_amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["price_offer_id"], name: "index_price_offer_details_on_price_offer_id"
+  end
+
   create_table "price_offers", force: :cascade do |t|
     t.bigint "customer_id", null: false
     t.date "price_offer_date"
@@ -156,6 +170,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_02_205944) do
     t.decimal "requested_crane_boom_length"
     t.decimal "requested_crane_tonnage"
     t.string "requested_crane_boom_tonnage"
+    t.bigint "crane_fixing_id"
+    t.string "requested_crane_chassis_size"
+    t.string "requested_crane_mast_size"
+    t.index ["crane_fixing_id"], name: "index_price_offers_on_crane_fixing_id"
     t.index ["crane_id"], name: "index_price_offers_on_crane_id"
     t.index ["customer_id"], name: "index_price_offers_on_customer_id"
     t.index ["payment_method_id"], name: "index_price_offers_on_payment_method_id"
@@ -186,6 +204,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_02_205944) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "payment_tables", "contracts"
+  add_foreign_key "price_offer_details", "price_offers"
+  add_foreign_key "price_offers", "crane_fixings"
   add_foreign_key "price_offers", "cranes"
   add_foreign_key "price_offers", "customers"
   add_foreign_key "price_offers", "payment_methods"

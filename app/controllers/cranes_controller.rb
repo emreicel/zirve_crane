@@ -18,8 +18,27 @@ class CranesController < ApplicationController
   end
 
   def show
+    @crane = Crane.find(params[:id])
     authorize @crane
-    redirect_to cranes_path
+    
+    respond_to do |format|
+      format.html { redirect_to cranes_path }
+      format.json { 
+        # Debug için
+        Rails.logger.debug "Crane Data: #{@crane.attributes.inspect}"
+        Rails.logger.debug "Crane Fixing: #{@crane.crane_fixing.inspect if @crane.crane_fixing}"
+        
+        render json: {
+          crane_fixing: @crane.crane_fixing&.attributes,
+          crane_chassis_size: @crane.crane_chassis_size,
+          crane_mast_size: @crane.crane_mast_size,
+          crane_height: @crane.crane_height,
+          crane_boom_length: @crane.crane_boom_length,
+          crane_tonnage: @crane.crane_tonnage,
+          crane_boom_tonnage: @crane.crane_boom_tonnage
+        }
+      }
+    end
   end
 
   def new

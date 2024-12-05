@@ -35,7 +35,12 @@ Rails.application.routes.draw do
   resources :crane_owners
   resources :crane_fixings
   resources :banks
-  resources :price_offers
+  resources :price_offers do
+    resources :price_offer_details, only: [:create, :edit, :update, :destroy]
+    collection do
+      get :get_crane_info
+    end
+  end
   resources :contracts do
     member do
       get :show_pdf

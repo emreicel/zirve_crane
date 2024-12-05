@@ -123,6 +123,46 @@
                     </thead>
                     <tbody>
                       <tr>
+                        <td>Vinç Sabitleme</td>
+                        <td>
+                          <span id="crane-fixing" data-crane-select-target="crane_fixing"></span>
+                        </td>
+                        <td>
+                          <%= f.collection_select :crane_fixing_id, 
+                              @crane_fixings, 
+                              :id, 
+                              :crane_fixing, 
+                              { prompt: "Vinç Sabitleme Seçiniz" }, 
+                              { class: "form-select" } %>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>Şase Boyutu</td>
+                        <td>
+                          <span id="crane-chassis-size" data-crane-select-target="crane_chassis_size"></span>
+                        </td>
+                        <td>
+                          <%= f.text_field :requested_crane_chassis_size,
+                              class: "form-control",
+                              placeholder: "Talep edilen şase boyutu"
+                          %>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>Mast Boyutu</td>
+                        <td>
+                          <span id="crane-mast-size" data-crane-select-target="crane_mast_size"></span>
+                        </td>
+                        <td>
+                          <%= f.text_field :requested_crane_mast_size,
+                              class: "form-control",
+                              placeholder: "Talep edilen mast boyutu"
+                          %>
+                        </td>
+                      </tr>
+                      <tr>
                         <td>Serbest Duruş</td>
                         <td>
                           <span id="crane-height" data-crane-select-target="height"></span>
@@ -158,6 +198,19 @@
                               class: "form-control",
                               step: "0.1",
                               placeholder: "Talep edilen kapasite"
+                          %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Bom Ucu Kapasitesi</td>
+                        <td>
+                          <span id="crane-boom-tonnage" data-crane-select-target="boomTonnage"></span>
+                        </td>
+                        <td>
+                          <%= f.number_field :requested_crane_boom_tonnage,
+                              class: "form-control",
+                              step: "0.1",
+                              placeholder: "Talep edilen bom ucu kapasitesi"
                           %>
                         </td>
                       </tr>

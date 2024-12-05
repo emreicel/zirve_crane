@@ -118,6 +118,47 @@
                     </thead>
                     <tbody>
                       <tr>
+                        <td>Vinç Sabitleme</td>
+                        <td>
+                          <span id="crane-fixing" data-crane-select-target="crane_fixing"></span>
+                        </td>
+                        <td>
+                          <%= f.collection_select :crane_fixing_id, 
+                              @crane_fixings, 
+                              :id, 
+                              :crane_fixing, 
+                              { prompt: "Vinç Sabitleme Seçiniz" }, 
+                              { class: "form-select" } %>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>Şase Boyutu</td>
+                        <td>
+                          <span id="crane-chassis-size" data-crane-select-target="crane_chassis_size"></span>
+                        </td>
+                        <td>
+                          <%= f.text_field :requested_crane_chassis_size,
+                              class: "form-control",
+                              placeholder: "Talep edilen şase boyutu"
+                          %>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>Mast Boyutu</td>
+                        <td>
+                          <span id="crane-mast-size" data-crane-select-target="crane_mast_size"></span>
+                        </td>
+                        <td>
+                          <%= f.text_field :requested_crane_mast_size,
+                              class: "form-control",
+                              placeholder: "Talep edilen mast boyutu"
+                          %>
+                        </td>
+                      </tr>
+
+                      <tr>
                         <td>Serbest Duruş</td>
                         <td>
                           <span id="crane-height" data-crane-select-target="height"></span>
@@ -156,6 +197,80 @@
                           %>
                         </td>
                       </tr>
+                      <tr>
+                        <td>Bom Ucu Kapasitesi</td>
+                        <td>
+                          <span id="crane-boom-tonnage" data-crane-select-target="boomTonnage"></span>
+                        </td>
+                        <td>
+                          <%= f.number_field :requested_crane_boom_tonnage,
+                              class: "form-control",
+                              step: "0.1",
+                              placeholder: "Talep edilen bom ucu kapasitesi"
+                          %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Teklif Detayları -->
+        <div class="row g-3 mt-4">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Teklif Detayları</h6>
+                <button type="button" class="btn btn-sm btn-primary" onclick="addNewRow()">
+                  <i class="fas fa-plus me-1"></i>Yeni Satır Ekle
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="detailsTable">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Açıklama</th>
+                        <th>Adet</th>
+                        <th>Birim</th>
+                        <th>Birim Fiyatı</th>
+                        <th>Tutar</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="detailsTableBody">
+                      <!-- İlk satır -->
+                      <tr class="detail-row">
+                        <td>
+                          <input type="text" name="price_offer[price_offer_details_attributes][0][price_offer_list_description]" class="form-control">
+                        </td>
+                        <td>
+                          <input type="number" name="price_offer[price_offer_details_attributes][0][price_offer_list_quantity]" 
+                                class="form-control quantity-input" 
+                                onchange="calculateRowTotal(this)"
+                                min="1">
+                        </td>
+                        <td>
+                          <input type="text" name="price_offer[price_offer_details_attributes][0][price_offer_list_unit]" class="form-control">
+                        </td>
+                        <td>
+                          <input type="number" name="price_offer[price_offer_details_attributes][0][price_offer_detail_unit_price]" 
+                                class="form-control price-input" 
+                                onchange="calculateRowTotal(this)"
+                                step="0.01" 
+                                min="0">
+                        </td>
+                        <td>
+                          <span class="total-amount">0.00</span>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -172,3 +287,57 @@
     </div>
   </div>
 </div>
+
+<!-- JavaScript kodları -->
+<script>
+  function addNewRow() {
+    const tbody = document.getElementById('detailsTableBody');
+    const rowCount = tbody.getElementsByClassName('detail-row').length;
+    const newRow = `
+      <tr class="detail-row">
+        <td>
+          <input type="text" name="price_offer[price_offer_details_attributes][${rowCount}][price_offer_list_description]" class="form-control">
+        </td>
+        <td>
+          <input type="number" name="price_offer[price_offer_details_attributes][${rowCount}][price_offer_list_quantity]" 
+                 class="form-control quantity-input" 
+                 onchange="calculateRowTotal(this)"
+                 min="1">
+        </td>
+        <td>
+          <input type="text" name="price_offer[price_offer_details_attributes][${rowCount}][price_offer_list_unit]" class="form-control">
+        </td>
+        <td>
+          <input type="number" name="price_offer[price_offer_details_attributes][${rowCount}][price_offer_detail_unit_price]" 
+                 class="form-control price-input" 
+                 onchange="calculateRowTotal(this)"
+                 step="0.01" 
+                 min="0">
+        </td>
+        <td>
+          <span class="total-amount">0.00</span>
+        </td>
+        <td>
+          <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', newRow);
+  }
+
+  function calculateRowTotal(input) {
+    const row = input.closest('tr');
+    const quantity = parseFloat(row.querySelector('.quantity-input').value) || 0;
+    const price = parseFloat(row.querySelector('.price-input').value) || 0;
+    const total = quantity * price;
+    row.querySelector('.total-amount').textContent = total.toFixed(2);
+  }
+
+  function removeRow(button) {
+    if (confirm('Bu satırı silmek istediğinize emin misiniz?')) {
+      button.closest('tr').remove();
+    }
+  }
+</script>

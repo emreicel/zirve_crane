@@ -108,6 +108,21 @@
                   </thead>
                   <tbody>
                     <tr>
+                      <td>Vinç Sabitleme</td>
+                      <td><%= @price_offer.crane_fixing.crane_fixing %></td>
+                      <td><%= @price_offer.crane_fixing.crane_fixing %></td>
+                    </tr>
+                    <tr>
+                      <td>Şase Boyutu</td>
+                      <td><%= @price_offer.crane.crane_chassis_size || "Belirtilmemiş" %></td>
+                      <td><%= @price_offer.requested_crane_chassis_size || "Belirtilmemiş" %></td>
+                    </tr>
+                    <tr>
+                      <td>Mast Boyutu</td>
+                      <td><%= @price_offer.crane.crane_mast_size || "Belirtilmemiş" %></td>
+                      <td><%= @price_offer.requested_crane_mast_size || "Belirtilmemiş" %></td>
+                    </tr>
+                    <tr>
                       <td>Serbest Duruş</td>
                       <td><%= @price_offer.crane.crane_height %> m</td>
                       <td><%= @price_offer.requested_crane_height %> m</td>
@@ -122,6 +137,11 @@
                       <td><%= @price_offer.crane.crane_tonnage %> kg</td>
                       <td><%= @price_offer.requested_crane_tonnage %> kg</td>
                     </tr>
+                    <tr>
+                      <td>Bom Ucu Kapasitesi</td>
+                      <td><%= @price_offer.crane.crane_boom_tonnage || "Belirtilmemiş" %> kg</td>
+                      <td><%= @price_offer.requested_crane_boom_tonnage || "Belirtilmemiş" %> kg</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -130,11 +150,184 @@
         </div>
       </div>
 
+      <!-- Mevcut kodlar aynen kalacak, sadece vinç bilgilerinden sonra aşağıdaki kısmı ekleyin -->
+
+      <!-- Teklif Detayları Tablosu -->
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+              <h6 class="mb-0">Teklif Detayları</h6>
+              
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 40%">Açıklama</th>
+                      <th style="width: 10%">Adet</th>
+                      <th style="width: 15%">Birim</th>
+                      <th style="width: 15%">Birim Fiyatı</th>
+                      <th style="width: 15%">Tutar</th>
+                      <th style="width: 5%">İşlem</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @price_offer.price_offer_details.each do |detail| %>
+                      <tr>
+                        <td><%= detail.price_offer_list_description %></td>
+                        <td class="text-center"><%= detail.price_offer_list_quantity %></td>
+                        <td class="text-center"><%= detail.price_offer_list_unit %></td>
+                        <td class="text-end"><%= number_to_currency(detail.price_offer_detail_unit_price) %></td>
+                        <td class="text-end"><%= number_to_currency(detail.total_amount) %></td>
+                        <td class="text-center">
+                          <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editDetailModal<%= detail.id %>">
+                              <i class="fas fa-edit"></i>
+                            </button>
+                            <%= button_to price_offer_price_offer_detail_path(@price_offer, detail),
+                                method: :delete,
+                                class: "btn btn-outline-danger",
+                                data: { turbo_confirm: "Bu detayı silmek istediğinize emin misiniz?" } do %>
+                              <i class="fas fa-trash"></i>
+                            <% end %>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <!-- Toplam Satırı -->
+                    <tr class="table-light">
+                      <td colspan="4" class="text-end"><strong>Toplam:</strong></td>
+                      <td class="text-end">
+                        <strong>
+                          <%= number_to_currency(@price_offer.price_offer_details.sum(&:total_amount)) %>
+                        </strong>
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr class="table-light">
+                      <td colspan="4" class="text-end"><strong>%20 KDV:</strong></td>
+                      <td class="text-end">
+                        <strong>
+                          <%= number_to_currency(@price_offer.price_offer_details.sum(&:total_amount) * 0.2) %>
+                        </strong>
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr class="table-light">
+                      <td colspan="4" class="text-end"><strong>Genel Toplam:</strong></td>
+                      <td class="text-end">
+                        <strong>
+                          <%= number_to_currency(@price_offer.price_offer_details.sum(&:total_amount) * 1.2) %>
+                        </strong>
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Yeni Detay Ekleme Modal -->
+      <div class="modal fade" id="newDetailModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Yeni Detay Ekle</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <%= form_with(url: price_offer_price_offer_details_path(@price_offer), local: true) do |f| %>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <%= f.label :price_offer_list_description, "Açıklama", class: "form-label" %>
+                  <%= f.text_field "price_offer_detail[price_offer_list_description]", class: "form-control" %>
+                </div>
+                <div class="mb-3">
+                  <%= f.label :price_offer_list_quantity, "Adet", class: "form-label" %>
+                  <%= f.number_field "price_offer_detail[price_offer_list_quantity]", class: "form-control", min: 1 %>
+                </div>
+                <div class="mb-3">
+                  <%= f.label :price_offer_list_unit, "Birim", class: "form-label" %>
+                  <%= f.text_field "price_offer_detail[price_offer_list_unit]", class: "form-control" %>
+                </div>
+                <div class="mb-3">
+                  <%= f.label :price_offer_detail_unit_price, "Birim Fiyatı", class: "form-label" %>
+                  <%= f.number_field "price_offer_detail[price_offer_detail_unit_price]", class: "form-control", step: "0.01", min: 0 %>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <%= f.submit "Kaydet", class: "btn btn-primary" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Her detay için düzenleme modalı -->
+      <% @price_offer.price_offer_details.each do |detail| %>
+        <div class="modal fade" id="editDetailModal<%= detail.id %>" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Detay Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <%= form_with(url: price_offer_price_offer_detail_path(@price_offer, detail), 
+                          method: :patch,
+                          local: true) do |f| %>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <%= f.label :price_offer_list_description, "Açıklama", class: "form-label" %>
+                    <%= f.text_field "price_offer_detail[price_offer_list_description]", 
+                                  value: detail.price_offer_list_description, 
+                                  class: "form-control" %>
+                  </div>
+                  <div class="mb-3">
+                    <%= f.label :price_offer_list_quantity, "Adet", class: "form-label" %>
+                    <%= f.number_field "price_offer_detail[price_offer_list_quantity]", 
+                                    value: detail.price_offer_list_quantity, 
+                                    class: "form-control", 
+                                    min: 1 %>
+                  </div>
+                  <div class="mb-3">
+                    <%= f.label :price_offer_list_unit, "Birim", class: "form-label" %>
+                    <%= f.text_field "price_offer_detail[price_offer_list_unit]", 
+                                  value: detail.price_offer_list_unit, 
+                                  class: "form-control" %>
+                  </div>
+                  <div class="mb-3">
+                    <%= f.label :price_offer_detail_unit_price, "Birim Fiyatı", class: "form-label" %>
+                    <%= f.number_field "price_offer_detail[price_offer_detail_unit_price]", 
+                                    value: detail.price_offer_detail_unit_price, 
+                                    class: "form-control", 
+                                    step: "0.01", 
+                                    min: 0 %>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                  <%= f.submit "Güncelle", class: "btn btn-primary" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Geri Dön butonu -->
       <div class="mt-4">
         <%= link_to price_offers_path, class: "btn btn-light" do %>
           <i class="fas fa-arrow-left me-1"></i>Geri Dön
         <% end %>
       </div>
+
     </div>
   </div>
 </div>
