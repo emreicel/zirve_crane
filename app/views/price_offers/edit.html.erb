@@ -36,13 +36,7 @@
                           :id, 
                           :customer_name, 
                           { prompt: "Müşteri Seçiniz" }, 
-                          { 
-                            class: "form-select",
-                            data: { 
-                              controller: "customer-select",
-                              action: "change->customer-select#updateCustomerInfo"
-                            }
-                          } 
+                          { class: "form-select" } 
                       %>
                     </div>
                   </div>
@@ -82,8 +76,6 @@
           </div>
         </div>
 
-        <!-- Önceki kodlar aynı kalacak -->
-
         <!-- Vinç Bilgileri -->
         <div class="row g-3 mt-4">
           <div class="col-md-12">
@@ -91,7 +83,7 @@
               <div class="card-header">
                 <h6 class="mb-0">Vinç Bilgileri</h6>
               </div>
-              <div class="card-body" data-controller="crane-select">
+              <div class="card-body">
                 <!-- Vinç Seçimi -->
                 <div class="row mb-4">
                   <div class="col-md-6">
@@ -102,10 +94,7 @@
                           :id,
                           ->(crane) { "#{crane.crane_brand_name} - #{crane.crane_model_name} - #{crane.crane_chassis_no}" },
                           { prompt: "Vinç Seçiniz" },
-                          {
-                            class: "form-select",
-                            data: { action: "change->crane-select#updateCraneInfo" }
-                          }
+                          { class: "form-select" }
                       %>
                     </div>
                   </div>
@@ -125,7 +114,7 @@
                       <tr>
                         <td>Vinç Sabitleme</td>
                         <td>
-                          <span id="crane-fixing" data-crane-select-target="crane_fixing"></span>
+                          <span id="crane-fixing"></span>
                         </td>
                         <td>
                           <%= f.collection_select :crane_fixing_id, 
@@ -140,7 +129,7 @@
                       <tr>
                         <td>Şase Boyutu</td>
                         <td>
-                          <span id="crane-chassis-size" data-crane-select-target="crane_chassis_size"></span>
+                          <span id="crane-chassis-size"></span>
                         </td>
                         <td>
                           <%= f.text_field :requested_crane_chassis_size,
@@ -153,7 +142,7 @@
                       <tr>
                         <td>Mast Boyutu</td>
                         <td>
-                          <span id="crane-mast-size" data-crane-select-target="crane_mast_size"></span>
+                          <span id="crane-mast-size"></span>
                         </td>
                         <td>
                           <%= f.text_field :requested_crane_mast_size,
@@ -162,10 +151,11 @@
                           %>
                         </td>
                       </tr>
+
                       <tr>
                         <td>Serbest Duruş</td>
                         <td>
-                          <span id="crane-height" data-crane-select-target="height"></span>
+                          <span id="crane-height"></span>
                         </td>
                         <td>
                           <%= f.number_field :requested_crane_height,
@@ -178,7 +168,7 @@
                       <tr>
                         <td>Bom Uzunluğu</td>
                         <td>
-                          <span id="crane-boom-length" data-crane-select-target="boomLength"></span>
+                          <span id="crane-boom-length"></span>
                         </td>
                         <td>
                           <%= f.number_field :requested_crane_boom_length,
@@ -191,7 +181,7 @@
                       <tr>
                         <td>Maksimum Kapasite</td>
                         <td>
-                          <span id="crane-tonnage" data-crane-select-target="tonnage"></span>
+                          <span id="crane-tonnage"></span>
                         </td>
                         <td>
                           <%= f.number_field :requested_crane_tonnage,
@@ -204,7 +194,7 @@
                       <tr>
                         <td>Bom Ucu Kapasitesi</td>
                         <td>
-                          <span id="crane-boom-tonnage" data-crane-select-target="boomTonnage"></span>
+                          <span id="crane-boom-tonnage"></span>
                         </td>
                         <td>
                           <%= f.number_field :requested_crane_boom_tonnage,
@@ -222,6 +212,69 @@
           </div>
         </div>
 
+        <!-- Teklif Detayları -->
+        <div class="row g-3 mt-4">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Teklif Detayları</h6>
+                <button type="button" class="btn btn-sm btn-primary" onclick="addNewRow()">
+                  <i class="fas fa-plus me-1"></i>Yeni Satır Ekle
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="detailsTable">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Açıklama</th>
+                        <th>Adet</th>
+                        <th>Birim</th>
+                        <th>Birim Fiyatı</th>
+                        <th>Tutar</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="detailsTableBody">
+                      <%= f.fields_for :price_offer_details do |detail_form| %>
+                        <tr class="detail-row">
+                          <td>
+                            <%= detail_form.text_field :price_offer_list_description, class: "form-control" %>
+                          </td>
+                          <td>
+                            <%= detail_form.number_field :price_offer_list_quantity, 
+                                class: "form-control quantity-input", 
+                                onchange: "calculateRowTotal(this)",
+                                min: 1 %>
+                          </td>
+                          <td>
+                            <%= detail_form.text_field :price_offer_list_unit, class: "form-control" %>
+                          </td>
+                          <td>
+                            <%= detail_form.number_field :price_offer_detail_unit_price, 
+                                class: "form-control price-input", 
+                                onchange: "calculateRowTotal(this)",
+                                step: "0.01", 
+                                min: 0 %>
+                          </td>
+                          <td>
+                            <span class="total-amount">0.00</span>
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">
+                              <i class="fas fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="mt-4">
           <%= f.submit "Değişiklikleri Kaydet", class: "btn btn-primary" %>
           <%= link_to "İptal", price_offer_path(@price_offer), class: "btn btn-light" %>
@@ -231,58 +284,119 @@
   </div>
 </div>
 
-<% content_for :scripts do %>
-  <script>
-    document.addEventListener('turbo:load', function() {
-      // Müşteri seçimi için mevcut kod
-      const customerSelect = document.querySelector('select[name="price_offer[customer_id]"]');
-      if (customerSelect) {
-        customerSelect.addEventListener('change', function() {
-          const customerId = this.value;
-          if (customerId) {
-            fetch(`/customers/${customerId}/info`)
-              .then(response => response.json())
-              .then(data => {
-                document.getElementById('customer-phone').value = data.phone_number;
-                document.getElementById('customer-email').value = data.email;
-              });
-          }
-        });
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const craneSelect = document.querySelector('select[name="price_offer[crane_id]"]');
+    
+    craneSelect.addEventListener('change', function() {
+      const selectedCraneId = this.value;
+      console.log('Selected Crane ID:', selectedCraneId);
+
+      if (!selectedCraneId) {
+        clearCraneInfo();
+        return;
       }
 
-      // Vinç seçimi için yeni kod
-      const craneSelect = document.querySelector('select[name="price_offer[crane_id]"]');
-      if (craneSelect) {
-        // Sayfa yüklendiğinde mevcut vinç bilgilerini göster
-        const currentCraneId = craneSelect.value;
-        if (currentCraneId) {
-          fetch(`/cranes/${currentCraneId}/info`)
-            .then(response => response.json())
-            .then(data => {
-              document.getElementById('crane-height').textContent = `${data.height} m`;
-              document.getElementById('crane-boom-length').textContent = `${data.boom_length} m`;
-              document.getElementById('crane-tonnage').textContent = `${data.tonnage} ton`;
-            });
-        }
+      fetch(`/price_offers/get_crane_info?crane_id=${selectedCraneId}`)
+        .then(response => response.json())
+        .then(crane => {
+          console.log('Crane Data:', crane);
 
-        // Vinç seçimi değiştiğinde bilgileri güncelle
-        craneSelect.addEventListener('change', function() {
-          const craneId = this.value;
-          if (craneId) {
-            fetch(`/cranes/${craneId}/info`)
-              .then(response => response.json())
-              .then(data => {
-                document.getElementById('crane-height').textContent = `${data.height} m`;
-                document.getElementById('crane-boom-length').textContent = `${data.boom_length} m`;
-                document.getElementById('crane-tonnage').textContent = `${data.tonnage} ton`;
-              });
-          } else {
-            document.getElementById('crane-height').textContent = '';
-            document.getElementById('crane-boom-length').textContent = '';
-            document.getElementById('crane-tonnage').textContent = '';
-          }
+          document.getElementById('crane-fixing').textContent = 
+            crane.crane_fixing || '-';
+          document.getElementById('crane-chassis-size').textContent = 
+            crane.crane_chassis_size || '-';
+          document.getElementById('crane-mast-size').textContent = 
+            crane.crane_mast_size || '-';
+          document.getElementById('crane-height').textContent = 
+            crane.crane_height ? `${crane.crane_height} m` : '-';
+          document.getElementById('crane-boom-length').textContent = 
+            crane.crane_boom_length ? `${crane.crane_boom_length} m` : '-';
+          document.getElementById('crane-tonnage').textContent = 
+            crane.crane_tonnage ? `${crane.crane_tonnage} kg` : '-';
+          document.getElementById('crane-boom-tonnage').textContent = 
+            crane.crane_boom_tonnage ? `${crane.crane_boom_tonnage} kg` : '-';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          clearCraneInfo();
         });
-      }
     });
-  </script>
-<% end %>
+
+    function clearCraneInfo() {
+      const elements = [
+        'crane-fixing',
+        'crane-chassis-size',
+        'crane-mast-size',
+        'crane-height',
+        'crane-boom-length',
+        'crane-tonnage',
+        'crane-boom-tonnage'
+      ];
+      
+      elements.forEach(id => {
+        document.getElementById(id).textContent = '-';
+      });
+    }
+  });
+
+  // Teklif detayları için JavaScript fonksiyonları
+  function addNewRow() {
+    const tbody = document.getElementById('detailsTableBody');
+    const rowCount = tbody.getElementsByClassName('detail-row').length;
+    const newRow = `
+      <tr class="detail-row">
+        <td>
+          <input type="text" name="price_offer[price_offer_details_attributes][${rowCount}][price_offer_list_description]" class="form-control">
+        </td>
+        <td>
+          <input type="number" name="price_offer[price_offer_details_attributes][${rowCount}][price_offer_list_quantity]" 
+                 class="form-control quantity-input" 
+                 onchange="calculateRowTotal(this)"
+                 min="1">
+        </td>
+        <td>
+          <input type="text" name="price_offer[price_offer_details_attributes][${rowCount}][price_offer_list_unit]" class="form-control">
+        </td>
+        <td>
+          <input type="number" name="price_offer[price_offer_details_attributes][${rowCount}][price_offer_detail_unit_price]" 
+                 class="form-control price-input" 
+                 onchange="calculateRowTotal(this)"
+                 step="0.01" 
+                 min="0">
+        </td>
+        <td>
+          <span class="total-amount">0.00</span>
+        </td>
+        <td>
+          <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', newRow);
+  }
+
+  function calculateRowTotal(input) {
+    const row = input.closest('tr');
+    const quantity = parseFloat(row.querySelector('.quantity-input').value) || 0;
+    const price = parseFloat(row.querySelector('.price-input').value) || 0;
+    const total = quantity * price;
+    row.querySelector('.total-amount').textContent = total.toFixed(2);
+  }
+
+  function removeRow(button) {
+    if (confirm('Bu satırı silmek istediğinize emin misiniz?')) {
+      button.closest('tr').remove();
+    }
+  }
+
+  // Sayfa yüklendiğinde mevcut satırların toplamlarını hesapla
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.detail-row').forEach(row => {
+      const input = row.querySelector('.quantity-input');
+      if (input) calculateRowTotal(input);
+    });
+  });
+</script>
