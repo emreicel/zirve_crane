@@ -36,6 +36,9 @@ Rails.application.routes.draw do
   resources :crane_fixings
   resources :banks
   resources :price_offers do
+    member do
+      get :show_pdf
+    end
     resources :price_offer_details, only: [:create, :edit, :update, :destroy]
     collection do
       get :get_crane_info

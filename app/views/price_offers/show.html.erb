@@ -5,6 +5,13 @@
         <h5 class="mb-0">
           <i class="fas fa-file-invoice me-2"></i>Teklif Detayı
         </h5>
+        
+        <%= link_to show_pdf_price_offer_path(@price_offer, format: :pdf), 
+            target: "_blank", 
+            class: "btn btn-sm btn-outline-info" do %>
+          <i class="fas fa-file-pdf me-1"></i>PDF Oluştur
+        <% end %>
+      
         <div class="btn-group">
           <%= link_to edit_price_offer_path(@price_offer), class: "btn btn-sm btn-primary" do %>
             <i class="fas fa-edit me-1"></i>Düzenle

@@ -1,6 +1,7 @@
 class PriceOffersController < ApplicationController
-  before_action :set_price_offer, only: [:show, :edit, :update, :destroy]
+  before_action :set_price_offer, only: [:show, :edit, :update, :show_pdf, :destroy]
   before_action :set_collections, only: [:new, :create, :edit, :update]
+
 
   def index
     @price_offers = PriceOffer.all
@@ -62,6 +63,28 @@ class PriceOffersController < ApplicationController
     redirect_to price_offers_path, notice: 'Teklif başarıyla silindi.'
   end
 
+  def show_pdf
+    @price_offer = PriceOffer.find(params[:id])
+    
+    respond_to do |format|
+      format.pdf do
+        render pdf: "teklif_#{@price_offer.id}",
+               template: "price_offers/show_pdf",
+               layout: false,
+               disposition: "inline",
+               page_size: "A4",
+               margin: {
+                 top: 20,
+                 bottom: 20,
+                 left: 20,
+                 right: 20
+               }
+      end
+    end
+  end
+
+  
+
   private
 
   def set_price_offer
@@ -114,4 +137,5 @@ class PriceOffersController < ApplicationController
       ]
     )
   end
+
 end

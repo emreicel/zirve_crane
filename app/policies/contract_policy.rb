@@ -69,9 +69,6 @@ class ContractPolicy < ApplicationPolicy
         super_admin? || admin?  # Sadece super_admin ve admin email gönderebilir
     end
 
-    def show_pdf?
-        super_admin? || admin?  # accountant kaldırıldı
-    end
 
     def show_info?
         super_admin? || admin?  # Sadece super_admin ve admin info görüntüleyebilir
