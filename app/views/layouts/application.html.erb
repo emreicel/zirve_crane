@@ -25,49 +25,58 @@
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
-          <!-- Left Menu -->
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"><%= link_to 'Anasayfa', root_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to 'Teklifler', price_offers_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to 'Kontratlar', contracts_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to 'Vinçler', cranes_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to 'Müşteriler', customers_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to 'Vinç Firmaları', crane_owners_path, class: "nav-link" %></li>
-
-            <% if current_user&.super_admin? %>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Users
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="usersDropdown">
-                  <li><%= link_to 'Kullanıcı Listesi', users_path, class: "dropdown-item" %></li>
-                  <li><%= link_to 'Yeni Kullanıcı Oluştur', new_user_path, class: "dropdown-item" %></li>
-                </ul>
-              </li>
-
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Ayarlar
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="settingsDropdown">
-                  <li><%= link_to 'Ödeme Yöntemleri', payment_methods_path, class: "dropdown-item" %></li>
-                  <li><%= link_to 'Vinç Sabitleme Tipleri', crane_fixings_path, class: "dropdown-item" %></li>
-                  <li><%= link_to 'Banka Hesapları', banks_path, class: "dropdown-item" %></li>
-                </ul>
-              </li>
-            <% end %>
-          </ul>
-
-          <!-- Right User Info -->
-          <div class="d-flex align-items-center">
           
-            <span class="text-white me-3"><%= current_user.name %></span>
-            <span class="text-white me-3"><%= current_user.role ? current_user.role.description : "" %></span>
-            <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
-              <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
-            <% end %>
-              
-          
+          <!-- Hamburger Button -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+                  aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <!-- Collapsible Content -->
+          <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Left Menu -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item"><%= link_to 'Anasayfa', root_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to 'Teklifler', price_offers_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to 'Kontratlar', contracts_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to 'Vinçler', cranes_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to 'Müşteriler', customers_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to 'Vinç Firmaları', crane_owners_path, class: "nav-link" %></li>
+
+              <% if current_user&.super_admin? %>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" 
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Users
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+                    <li><%= link_to 'Kullanıcı Listesi', users_path, class: "dropdown-item" %></li>
+                    <li><%= link_to 'Yeni Kullanıcı Oluştur', new_user_path, class: "dropdown-item" %></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" 
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Ayarlar
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="settingsDropdown">
+                    <li><%= link_to 'Ödeme Yöntemleri', payment_methods_path, class: "dropdown-item" %></li>
+                    <li><%= link_to 'Vinç Sabitleme Tipleri', crane_fixings_path, class: "dropdown-item" %></li>
+                    <li><%= link_to 'Banka Hesapları', banks_path, class: "dropdown-item" %></li>
+                  </ul>
+                </li>
+              <% end %>
+            </ul>
+
+            <!-- Right User Info -->
+            <div class="d-flex align-items-center">
+              <span class="text-white me-3"><%= current_user.name %></span>
+              <span class="text-white me-3"><%= current_user.role ? current_user.role.description : "" %></span>
+              <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
+                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+              <% end %>
+            </div>
           </div>
         </div>
       </nav>

@@ -26,6 +26,11 @@ gem 'font-awesome-sass'
 gem 'axlsx_rails'
 gem 'letter_opener', group: :development
 gem 'pundit'
+gem 'roo'
+gem 'caxlsx'
+gem 'caxlsx_rails'
+gem 'kaminari'
+gem 'bootstrap5-kaminari-views'
 
 
 

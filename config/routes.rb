@@ -30,7 +30,12 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   # Resources routes
-  resources :cranes
+  resources :cranes do
+    collection do
+      post :import
+      get :download_template
+    end
+  end
   resources :customers
   resources :crane_owners
   resources :crane_fixings

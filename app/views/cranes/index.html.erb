@@ -1,4 +1,79 @@
 <div class="container-fluid mt-4">
+  <!-- Arama ve Excel İşlemleri Kartı -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <!-- Arama Formu -->
+        <div class="col-md-6">
+          <%= form_tag cranes_path, method: :get, class: 'row g-2' do %>
+            <div class="col-8">
+              <%= text_field_tag :search, params[:search], 
+                  class: "form-control", 
+                  placeholder: "Marka, Model, Şase No ile ara..." %>
+            </div>
+            <div class="col-4 d-flex gap-2">
+              <%= submit_tag "Ara", class: "btn btn-primary" %>
+              <% if params[:search].present? %>
+                <%= link_to "Temizle", cranes_path, class: "btn btn-outline-secondary" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Excel İşlemleri -->
+        <div class="col-md-6">
+          <div class="d-flex justify-content-md-end gap-2">
+            <% if policy(Crane).new? %>
+              <%= link_to new_crane_path, class: "btn btn-success" do %>
+                <i class="fas fa-plus me-1"></i>Yeni Vinç
+              <% end %>
+            <% end %>
+            <%= link_to download_template_cranes_path(format: :xlsx), 
+                class: 'btn btn-outline-secondary' do %>
+              <i class="fas fa-download me-1"></i>Excel Şablonu
+            <% end %>
+            <%= link_to cranes_path(format: :xlsx), 
+                class: "btn btn-outline-primary" do %>
+              <i class="fas fa-file-excel me-1"></i>Excel'e Aktar
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Excel Yükleme Kartı -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+      <h6 class="mb-0">Excel'den Vinç Yükle</h6>
+      <small class="text-muted">Desteklenen formatlar: .xlsx, .xls</small>
+    </div>
+    <div class="card-body">
+      <%= form_tag import_cranes_path, multipart: true do %>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group">
+              <input type="file" name="file" class="form-control" 
+                     accept=".xlsx, .xls" required>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-upload me-1"></i>Yükle
+              </button>
+            </div>
+            <div class="mt-2">
+              <small class="text-muted d-block">
+                <i class="fas fa-info-circle me-1"></i>Excel dosyası şablona uygun olmalıdır.
+              </small>
+              <small class="text-muted d-block">
+                <i class="fas fa-exclamation-circle me-1"></i>Vinç Firması sistemde kayıtlı olmalıdır.
+              </small>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Vinç Listesi Kartı -->
   <div class="card shadow-sm">
     <div class="card-header bg-light py-3">
       <div class="d-flex justify-content-between align-items-center">
@@ -6,85 +81,90 @@
           <h5 class="mb-0">
             <i class="fas fa-truck-pickup me-2"></i>Vinç Listesi
           </h5>
-          <small class="text-muted">Toplam <%= @cranes.count %> vinç</small>
-        </div>
-        <div class="btn-group">
-          <% if policy(Crane).new? %>
-            <%= link_to new_crane_path, class: "btn btn-sm btn-success" do %>
-              <i class="fas fa-plus me-1"></i>Yeni Ekle
+          <small class="text-muted">
+            Toplam <%= @cranes.count %> vinç
+            <% if params[:search].present? %>
+              | Aranan: "<%= params[:search] %>"
             <% end %>
-          <% end %>
-          <%= link_to cranes_path(format: :xlsx), class: "btn btn-sm btn-primary" do %>
-            <i class="fas fa-file-excel me-1"></i>Excel
-          <% end %>
+          </small>
         </div>
       </div>
     </div>
 
     <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover table-striped align-middle mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>Marka/Model</th>
-              <th>Şase No</th>
-              <th class="text-center">Ölçüler</th>
-              <th class="text-center">Kapasite</th>
-              <th>Firma</th>
-              <th class="text-center">Durum</th>
-              <% if current_user&.admin? || current_user&.super_admin? %>
-                <th class="text-end pe-3">İşlemler</th>
-              <% end %>
-            </tr>
-          </thead>
-          <tbody>
-            <% @cranes.each do |crane| %>
+      <% if @cranes.any? %>
+        <div class="table-responsive">
+          <table class="table table-hover table-striped align-middle mb-0">
+            <thead class="table-light">
               <tr>
-                <td>
-                  <div class="fw-bold"><%= crane.crane_brand_name %></div>
-                  <small class="text-muted"><%= crane.crane_model_name %></small>
-                </td>
-                <td>
-                  <div><%= crane.crane_chassis_no %></div>
-                  <small class="text-muted">Yıl: <%= crane.crane_year %></small>
-                </td>
-                <td class="text-center">
-                  <div><i class="fas fa-arrows-alt-v me-1"></i><%= crane.crane_height %> m</div>
-                  <small class="text-muted">Bom: </i><%= crane.crane_boom_length %> m</small>
-                </td>
-                <td class="text-center">
-                  <div><i class="fas fa-weight-hanging me-1"></i><%= number_with_delimiter(crane.crane_tonnage) %> kg</div>
-                  <small class="text-muted">Bom: <%= number_with_delimiter(crane.crane_boom_tonnage) %> kg</small>
-                </td>
-                <td>
-                  <%= crane.crane_owner.crane_owner_name %>
-                </td>
-                <td class="text-center">
-                  <% if crane.available %>
-                    <span class="badge bg-success">Müsait</span>
-                  <% else %>
-                    <span class="badge bg-danger">Kirada</span>
-                  <% end %>
-                </td>
-                <% if current_user&.admin? || current_user&.super_admin? %>
-                  <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                      <%= link_to edit_crane_path(crane), class: "btn btn-outline-primary" do %>
-                        <i class="fas fa-edit"></i>
-                      <% end %>
-                      <%= button_to crane, method: :delete, 
-                          data: { turbo_confirm: 'Bu vince ait bilgileri silmek istediğinize emin misiniz?' }, 
-                          class: "btn btn-outline-danger" do %>
-                        <i class="fas fa-trash"></i>
-                      <% end %>
-                    </div>
-                  </td>
+                <th>Marka/Model</th>
+                <th>Şase No</th>
+                <th class="text-center">Ölçüler</th>
+                <th class="text-center">Kapasite</th>
+                <th>Firma</th>
+                <th class="text-center">Durum</th>
+                <% if policy(Crane).edit? %>
+                  <th class="text-end pe-3">İşlemler</th>
                 <% end %>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              <% @cranes.each do |crane| %>
+                <tr>
+                  <td>
+                    <div class="fw-bold"><%= crane.crane_brand_name %></div>
+                    <small class="text-muted"><%= crane.crane_model_name %></small>
+                  </td>
+                  <td>
+                    <div><%= crane.crane_chassis_no %></div>
+                    <small class="text-muted">Yıl: <%= crane.crane_year %></small>
+                  </td>
+                  <td class="text-center">
+                    <div><i class="fas fa-arrows-alt-v me-1"></i><%= crane.crane_height %> m</div>
+                    <small class="text-muted">Bom: <%= crane.crane_boom_length %> m</small>
+                  </td>
+                  <td class="text-center">
+                    <div><i class="fas fa-weight-hanging me-1"></i><%= number_with_delimiter(crane.crane_tonnage) %> kg</div>
+                    <small class="text-muted">Bom: <%= number_with_delimiter(crane.crane_boom_tonnage) %> kg</small>
+                  </td>
+                  <td><%= crane.crane_owner&.crane_owner_name || "Belirtilmemiş" %></td>
+                  <td class="text-center">
+                    <% if crane.available %>
+                      <span class="badge bg-success">Müsait</span>
+                    <% else %>
+                      <span class="badge bg-danger">Kirada</span>
+                    <% end %>
+                  </td>
+                  <% if policy(crane).edit? %>
+                    <td class="text-end">
+                      <div class="btn-group btn-group-sm">
+                        <%= link_to edit_crane_path(crane), 
+                            class: "btn btn-outline-primary" do %>
+                          <i class="fas fa-edit"></i>
+                        <% end %>
+                        <%= button_to crane_path(crane), 
+                            method: :delete,
+                            class: "btn btn-outline-danger",
+                            form: { class: 'd-inline-block' },
+                            data: { turbo_confirm: 'Bu vinci silmek istediğinize emin misiniz?' } do %>
+                          <i class="fas fa-trash"></i>
+                        <% end %>
+                      </div>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="text-center py-4">
+          <div class="text-muted">
+            <i class="fas fa-search fa-2x mb-3"></i>
+            <p class="mb-0">Kayıt bulunamadı.</p>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

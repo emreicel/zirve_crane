@@ -1,0 +1,17 @@
+tr:
+  helpers:
+    page_entries_info:
+      more_pages:
+        display_entries: "%{total} kayıttan %{first} - %{last} arası gösteriliyor"
+      one_page:
+        display_entries:
+          one: "1 kayıt gösteriliyor"
+          other: "Toplam %{count} kayıt gösteriliyor"
+          zero: "Kayıt bulunamadı"
+  views:
+    pagination:
+      first: "&laquo; İlk"
+      last: "Son &raquo;"
+      next: "Sonraki &rsaquo;"
+      previous: "&lsaquo; Önceki"
+      truncate: "&hellip;"
