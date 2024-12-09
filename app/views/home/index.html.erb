@@ -73,6 +73,7 @@
             </thead>
             <tbody>
               <% @missing_documents.each do |payment| %>
+                
                 <tr>
                   <td class="text-center align-middle">
                     <%= payment.start_date&.strftime("%d/%m/%Y") %>
@@ -80,7 +81,7 @@
                       <span class="badge bg-danger ms-2">GECİKTİ</span>
                     <% elsif payment.start_date == Date.current %>
                       <span class="badge bg-warning ms-2">BUGÜN</span>
-                    <% elsif payment.start_date >= Date.current.beginning_of_month && payment.start_date <= Date.current.end_of_month %>
+                    <% elsif payment.start_date.between?(Date.current + 1.day, Date.current + 4.days) %>
                       <span class="badge bg-success ms-2">YAKLAŞIYOR</span>
                     <% end %>
                   </td>

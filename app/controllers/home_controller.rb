@@ -15,8 +15,8 @@ class HomeController < ApplicationController
         .where(active_storage_attachments: { id: nil })
         .where("start_date < ? OR (start_date >= ? AND start_date <= ?)",
                Date.current,
-               Date.current.beginning_of_month,
-               Date.current.end_of_month)
+               Date.current,
+               Date.current + 4.days)
         .order(start_date: :asc)
     end
   end
