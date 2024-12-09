@@ -31,7 +31,6 @@
 <body>
   <div class="header">
     <h2>TEKLİF FORMU</h2>
-    <p>Teklif No: <%= @price_offer.id %></p>
   </div>
 
   <div class="row">
@@ -61,7 +60,11 @@
       <h4>Teklif Bilgileri</h4>
       <table>
         <tr>
-          <th style="width: 30%">Teklif Tarihi:</th>
+          <th style="width: 50%">Teklif No:</th>
+          <td><%= @price_offer.id %></td>
+        </tr>
+        <tr>
+          <th>Teklif Tarihi:</th>
           <td><%= @price_offer.price_offer_date&.strftime("%d.%m.%Y") %></td>
         </tr>
         <tr>
@@ -91,8 +94,8 @@
       </tr>
       <tr>
         <td>Vinç Sabitleme</td>
-        <td><%= @price_offer.crane_fixing.crane_fixing %></td>
-        <td><%= @price_offer.crane_fixing.crane_fixing %></td>
+        <td><%= @price_offer.crane_fixing&.crane_fixing || "Belirtilmemiş" %></td>
+        <td><%= @price_offer.crane_fixing&.crane_fixing || "Belirtilmemiş" %></td>
       </tr>
       <tr>
         <td>Şase Boyutu</td>
@@ -171,8 +174,26 @@
     </table>
   </div>
 
+  <div style="margin-top: 20px;">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 50%">Siparişi Alan / Teklifi Hazırlayan</th>
+          <th style="width: 50%">Müşteri Onayı</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr style="height: 150px;">
+            <td></td>
+            <td></td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+
   <div style="margin-top: 30px; font-size: 10px;">
     <p>Bu teklif 30 gün geçerlidir.</p>
   </div>
+
 </body>
 </html>

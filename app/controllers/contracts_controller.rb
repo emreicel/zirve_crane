@@ -148,7 +148,7 @@ class ContractsController < ApplicationController
 
   def set_customers_and_cranes
     @customers = Customer.all
-    @cranes = Crane.where(available: true)
+    @cranes = Crane.where(available: true).or(Crane.where(id: @contract&.crane_id))
   end
 
   def set_payment_tables

@@ -19,7 +19,7 @@
           <% end %>
           
           <% if policy(Contract).export? %>
-            <%= link_to contracts_path(format: :xlsx), class: "btn btn-sm btn-primary" do %>
+            <%= link_to contracts_path(format: :xlsx), class: "btn btn-outline-primary" do %>
               <i class="fas fa-file-excel me-1"></i>Excel
             <% end %>
           <% end %>

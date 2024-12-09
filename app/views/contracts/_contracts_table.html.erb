@@ -1,5 +1,5 @@
 <div class="table-responsive">
-  <table class="table table-hover table-striped align-middle mb-0">
+  <table class="table table-hover table-striped align-middle mb-0"> 
     <thead class="table-light">
       <tr>
         <th>Müşteri/Vinç Bilgileri</th>
@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <% contracts.order(created_at: :desc).each do |contract| %>
+      <% contracts.order(id: :asc).each do |contract| %>
         <tr>
           <td>
             <div class="fw-bold"><%= contract.customer&.customer_name || "Müşteri bilgisi eksik" %></div>
@@ -17,6 +17,9 @@
               <%= contract.crane&.crane_brand_name || "Vinç bilgisi eksik" %> -
               <%= contract.crane&.crane_chassis_no || "Seri no eksik" %>
             </small>
+            <div class="text-muted"> 
+              <%= contract.contract_number %>
+            </div>
           </td>
           
           <td class="text-center">
