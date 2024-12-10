@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_05_204824) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_10_204052) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,23 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_05_204824) do
     t.string "swift_no"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "contract_extras", force: :cascade do |t|
+    t.bigint "contract_id", null: false
+    t.string "contract_extra_description", null: false
+    t.decimal "contract_extra_quantity", precision: 10, scale: 2, null: false
+    t.string "contract_extra_unit", null: false
+    t.decimal "contract_extra_unit_price", precision: 10, scale: 2, null: false
+    t.decimal "contract_extra_total_amount", precision: 10, scale: 2, null: false
+    t.decimal "contract_extra_total_amount_with_vat", precision: 10, scale: 2, null: false
+    t.date "contract_extra_payment_date", null: false
+    t.bigint "payment_method_id", null: false
+    t.text "contract_extra_explanation", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id"], name: "index_contract_extras_on_contract_id"
+    t.index ["payment_method_id"], name: "index_contract_extras_on_payment_method_id"
   end
 
   create_table "contracts", force: :cascade do |t|
@@ -203,6 +220,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_05_204824) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "contract_extras", "contracts"
+  add_foreign_key "contract_extras", "payment_methods"
   add_foreign_key "payment_tables", "contracts"
   add_foreign_key "price_offer_details", "price_offers"
   add_foreign_key "price_offers", "crane_fixings"

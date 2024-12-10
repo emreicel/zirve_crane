@@ -78,10 +78,12 @@ class ContractsController < ApplicationController
 
   def edit
     authorize @contract
+    @payment_methods = PaymentMethod.all
   end
 
   def update
     authorize @contract
+    @payment_methods = PaymentMethod.all
     
     if @contract.update(contract_params)
       update_crane_availability(@contract.crane_id, false)

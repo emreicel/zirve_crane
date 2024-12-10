@@ -3,6 +3,8 @@ class Contract < ApplicationRecord
     belongs_to :crane
     has_many :payment_tables, dependent: :destroy
     accepts_nested_attributes_for :payment_tables
+    has_many :contract_extras, dependent: :destroy
+    accepts_nested_attributes_for :contract_extras, allow_destroy: true
   
     after_commit :generate_contract_number, on: :create
     after_destroy :make_crane_available

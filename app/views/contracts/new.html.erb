@@ -182,6 +182,97 @@
             </div>
           </div>
 
+          <!-- Extra Detayları -->
+          <div class="row g-3 mt-4">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0">Extra Detayları</h6>
+                  <button type="button" class="btn btn-sm btn-primary" onclick="addNewRow()">
+                    <i class="fas fa-plus me-1"></i>Yeni Satır Ekle
+                  </button>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="extrasTable">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Açıklama</th>
+                          <th>Adet</th>
+                          <th>Birim</th>
+                          <th>Birim Fiyatı</th>
+                          <th>Tutar KDV Hariç</th>
+                          <th>Tutar KDV Dahil</th>
+                          <th>Tahmini Ödeme Tarihi</th>
+                          <th>Ödeme Yöntemi</th>
+                          <th>İzahat</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id="extrasTableBody">
+                        <!-- İlk satır -->
+                        <tr class="extra-row">
+                          <td>
+                            <input type="text" name="contract[contract_extras_attributes][0][contract_extra_description]" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" name="contract[contract_extras_attributes][0][contract_extra_quantity]" 
+                                  class="form-control quantity-input" 
+                                  onchange="calculateRowTotal(this)"
+                                  min="1">
+                          </td>
+                          <td>
+                            <input type="text" name="contract[contract_extras_attributes][0][contract_extra_unit]" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" name="contract[contract_extras_attributes][0][contract_extra_unit_price]" 
+                                  class="form-control price-input" 
+                                  onchange="calculateRowTotal(this)"
+                                  step="0.01" 
+                                  min="0">
+                          </td>
+                          <td>
+                            <span class="total-amount">0.00</span>
+                          </td>
+                          <td>
+                            <span class="total-vat-amount">0.00</span>
+                          </td>
+                          <td>
+                            <input type="date" 
+                                  name="contract[contract_extras_attributes][0][contract_extra_payment_date]" 
+                                  class="form-control"
+                                  value="<%= Date.current %>"
+                                  required>
+                          </td>
+                          <td>
+                            <select name="contract[contract_extras_attributes][0][contract_extra_payment_method]" 
+                                    class="form-select" 
+                                    required>
+                              <option value="">Ödeme Yöntemi Seçin</option>
+                              <% @payment_methods.each do |method| %>
+                                <option value="<%= method.payment_method %>"><%= method.payment_method %></option>
+                              <% end %>
+                            </select>
+                          </td>
+                          <td>
+                            <input type="text" name="contract[contract_extras_attributes][0][contract_extra_explanation]" class="form-control">
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">
+                              <i class="fas fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+  
+
           <!-- Form Butonları -->
           <div class="col-12 mt-4">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -209,28 +300,108 @@
 <% end %>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const rentTermInput = document.getElementById('rent_term');
-  const startDateInput = document.getElementById('rent_start_date');
-  const finishDateInput = document.getElementById('rent_finish_date');
+  document.addEventListener('DOMContentLoaded', function() {
+    const rentTermInput = document.getElementById('rent_term');
+    const startDateInput = document.getElementById('rent_start_date');
+    const finishDateInput = document.getElementById('rent_finish_date');
 
-  function updateFinishDate() {
-    const rentTerm = parseInt(rentTermInput.value) || 0;
-    const startDate = new Date(startDateInput.value);
-    
-    if (rentTerm > 0 && startDate instanceof Date && !isNaN(startDate)) {
-      const finishDate = new Date(startDate);
-      finishDate.setMonth(finishDate.getMonth() + rentTerm);
+    function updateFinishDate() {
+      const rentTerm = parseInt(rentTermInput.value) || 0;
+      const startDate = new Date(startDateInput.value);
       
-      const year = finishDate.getFullYear();
-      const month = String(finishDate.getMonth() + 1).padStart(2, '0');
-      const day = String(finishDate.getDate()).padStart(2, '0');
-      
-      finishDateInput.value = `${year}-${month}-${day}`;
+      if (rentTerm > 0 && startDate instanceof Date && !isNaN(startDate)) {
+        const finishDate = new Date(startDate);
+        finishDate.setMonth(finishDate.getMonth() + rentTerm);
+        
+        const year = finishDate.getFullYear();
+        const month = String(finishDate.getMonth() + 1).padStart(2, '0');
+        const day = String(finishDate.getDate()).padStart(2, '0');
+        
+        finishDateInput.value = `${year}-${month}-${day}`;
+      }
     }
+
+    rentTermInput.addEventListener('input', updateFinishDate);
+    startDateInput.addEventListener('change', updateFinishDate);
+  });
+
+  function addNewRow() {
+    const tbody = document.getElementById('extrasTableBody');
+    const rowCount = tbody.getElementsByClassName('extra-row').length;
+    const newRow = `
+      <tr class="extra-row">
+        <td>
+          <input type="text" name="contract[contract_extras_attributes][${rowCount}][contract_extra_description]" class="form-control">
+        </td>
+        <td>
+          <input type="number" name="contract[contract_extras_attributes][${rowCount}][contract_extra_quantity]" 
+                class="form-control quantity-input" 
+                onchange="calculateRowTotal(this)"
+                min="1">
+        </td>
+        <td>
+          <input type="text" name="contract[contract_extras_attributes][${rowCount}][contract_extra_unit]" class="form-control">
+        </td>
+        <td>
+          <input type="number" name="contract[contract_extras_attributes][${rowCount}][contract_extra_unit_price]" 
+                class="form-control price-input" 
+                onchange="calculateRowTotal(this)"
+                step="0.01" 
+                min="0">
+        </td>
+        <td>
+          <span class="total-amount">0.00</span>
+        </td>
+        <td>
+          <span class="total-vat-amount">0.00</span>
+        </td>
+        <td>
+          <input type="date" 
+                name="contract[contract_extras_attributes][${rowCount}][contract_extra_payment_date]" 
+                class="form-control"
+                value="<%= Date.current %>"
+                required>
+        </td>
+        <td>
+          <select name="contract[contract_extras_attributes][${rowCount}][contract_extra_payment_method]" 
+                  class="form-select" 
+                  required>
+            <option value="">Ödeme Yöntemi Seçin</option>
+            <% @payment_methods.each do |method| %>
+              <option value="<%= method.payment_method %>"><%= method.payment_method %></option>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <input type="text" name="contract[contract_extras_attributes][${rowCount}][contract_extra_explanation]" class="form-control">
+        </td>
+        <td>
+          <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', newRow);
   }
 
-  rentTermInput.addEventListener('input', updateFinishDate);
-  startDateInput.addEventListener('change', updateFinishDate);
-});
+  function calculateRowTotal(input) {
+    const row = input.closest('tr');
+    const quantity = parseFloat(row.querySelector('.quantity-input').value) || 0;
+    const price = parseFloat(row.querySelector('.price-input').value) || 0;
+    const total = quantity * price;
+    
+    // KDV'siz toplam
+    row.querySelector('.total-amount').textContent = total.toFixed(2);
+    
+    // KDV'li toplam hesaplama
+    const vatAmount = total + (total * 20) / 100;
+    row.querySelector('.total-vat-amount').textContent = vatAmount.toFixed(2);
+  }
+
+  function removeRow(button) {
+    if (confirm('Bu satırı silmek istediğinize emin misiniz?')) {
+      button.closest('tr').remove();
+    }
+  }
 </script>

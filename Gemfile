@@ -31,6 +31,8 @@ gem 'caxlsx'
 gem 'caxlsx_rails'
 gem 'kaminari'
 gem 'bootstrap5-kaminari-views'
+gem 'zeitwerk', '~> 2.7.1'
+gem 'csv' # Ruby 3.4'ten itibaren gerekli olacak
 
 
 

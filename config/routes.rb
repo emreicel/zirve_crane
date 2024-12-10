@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       post :send_email
       post :upload_invoice
       patch :complete
+      resources :contract_extras, only: [:create, :edit, :update, :destroy]
     end
   end
   resources :users, only: [:index, :new, :edit, :create, :update, :destroy]
