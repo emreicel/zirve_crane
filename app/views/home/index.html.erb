@@ -91,7 +91,23 @@
                   <td class="text-center align-middle"><%= number_to_currency(payment.amount_excluding_vat) %></td>
                   <td class="text-center align-middle">
                     <% if policy(payment.contract).show? %>
-                      <%= link_to "Detay", contract_path(payment.contract), class: "btn btn-sm btn-primary" %>
+                      <div class="btn-group">
+                        <% if policy(payment.contract).send_email? %>
+                          <% if payment.email_sent_at.present? %>
+                            <button class="btn btn-outline-success btn-sm disabled" disabled="disabled" title="<%= payment.email_sent_at.strftime("%d.%m.%Y %H:%M") %>" style="pointer-events: none;">
+                              <i class="material-icons" style="font-size: 16px;">check</i>
+                            </button>
+                          <% else %>
+                            <%= button_to send_payment_email_payment_table_path(payment),
+                                method: :post,
+                                class: "btn btn-outline-secondary btn-sm",
+                                data: { confirm: "Email göndermek istediğinize emin misiniz?" } do %>
+                              <i class="material-icons" style="font-size: 16px;">email</i>
+                            <% end %>
+                          <% end %>
+                        <% end %>
+                        <%= link_to "Detay", contract_path(payment.contract), class: "btn btn-sm btn-primary" %>
+                      </div>
                     <% end %>
                   </td>
                 </tr>
